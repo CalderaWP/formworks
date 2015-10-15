@@ -1,0 +1,6 @@
+Plugin Name -- Formworks
+Text domain -- formworks
+Function prefix -- frmwks
+Class prefix -- {{Core_Prefix}}
+Root namespace -- calderawp\frmwks
+Hook Prefix -- frmwks

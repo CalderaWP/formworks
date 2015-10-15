@@ -1,0 +1,27 @@
+{
+    "name": "calderawp/formworks",
+    "description": "Form Analitic and Submission Management Suite",
+    "type": "wordpress-plugin",
+    "keywords": [
+        "wordpress"
+    ],
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "David Cramer",
+            "homepage": "http://digilab.co.za",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "xamin/handlebars.php"      : "dev-master",
+        "calderawp/dismissible-notice": "dev-master",
+        "calderawp/licensing-helper": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "calderawp\\frmwks\\": "classes"
+        }
+    }
+}

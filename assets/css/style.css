@@ -1,0 +1,50 @@
+@font-face {
+	font-family: 'fooicon';
+	src:url('fonts/fooicon.eot?kmchdl');
+	src:url('fonts/fooicon.eot?#iefixkmchdl') format('embedded-opentype'),
+		url('fonts/fooicon.ttf?kmchdl') format('truetype'),
+		url('fonts/fooicon.woff?kmchdl') format('woff'),
+		url('fonts/fooicon.svg?kmchdl#fooicon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="fooicon-"], [class*=" fooicon-"] {
+	font-family: 'fooicon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.fooicon-plus:before {
+	content: "\e069";
+}
+.fooicon-remove:before {
+	content: "\e070";
+}
+.fooicon-minus:before {
+	content: "\e07f";
+}
+.fooicon-sort-asc:before {
+	content: "\e20a";
+}
+.fooicon-sort-desc:before {
+	content: "\e20b";
+}
+.fooicon-sort:before {
+	content: "\e213";
+}
+.fooicon-loader:before {
+	content: "\e278";
+}
+.fooicon-search:before {
+	content: "\e2ca";
+}
+

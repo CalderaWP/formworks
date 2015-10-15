@@ -1,0 +1,570 @@
+.formworks-calderaadmin-wrap,
+.formworks-calderamain-canvas {
+  margin-top: 103px;
+}
+
+.formworks-input-error,
+input.formworks-input-error,
+select.formworks-input-error,
+textarea.formworks-input-error {
+  border: 1px solid #df8080 !important;
+  box-shadow: 0 0 2px #ff6060 !important;
+}
+h4 > small.description {
+  color: #7f7f7f;
+  font-style: italic;
+  font-weight: normal;
+}
+.formworks-main-headerbrickroad,
+.formworks-main-headercaldera {
+	background: none repeat scroll 0 0 #fff;
+	box-shadow: 8px 1px 6px rgba(0, 0, 0, 0.04), 8px 0 0 #db4437 inset;
+	margin: -10px -20px 10px -22px;
+	padding: 0 0 8px 22px;
+	overflow: hidden;
+}
+.formworks-main-headercaldera,
+.formworks-sub-headercaldera {
+  left: 182px;
+  position: fixed;
+  right: 0;
+  top: 42px;
+  z-index: 9999;
+}
+.formworks-sub-headercaldera {
+  top: 96px;
+  z-index: 9998;
+}
+
+.formworks-fixed-list {
+  width: 420px;
+  float:left;  
+}
+.formworks-fixed-center {
+  bottom: 32px;
+  left: 630px;
+  overflow: hidden;
+  position: fixed;
+  top: 171px;
+  width: 750px;
+  z-index: 999;
+}
+.formworks-list-control-button.button.button-small {
+  float: right;
+  margin: 6px 6px 0px 0px;
+  padding: 0 12px;
+}
+.folded .formworks-main-headercaldera,
+.folded .formworks-sub-headercaldera{
+  left: 58px;
+}
+.folded .formworks-fixed-center {
+  left: 505px;
+}
+
+@media screen and ( max-width: 960px ) {
+  .formworks-main-headercaldera,
+  .formworks-sub-headercaldera{
+    left: 58px;
+  }
+  .formworks-fixed-list {
+    width: 340px;
+  }
+  .formworks-fixed-center {
+    left: 435px;
+  }
+}
+@media screen and ( max-width: 782px ) {
+  .formworks-main-headercaldera,
+  .formworks-sub-headercaldera{
+    top: 56px;
+    left: 22px;
+  } 
+  .formworks-sub-headercaldera{
+    top: 110px;
+  }
+  .formworks-fixed-center {
+    left: 370px;
+    top: 185px;
+  }  
+}
+@media screen and ( max-width: 600px ) {
+  .formworks-main-headercaldera,
+  .formworks-sub-headercaldera{
+    position: absolute;
+    left: 12px;
+  }
+}
+.formworks-sub-headercaldera {
+  background: none repeat scroll 0 0 #f8f8f8;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08), 8px 0 0 #db4437 inset;
+  margin: -10px -20px 10px -22px;
+  padding: 0 0 0 8px;
+  overflow: hidden;
+}
+.formworks-sub-headerbrickroad {
+  background: none repeat scroll 0 0 #f8f8f8;
+  border-radius: 0 0 6px;
+  bottom: 32px;
+  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1), 8px 0 0 #404040 inset;
+  margin: -11px -20px 10px -22px;
+  overflow: hidden;
+  padding: 0 0 0 8px;
+  position: absolute;
+  top: 65px;
+  width: 140px;
+}
+.formworks-subline,
+.formworks-version {
+  color: #9f9f9f;
+  font-size: 0.55em;
+  line-height: 0;
+  margin-right: 12px;
+}
+
+.formworks-main-headerbrickroad h2,
+.formworks-main-headercaldera h2 {
+	color: #4f4f4f;
+	font-size: 20px;
+	font-weight: 300;
+  float: left;
+  padding: 11px 15px 2px 0;  
+  margin: 6px;
+}
+
+.formworks-main-headerbrickroad .logo-icon,
+.formworks-main-headercaldera .logo-icon{
+	color: #db4437;
+  font-size: 72px;
+  margin: -18px 20px 0 -60px;
+  opacity: 0.2;
+  padding: 0 15px 0 0;
+}
+
+.formworks-main-headerwordpress .error_notice_box,
+.formworks-main-headerwordpress .updated_notice_box,
+.formworks-main-headerbrickroad .error_notice_box,
+.formworks-main-headerbrickroad .updated_notice_box,
+.formworks-main-headercaldera .error_notice_box,
+.formworks-main-headercaldera .updated_notice_box {
+  background: #fff;
+  border-left: 8px solid rgb(175, 175, 0);
+  color: #333;
+  display: inline-block;
+  padding: 20px 23px 15px 12px;
+  position: fixed;
+  top: -175px;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+  z-index: 99999;
+}
+.formworks-nav-separator {
+  background: #f8f8f8 none repeat scroll 0 0;
+  display: inline-block;
+  height: 55px;
+  margin: -23px 6px -23px 12px;
+  width: 1px;
+}
+
+.formworks-main-headerwordpress .error_notice_box,
+.formworks-main-headerbrickroad .error_notice_box,
+.formworks-main-headercaldera .error_notice_box {
+  border-left: 8px solid rgb(175, 0, 0);
+}
+.formworks-general-delete-link{
+  color: #a00;
+}
+.formworks-general-delete-link:hover{
+  color: red;
+}
+.subsubsub.formworks-nav-tabs a:last-child{
+  display: none;
+}
+.wrap .formworks-main-headerbrickroad .add-new-h2,
+.wrap .formworks-main-headercaldera .add-new-h2{
+	font-size: 12px;
+	margin: 6px;
+	cursor: pointer;
+  color: #4f4f4f;
+}
+.formworks-main-headerbrickroad .add-new-h2.current,
+.formworks-main-headercaldera .add-new-h2.current {
+  background: none repeat scroll 0 0 #db4437;
+  color: #fff;
+}
+.formworks-main-headerbrickroad .add-new-h2:hover,
+.formworks-main-headercaldera .add-new-h2:hover {
+	background: none repeat scroll 0 0 #db4437;
+  color: #fff;
+}
+
+.formworks-main-headerbrickroad .formworks-header-tabs,
+.formworks-main-headercaldera .formworks-header-tabs {
+  float: left;
+  margin: 0 0 0 -22px;
+  padding: 0;
+}
+.formworks-sub-headerbrickroad .formworks-sub-tabs,
+.formworks-sub-headercaldera .formworks-sub-tabs {
+  margin: 0;
+  padding: 0;
+}
+
+.formworks-main-headerbrickroad .formworks-header-tabs > li,
+.formworks-main-headercaldera .formworks-header-tabs > li{
+  float: left;
+}
+.formworks-main-headerbrickroad .formworks-header-tabs > li > a,
+.formworks-main-headercaldera .formworks-header-tabs > li > a{
+  display: inline-block;
+  margin: 0 0 -15px;
+  padding: 16px 20px 20px;
+  text-decoration: none;
+  color:#db4437;
+}
+.formworks-main-headercaldera .formworks-header-tabs > li > a:hover{
+  background-color: #efefef;
+}
+.formworks-main-headercaldera .formworks-header-tabs > li.active > a{
+  background-color: #db4437;
+  color: #fff;
+}
+.formworks-main-headerbrickroad .formworks-header-tabs > li.active > a {
+  background-color: #db4437;
+  color: #fff;
+}
+.formworks-sub-headercaldera .formworks-sub-tabs > li {
+  float: left;
+  margin: 0;
+}
+.formworks-sub-headerbrickroad .formworks-sub-tabs > li {
+  float: left;
+  margin: 0;
+  width: 100%;
+}
+.formworks-sub-headercaldera .formworks-sub-tabs > li > a{
+  display: inline-block;
+  margin: 0;
+  padding: 6px 14px 8px;
+  text-decoration: none;
+  color:#db4437;
+}
+.formworks-sub-headerbrickroad .formworks-sub-tabs > li > a {
+  color: #db4437;
+  display: block;
+  margin: 0;
+  padding: 6px 14px 8px;
+  text-decoration: none;
+}
+.formworks-sub-headercaldera .formworks-sub-tabs > li > a:hover{
+  background-color: #efefef;
+}
+.formworks-sub-headercaldera .formworks-sub-tabs > li.active > a{
+  background-color: #db4437;
+  color: #fff;
+}
+.formworks-sub-headerbrickroad .formworks-sub-tabs > li.active > a {
+  background-color: #646464;
+  color: #fff;
+}
+.formworks-split-panel {
+  margin-left: 300px;
+}
+.formworks-side-list {
+  float: left;
+  margin-left: -300px;
+  width: 280px;
+}
+.formworks-side-list > label{
+	display: block;
+}
+.formworks-side-list > select {
+	width: 100%;
+	margin-bottom: 2px;
+}
+
+.formworks-footer-bar {
+  border-top: 1px solid #e6e6e6;
+  margin: 30px -20px 0 -22px;
+  padding: 20px;
+}
+
+.formworks-main-list {
+  float: left;
+  min-height: 100px;
+  width: 550px;
+  position: relative;
+}
+
+.formworks-config-group {
+  margin-bottom: 6px;
+}
+.formworks-config-group > label {
+  display: inline-block;
+  margin: 6px 0 0;
+  vertical-align: top;
+  width: 180px;
+}
+.formworks-config-group .invalid {
+  border: 1px solid #c00 !important;
+  box-shadow: 0 0 5px -1px #c00 !important;
+}
+/* groups wrappers */
+.formworks-add-group-btn {
+  color: #777;
+  cursor: pointer;
+  float: left;
+  font-size: 1.5em;
+  width: 40px;
+}
+.formworks-group-wrapper {
+  float: left;
+  margin-right: 12px;
+  width: 280px;
+}
+.formworks-group-wrapper .sortable-placeholder {
+  display: block;
+  float: left;
+}
+.formworks-field-group {
+  background: none repeat scroll 0 0 #fff;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  color: #555;
+  margin: 0 0 6px;
+  padding: 6px 12px;
+  position: relative;
+}
+.formworks-field-item {
+  background: none repeat scroll 0 0 #fff;
+  border: 1px solid #e5e5e5;
+  box-sizing: border-box;
+  color: #555;
+  margin: 0 0 6px;
+  overflow: hidden;
+  padding: 6px 0 6px 6px;
+  position: relative;
+}
+.formworks-field-group-config {
+  background: none repeat scroll 0 0 rgb(248, 248, 248);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.18);
+  height: 130px;
+  margin: 6px 0;
+  overflow: hidden;
+  padding: 6px 6px 0;
+}
+.formworks-field-config-wrapper {
+  float: left;
+  width: 550px;
+}
+
+.formworks-editor-panel{
+  height:100%;
+}
+
+/* Tags */
+.magic-tag-init {
+  margin: 4px 2px;
+  padding: 3px;
+  position: absolute;
+  right: 0;
+}
+.ui-autocomplete-category {
+  background: none repeat scroll 0 0 #cecece;
+  font-weight: bold;
+  padding: 3px 10px;
+}
+.ui-autocomplete {
+  border: 1px solid #cbcbcb;
+  max-height: 380px;
+  overflow: auto;
+}
+.formworks-card-item {
+  background: none repeat scroll 0 0 #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04), 50px 0 0 #f8f8f8 inset;
+  box-sizing: border-box;
+  color: #555;
+  display: inline-block;
+  font-size: 13px;
+  min-height: 90px;
+  margin: 6px 6px 0 0;
+  overflow: hidden;
+  padding: 0 0 0 50px;
+  position: relative;
+  width: 250px;
+}
+.formworks-card-sub-item {
+  background: none repeat scroll 0 0 #fcfcfc;
+  border: 1px solid #e5e5e5;
+  box-shadow: -39px 0 0 #f8f8f8 inset,-40px 0 0 #dfdfdf inset;
+  box-sizing: border-box;
+  color: #555;
+  font-size: 13px;
+  margin: 0 0 6px;
+  padding: 6px;
+  position: relative;
+}
+
+.formworks-card-item .formworks-card-icon {
+  float: left;
+  font-size: 95px;
+  height: 100%;
+  margin-left: -51px;
+  overflow: hidden;
+  padding: 0 1px;
+  text-indent: -40px;
+  width: 49px;
+  line-height: 84px;
+}
+.formworks-card-item .formworks-card-icon:before {
+  opacity: 0.2;
+}
+.formworks-card-content {
+  box-sizing: padding-box;
+  border-left: 1px solid #dfdfdf;
+  padding: 6px 12px;
+  width: 100%;
+  min-height: 90px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ui-sortable-helper .formworks-card-content{
+  overflow: visible;
+}
+.ui-sortable-helper .dashicons{
+  display: none;
+}
+.formworks-card-item .formworks-card-content > h4{
+	margin: 0;
+}
+
+.formworks-card-content input[type="text"] {
+  width: 100%;
+}
+.formworks-card-content .description {
+  color: #8f8f8f;
+  font-size: 11px;
+}
+.formworks-card-content .formworks-card-actions {
+  padding: 0;
+}
+.formworks-card-content .formworks-card-actions .row-actions{
+	visibility: visible;
+}
+.formworks-card-content .formworks-card-actions .row-actions a{
+	text-decoration: none;
+}
+#formworks-save-indicator.loading .spinner{
+  display: block;
+  visibility: visible;
+}
+
+/* wp cleaups */
+/*.sticky-menu #adminmenuwrap{
+  position: relative;
+}*/
+.formworks-config-group .CodeMirror.CodeMirror-wrap {
+  background: #fff none repeat scroll 0 0;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
+  padding: 6px 0 3px;
+}
+
+.baldrick-modal-title .modal-label,
+.baldrick-modal-title .baldrick-modal-closer{
+  color: #fff;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+.baldrick-modal-title .baldrick-modal-closer:hover {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.2);
+}
+.baldrick-modal-title .modal-label{
+  background-color: #db4437;
+}
+.formworks-main-headercaldera .loading{
+	top: -2px;
+}
+
+
+
+.formworks-fixed-center > .avatar{
+  background: rgb(255, 255, 255) none repeat scroll 0 0;
+  border: 1px solid rgb(224, 224, 224);
+  float: left;
+  margin: 0 6px 0 0;
+  padding: 6px;
+}
+
+.formworks-pagination.pagination-bottom {
+  border-top: 1px solid rgb(239, 239, 239);
+  clear: both;
+  height: 35px;
+  margin: 0;
+  padding-top: 6px;
+}
+.formworks-pagination.pagination-top {
+  border-bottom: 1px solid rgb(239, 239, 239);
+  clear: both;
+  height: 35px;
+  margin: 6px 0;
+}
+
+.formworks-pagination .pagination{
+  margin: 0;
+  padding: 1px 0;
+}
+.formworks-pagination .pagination > li {
+  display: inline-block;
+  margin: 0 6px 0 0;
+}
+.formworks-pagination .pagination > li > a {
+  display: inline-block;
+  padding: 6px;
+  text-decoration: none;
+}
+.formworks-pagination .pagination > li.active > a {
+  background: rgb(159, 159, 159) none repeat scroll 0 0;
+  border-radius: 3px;
+  color: rgb(255, 255, 255);
+  display: inline-block;
+  text-decoration: none;
+}
+.formworks-pagination .pagination > li.active.load > a {
+  background: #fff;
+}
+.formworks-chart-legend .line-legend > li {
+  display: inline-block;
+  margin-right: 20px;
+  padding-left: 20px;
+  position: relative;
+}
+.formworks-chart-legend .line-legend span {
+  border: 2px solid #fff;
+  display: block;
+  height: 14px;
+  left: 0;
+  position: absolute;
+  top: 1px;
+  width: 14px;
+}
+
+button.add-new-h2.formworks-filter-button:active,
+button.add-new-h2.formworks-filter-button{
+  cursor: pointer;
+  top: 0;
+}
+button.add-new-h2.formworks-filter-button.active,
+button.add-new-h2.formworks-filter-button:hover{
+  color: #fff;
+  background: #db4437 !important;
+}
+
+
+.formworks-post-event{
+  opacity: 0.5;
+  z-index: 100;
+}
+.formworks-post-event:hover{
+  opacity: 1;
+  z-index: 101;
+}

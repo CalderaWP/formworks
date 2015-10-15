@@ -84,12 +84,12 @@ class core {
 
 		add_filter( 'gform_get_form_filter', function( $html, $form ){
 			$form_id = 'gform_'. $form['id'];
-			return $this->set_tracking( $html, $form_id );
+			return core::set_tracking( $html, $form_id );
 		},10 , 2 );
 
 		// setup tracking
 		add_filter( 'caldera_forms_render_form', function( $html, $form ){
-			return $this->set_tracking( $html, $form['ID'] );
+			return core::set_tracking( $html, $form['ID'] );
 		}, 10, 2 );
 
 		add_action( 'gform_after_submission', function( $form ){
@@ -311,7 +311,7 @@ class core {
 	 *
 	 * @return   html  the form HTML
 	 */
-	public function set_tracking( $html, $form_id ){
+	public static function set_tracking( $html, $form_id ){
 			$formworks = \calderawp\frmwks\options::get_registry(); 
 			// add loaded notch
 			tracker::add_notch( $form_id, 'loaded' );

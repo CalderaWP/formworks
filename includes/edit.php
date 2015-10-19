@@ -57,7 +57,7 @@ if( class_exists( 'FrmForm' ) ){
 	$formworks['forms']['frmid'] = array(
 		'name' => __('Formidable', 'formidable'),
 		'forms' => array()
-	);	
+	);
 	foreach( $fforms as $form ){
 		if( !empty( $form->is_template ) ){
 			continue;
@@ -65,6 +65,21 @@ if( class_exists( 'FrmForm' ) ){
 		$formworks['forms']['frmid']['forms'][ 'frmid_' . $form->id ] = $form->name;
 	}	
 
+}
+// jetpack
+if( function_exists( 'grunion_display_form_view' ) ){
+	global $wpdb;
+	$shortcodes = $wpdb->get_results("SELECT `post_id` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_g_feedback_shortcode';", ARRAY_A );
+	if( !empty( $shortcodes ) ){
+		$formworks['forms']['jp'] = array(
+			'name' => __('Jetpack Contact Form', 'jetpack'),
+			'forms' => array()
+		);
+		foreach( $shortcodes as $post_id ){
+			$form = get_post( $post_id['post_id'] );
+			$formworks['forms']['jp']['forms'][ 'jp_' . $post_id['post_id'] ] = $form->post_title;
+		}
+	}
 }
 
 

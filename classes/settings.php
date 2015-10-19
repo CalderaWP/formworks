@@ -359,6 +359,10 @@ class settings extends core{
 						case 'frmid':
 							$form_name = \FrmForm::getname( $form[1] );
 							$form_id = $form[1];
+						case 'jp':
+							$form_post = get_post( $form[1] );
+							$form_name = $form_post->post_title;
+							$form_id = $form[1];
 						default:
 							# no idea what this is or the form plugin was disabled.
 							break;

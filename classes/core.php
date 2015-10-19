@@ -82,6 +82,19 @@ class core {
 		// pull partials
 		add_filter( 'caldera_forms_render_pre_get_entry' , array( $this, 'get_partial' ), 10, 3 );
 
+		add_filter( 'grunion_contact_form_success_message', function( $html ){
+
+			$form_id = 'jp_' . $_GET['contact-form-id'];
+			tracker::add_submission( $form_id );
+			return $html;
+		});
+
+		add_filter( 'grunion_contact_form_form_action', function( $url, $post, $form ){
+			$form_id = 'jp_' . $form;
+			core::set_tracking( null, $form_id );
+			return $url;
+		}, 15, 3 );
+
 		add_action( 'frm_process_entry', function( $params ){
 
 			$form_id = 'frmid_' . $params['form_id'];

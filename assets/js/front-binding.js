@@ -1,7 +1,7 @@
 
 jQuery( function( $ ){
 
-	var forms = $( 'form.caldera_forms_form, .gform_wrapper form, .wpcf7-form, .frm-show-form' ),
+	var forms = $( 'form.caldera_forms_form, .gform_wrapper form, .wpcf7-form, .frm-show-form, .contact-form' ),
 		main_window = $( window ),
 		current_request;
 
@@ -37,10 +37,13 @@ jQuery( function( $ ){
 		if( form.find('[name="_wpcf7"]').length ){
 			form_id = 'cf7_' + form.find('[name="_wpcf7"]').val();
 		}
+		// is formiddable
 		if( form.find('[name="form_id"]').length ){
 			form_id = 'frmid_' + form.find('[name="form_id"]').val();
-		}		
-		
+		}
+		if( form.hasClass('contact-form') ){
+			form_id = 'jp_' + form.parent().prop('id').replace('contact-form-','');
+		}
 		form.data('form_id', form_id );
 		form.on( 'change' ,'input,select,textarea', function( ){
 

@@ -42,6 +42,17 @@ if( class_exists( 'NF_Forms' ) ){
 		$formworks['forms']['ninja']['forms'][ 'ninja_' . $form ]	= Ninja_Forms()->form( $form )->get_setting( 'form_title' );
 	}
 }
+if( class_exists( 'WPCF7_ContactForm' ) ){
+	$cforms = WPCF7_ContactForm::find( array( 'posts_per_page' => -1 ) );
+	$formworks['forms']['cf7'] = array(
+		'name' => __('Contact Form 7', 'contact-form-7'),
+		'forms' => array()
+	);	
+	foreach( $cforms as $form ){
+		$formworks['forms']['cf7']['forms'][ 'cf7_' . $form->id() ] = $form->title();
+	}
+
+}
 
 ?>
 <div class="wrap formworks-calderamain-canvas" id="formworks-main-canvas">

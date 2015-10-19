@@ -350,6 +350,13 @@ class settings extends core{
 							$form_name = Ninja_Forms()->form( $form[1] )->get_setting( 'form_title' );
 							$form_id = $form[1];
 							break;
+						case 'cf7':
+							# get contact form 7
+							$cf7form = \WPCF7_ContactForm::get_instance( $form[1] );							
+							$form_name = $cf7form->title();
+							$form_id = $cf7form->id();
+							break;
+						
 						default:
 							# no idea what this is or the form plugin was disabled.
 							break;

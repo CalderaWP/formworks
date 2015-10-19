@@ -29,9 +29,14 @@ $formworks['_current_tab'] = '#formworks-panel-stats';
 				break;
 			
 			case 'ninja':
-				# get ninja form
-				
+				# get ninja form				
 				$form_name = Ninja_Forms()->form( $form[1] )->get_setting( 'form_title' );
+				break;
+			
+			case 'cf7':
+				# get contact form 7
+				$cf7form = \WPCF7_ContactForm::get_instance( $form[1] );							
+				$form_name = $cf7form->title();
 				break;
 			default:
 				# no idea what this is or the form plugin was disabled.

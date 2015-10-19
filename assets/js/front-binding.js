@@ -1,7 +1,7 @@
 
 jQuery( function( $ ){
 
-	var forms = $( 'form.caldera_forms_form, .gform_wrapper form' ),
+	var forms = $( 'form.caldera_forms_form, .gform_wrapper form, .wpcf7-form' ),
 		main_window = $( window ),
 		current_request;
 
@@ -33,6 +33,10 @@ jQuery( function( $ ){
 
 		var form = $( this ),
 			form_id = form.find('[name="_cf_frm_id"]').length ? form.find('[name="_cf_frm_id"]').val() : form.prop('id');
+		// is cf7
+		if( form.find('[name="_wpcf7"]').length ){
+			form_id = 'cf7_' + form.find('[name="_wpcf7"]').val();
+		}
 		form.data('form_id', form_id );
 		form.on( 'change' ,'input,select,textarea', function( ){
 

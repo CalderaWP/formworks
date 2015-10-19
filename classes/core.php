@@ -82,6 +82,22 @@ class core {
 		// pull partials
 		add_filter( 'caldera_forms_render_pre_get_entry' , array( $this, 'get_partial' ), 10, 3 );
 
+
+		add_filter( 'wpcf7_form_elements', function( $html ){
+			$form = \WPCF7_ContactForm::get_current();
+			$form_id = 'cf7_'. $form->id();
+			return core::set_tracking( $html, $form_id );
+		},10 , 2 );
+
+		add_action( 'wpcf7_submit', function( $instance, $result ){
+
+			if( $result['status'] === 'mail_sent' ){			
+				$form_id = 'cf7_' . $instance->id();
+				tracker::add_submission( $form_id );
+			}
+
+		},20, 2);
+
 		add_filter( 'gform_get_form_filter', function( $html, $form ){
 			$form_id = 'gform_'. $form['id'];
 			return core::set_tracking( $html, $form_id );

@@ -356,7 +356,9 @@ class settings extends core{
 							$form_name = $cf7form->title();
 							$form_id = $cf7form->id();
 							break;
-						
+						case 'frmid':
+							$form_name = \FrmForm::getname( $form[1] );
+							$form_id = $form[1];
 						default:
 							# no idea what this is or the form plugin was disabled.
 							break;

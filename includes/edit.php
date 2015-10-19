@@ -51,8 +51,23 @@ if( class_exists( 'WPCF7_ContactForm' ) ){
 	foreach( $cforms as $form ){
 		$formworks['forms']['cf7']['forms'][ 'cf7_' . $form->id() ] = $form->title();
 	}
+}
+if( class_exists( 'FrmForm' ) ){
+	$fforms = FrmForm::getAll();
+	$formworks['forms']['frmid'] = array(
+		'name' => __('Formidable', 'formidable'),
+		'forms' => array()
+	);	
+	foreach( $fforms as $form ){
+		if( !empty( $form->is_template ) ){
+			continue;
+		}
+		$formworks['forms']['frmid']['forms'][ 'frmid_' . $form->id ] = $form->name;
+	}	
 
 }
+
+
 
 ?>
 <div class="wrap formworks-calderamain-canvas" id="formworks-main-canvas">

@@ -38,6 +38,9 @@ $formworks['_current_tab'] = '#formworks-panel-stats';
 				$cf7form = \WPCF7_ContactForm::get_instance( $form[1] );							
 				$form_name = $cf7form->title();
 				break;
+			case 'frmid':
+				$form_name = FrmForm::getname( $form[1] );
+				break;				
 			default:
 				# no idea what this is or the form plugin was disabled.
 				break;

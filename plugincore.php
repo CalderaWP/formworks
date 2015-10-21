@@ -9,7 +9,7 @@
  * @wordpress-plugin
  * Plugin Name: Formworks
  * Plugin URI:  http://CalderaWP.com
- * Description: Form Analytics, Reporting, and Submission Management Suite for Caldera Forms (I need to work on that..)
+ * Description: Form analytics for your favorite WordPress Form Builder Plugins
  * Version:     1.0.0
  * Author:      David Cramer
  * Author URI:  https://CalderaWP.com

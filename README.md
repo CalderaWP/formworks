@@ -1,8 +1,10 @@
 # FormWorks
 Form analytics plugin for WordPress -- track conversion and engagment for your WordPress forms. Works with yoru favorite form builder plugins, tells you if your form is working for you. Another fine plugin by [CalderaWP](https://CalderaWP.com). 
 
-This is a beta of what will be a paid product. We appreciate your feedback, if you find any problems please [open an issue](https://github.com/CalderaWP/formworks/). If you enjoy this plugin, we hope you will purchase a license in order to recive support and automatic updates, as well as to help support our work.
+This is a beta of what will be a paid product. We appreciate your feedback, if you find any problems please [open an issue](https://github.com/CalderaWP/formworks/). If you enjoy this plugin, we hope you will purchase a license in order to receive support and automatic updates, as well as to help support our work.
 
+### READ BEFORE CLONING THIS REPO OR DOWNLOADING
+If you clone this repo or download the zip file, you must run `composer update` to make it work. If you just install it directly, it will not work and may break stuff. If you don't know how to use composer or do not wish to, you can download a built zip file from [https://github.com/CalderaWP/formworks/blob/master/releases](the releases directory) of this repo.
 
 ### Plugins Supported
 - Caldera Forms

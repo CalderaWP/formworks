@@ -10,7 +10,7 @@
  * Plugin Name: Formworks
  * Plugin URI:  http://CalderaWP.com
  * Description: Form analytics for your favorite WordPress Form Builder Plugins
- * Version:     1.0.0
+ * Version: 1.0.0-b-1
  * Author:      David Cramer
  * Author URI:  https://CalderaWP.com
  * Text Domain: formworks
@@ -28,7 +28,7 @@ define('FRMWKS_PATH',  plugin_dir_path( __FILE__ ) );
 define('FRMWKS_CORE',  __FILE__ );
 define('FRMWKS_SLUG',  'frmwrks-trk' );
 define('FRMWKS_URL',  plugin_dir_url( __FILE__ ) );
-define('FRMWKS_VER',  '1.0.0' );
+define( 'FRMWKS_VER', '1.0.0-b-1' );
 
 
 

@@ -1,4 +1,3 @@
-
 jQuery( function( $ ){
 
 	var forms = $( 'form.caldera_forms_form, .gform_wrapper form, .wpcf7-form, .frm-show-form, .contact-form' ),
@@ -17,7 +16,30 @@ jQuery( function( $ ){
 	}
 
 	function push_stuff( data ){
-		
+
+		if( typeof ga === 'function' ){
+			//formworks.config.forms
+			var this_form = data.form.split('_');
+			if( this_form.length === 1 ){
+				this_form[0] = 'caldera';
+			}
+			// add form name
+			if( typeof formworks !== 'undefined' 
+				&& typeof formworks.config.forms[ this_form[0] ] !== 'undefined'
+				&& typeof formworks.config.forms[ this_form[0] ].forms !== 'undefined'
+				){
+			
+				var form_name = formworks.config.forms[ this_form[0] ].forms[ data.form ];
+				if( data.type ){
+					ga('send', 'event', { eventCategory: 'Form', eventAction: data.type, eventLabel: form_name });
+				}else if( data.field ){
+					ga('send', 'event', { eventCategory: 'Form', eventAction: 'Field:' + data.field, eventLabel: form_name });
+				}
+			}
+		}
+		if( !data.method ){
+			return;
+		}
 		return $.post( formworks.frmwksurl, data );
 
 	};
@@ -45,6 +67,9 @@ jQuery( function( $ ){
 			form_id = 'jp_' + form.parent().prop('id').replace('contact-form-','');
 		}
 		form.data('form_id', form_id );
+		
+		push_stuff( { action : 'frmwks_push', 'type' : 'load', 'form' : form.data('form_id') } );
+
 		form.on( 'change' ,'input,select,textarea', function( ){
 
 			var	field = $( this ),
@@ -78,5 +103,10 @@ jQuery( function( $ ){
 		});
 		view_notch( form );
 	} );
+	if( typeof formworks !== 'undefined' && formworks.submissions !== null ){
 
+		for( var i = 0; i < formworks.submissions.length; i++){
+			push_stuff( { action : 'frmwks_push', 'type' : 'submission', 'form' : formworks.submissions[ i ] } );
+		}
+	}
 });

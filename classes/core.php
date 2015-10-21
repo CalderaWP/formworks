@@ -54,7 +54,7 @@ class core {
 	 * @access private
 	 */
 	private function __construct() {
-
+		global $formworks_submittion_tracks;
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
@@ -72,6 +72,9 @@ class core {
 		// Load front style sheet and JavaScript.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_front_stylescripts' ) );
 
+		// output tracking code
+		add_action( 'wp_print_footer_scripts', array( $this, 'print_front_scripts' ) );
+
 		// Add partial completions		
 		add_action( 'wp_ajax_frmwks_push', array( $this, 'tracker_push') );
 		add_action( 'wp_ajax_nopriv_frmwks_push', array( $this, 'tracker_push') );
@@ -83,9 +86,10 @@ class core {
 		add_filter( 'caldera_forms_render_pre_get_entry' , array( $this, 'get_partial' ), 10, 3 );
 
 		add_filter( 'grunion_contact_form_success_message', function( $html ){
-
+			global $formworks_submittion_tracks;
 			$form_id = 'jp_' . $_GET['contact-form-id'];
 			tracker::add_submission( $form_id );
+			$formworks_submittion_tracks[] = $form_id;
 			return $html;
 		});
 
@@ -96,8 +100,9 @@ class core {
 		}, 15, 3 );
 
 		add_action( 'frm_process_entry', function( $params ){
-
+			global $formworks_submittion_tracks;
 			$form_id = 'frmid_' . $params['form_id'];
+			$formworks_submittion_tracks[] = $form_id;
 			tracker::add_submission( $form_id );
 			
 		}, 15 );
@@ -117,8 +122,10 @@ class core {
 
 		add_action( 'wpcf7_submit', function( $instance, $result ){
 
-			if( $result['status'] === 'mail_sent' ){			
+			if( $result['status'] === 'mail_sent' ){
+				global $formworks_submittion_tracks;
 				$form_id = 'cf7_' . $instance->id();
+				$formworks_submittion_tracks[] = $form_id;
 				tracker::add_submission( $form_id );
 			}
 
@@ -145,7 +152,10 @@ class core {
 
 		add_action( 'ninja_forms_post_process', function(){
 			global $ninja_forms_processing;
+			global $formworks_submittion_tracks;
+
 			$form_id = 'ninja_'. $ninja_forms_processing->get_form_ID();
+			$formworks_submittion_tracks[] = $form_id;
 			tracker::add_submission( $form_id );
 			return;
 		});
@@ -354,13 +364,17 @@ class core {
 	 * @return   html  the form HTML
 	 */
 	public static function set_tracking( $html, $form_id ){
-			$formworks = \calderawp\frmwks\options::get_registry(); 
+			global $formworks_submittion_tracks;
+			$formworks = \calderawp\frmwks\options::get_single( 'formworks' );
+
 			// add loaded notch
 			tracker::add_notch( $form_id, 'loaded' );
 
 			// URL hack :)
 			$script_array = array(
-				'frmwksurl' => admin_url( 'admin-ajax.php' )
+				'frmwksurl' => admin_url( 'admin-ajax.php' ),
+				'config' => $formworks,
+				'submissions' => $formworks_submittion_tracks
 			);
 			wp_localize_script( 'formworks-front-binding', 'formworks', $script_array );
 			wp_enqueue_script( 'formworks-front-binding' );
@@ -406,7 +420,29 @@ class core {
 	public function enqueue_front_stylescripts() {
 		wp_register_script( 'formworks-front-binding', FRMWKS_URL . 'assets/js/front-binding.min.js', array( 'jquery' ), FRMWKS_VER );		
 	}
+	/**
+	 * Output tracking code
+	 *
+	 * @since 1.0.0
+	 *
+	 */
+	public function print_front_scripts() {
+		$formworks = \calderawp\frmwks\options::get_single( 'formworks' );
+		if( !empty( $formworks['external']['ga'] ) ){
+			?>
+			<script>
+			(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
+			ga('create', '<?php echo $formworks['external']['ga']; ?>', 'auto');
+			ga('send', 'pageview');
+			</script>
+			<?php
+		}
+		
+	}
 	
 	/**
 	 * Register visitor session and ensure one is created before using anything.
@@ -468,6 +504,8 @@ class core {
 
 		if( !empty( $form ) ){
 			// do a submission complete
+			global $formworks_submittion_tracks;
+			$formworks_submittion_tracks[] = $form['ID'];
 			tracker::add_submission( $form['ID'] );
 			return;
 		}

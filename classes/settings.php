@@ -338,6 +338,9 @@ class settings extends core{
 					switch ( $form[0] ){
 						case 'gform':
 							# get gravity form
+							if( !class_exists( 'RGFormsModel' ) ){
+								continue;
+							}						
 							$form_info     = \RGFormsModel::get_form( $form[1] );
 							$form_name = $form_info->title;
 							$form_id = $form_info->id;
@@ -346,21 +349,32 @@ class settings extends core{
 						
 						case 'ninja':
 							# get ninja form
-							
+							if( !function_exists( 'Ninja_Forms' ) ){
+								continue;
+							}
 							$form_name = Ninja_Forms()->form( $form[1] )->get_setting( 'form_title' );
 							$form_id = $form[1];
 							break;
 						case 'cf7':
 							# get contact form 7
+							if( !class_exists( 'WPCF7_ContactForm' ) ){
+								continue;
+							}
 							$cf7form = \WPCF7_ContactForm::get_instance( $form[1] );							
 							$form_name = $cf7form->title();
 							$form_id = $cf7form->id();
 							break;
 						case 'frmid':
+							if( !class_exists( 'FrmForm' ) ){
+								continue;
+							}
 							$form_name = \FrmForm::getname( $form[1] );
 							$form_id = $form[1];
 						case 'jp':
 							$form_post = get_post( $form[1] );
+							if( empty( $form_post )){
+								continue;
+							}
 							$form_name = $form_post->post_title;
 							$form_id = $form[1];
 						default:
@@ -375,6 +389,9 @@ class settings extends core{
 					}
 					$form_id = $form['ID'];
 					$form_name = $form['name'];
+				}
+				if( $form_name == null ){
+					continue;
 				}
 				$form_slug = sanitize_key( $form_name );
 				$this->plugin_screen_hook_suffix['formwork-' . $form_key ] =  add_submenu_page(

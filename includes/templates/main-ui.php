@@ -41,7 +41,20 @@
 
 	<span class="wp-baldrick" id="formworks-field-sync" data-event="refresh" data-target="#formworks-main-canvas" data-before="frmwks_canvas_reset" data-callback="frmwks_canvas_init" data-type="json" data-request="#formworks-live-config" data-template="#main-ui-template"></span>
 </div>
-
+<div class="formworks-sub-headercaldera">
+	<ul class="formworks-sub-tabs formworks-nav-tabs">
+		<li class="{{#is _current_tab value="#formworks-panel-forms"}}active {{/is}}formworks-nav-tab">
+			<a href="#formworks-panel-forms">
+				<?php _e('Forms', 'formworks') ; ?>
+			</a>
+		</li>
+		<li class="{{#is _current_tab value="#formworks-panel-analytics"}}active {{/is}}formworks-nav-tab">
+			<a href="#formworks-panel-analytics">
+				<?php _e('Analytics', 'formworks') ; ?>
+			</a>
+		</li>
+	</ul>
+</div>
 <form class="caldera-main-form " id="formworks-main-form" action="?page=formworks" method="POST">
 	<?php wp_nonce_field( 'formworks', 'formworks-setup' ); ?>
 	<input type="hidden" value="formworks" name="id" id="formworks-id">
@@ -49,8 +62,7 @@
 	<input type="hidden" value="{{_current_tab}}" name="_current_tab" id="formworks-active-tab">
 
 	
-
-	<div id="formworks-panel-flow" class="formworks-editor-panel">		
+	<div id="formworks-panel-forms" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-forms"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
 		<h4>
 			<?php _e('Setup Formworks Pages', 'formworks') ; ?>
 			<small class="description">
@@ -65,6 +77,22 @@
 		?>
 	</div>
 		
+
+	<div id="formworks-panel-analytics" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-analytics"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
+		<h4>
+			<?php _e( 'Google Analytics Goals', 'formworks' ); ?>
+			<small class="description">
+				<?php _e('How to setup goals in Google Analytics', 'formworks') ; ?>
+			</small>	
+		</h4>
+		<?php
+			/**
+			 * Include the analytics template
+			 */
+			include FRMWKS_PATH . 'includes/templates/analytics-panel.php';
+		?>
+	</div>
+
 
 </form>
 

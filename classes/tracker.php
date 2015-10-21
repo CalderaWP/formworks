@@ -186,7 +186,6 @@ class tracker {
 		}
 		// save with completion time
 		$timespent = current_time( 'timestamp', true ) - strtotime( $partial['datestamp'] );
-		
 		if( self::save( 'submission', $timespent, $form_id ) ){
 			return self::kill_partial( $partial['id'] );
 		}

@@ -40,6 +40,7 @@ function activate_formworks_tracker(){
 		$meta_table = "CREATE TABLE `" . $wpdb->prefix . "formworks_tracker` (
 		`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 		`form_id` varchar(18) DEFAULT NULL,
+		`prefix` VARCHAR(18) DEFAULT NULL,
 		`user_id` int(11) DEFAULT NULL,
 		`user_key` varchar(41) DEFAULT NULL,
 		`datestamp` datetime DEFAULT NULL,

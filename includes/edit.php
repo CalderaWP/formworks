@@ -11,77 +11,14 @@
 
 $formworks = \calderawp\frmwks\options::get_single( 'formworks' );
 
-if( class_exists( 'Caldera_Forms' ) ){
-	$forms = Caldera_Forms::get_forms();
-	$formworks['forms']['caldera'] = array(
-		'name' => __('Caldera Forms', 'caldera-forms'),
-		'forms' => array()
-	);
-	foreach( $forms as $form ){
-		$formworks['forms']['caldera']['forms'][ $form['ID'] ] = $form['name'];
-	}
-}
-if( class_exists('RGFormsModel') ){
-	$forms = RGFormsModel::get_forms( null, 'title' );
-	$formworks['forms']['gravity'] = array(
-		'name' => __('Gravity Forms', 'gravityforms'),
-		'forms' => array()
-	);
-	foreach( $forms as $form ){
-		$formworks['forms']['gravity']['forms'][ 'gform_' . $form->id ] = $form->title;
-	}
-}
-if( class_exists( 'NF_Forms' ) ){
-	$nforms = new NF_Forms();
-	$nforms = $nforms->get_all();
-	$formworks['forms']['ninja'] = array(
-		'name' => __('Ninja Forms', 'ninja-forms'),
-		'forms' => array()
-	);
-	foreach ($nforms as $form) {
-		$formworks['forms']['ninja']['forms'][ 'ninja_' . $form ]	= Ninja_Forms()->form( $form )->get_setting( 'form_title' );
-	}
-}
-if( class_exists( 'WPCF7_ContactForm' ) ){
-	$cforms = WPCF7_ContactForm::find( array( 'posts_per_page' => -1 ) );
-	$formworks['forms']['cf7'] = array(
-		'name' => __('Contact Form 7', 'contact-form-7'),
-		'forms' => array()
-	);	
-	foreach( $cforms as $form ){
-		$formworks['forms']['cf7']['forms'][ 'cf7_' . $form->id() ] = $form->title();
-	}
-}
-if( class_exists( 'FrmForm' ) ){
-	$fforms = FrmForm::getAll();
-	$formworks['forms']['frmid'] = array(
-		'name' => __('Formidable', 'formidable'),
-		'forms' => array()
-	);
-	foreach( $fforms as $form ){
-		if( !empty( $form->is_template ) ){
-			continue;
-		}
-		$formworks['forms']['frmid']['forms'][ 'frmid_' . $form->id ] = $form->name;
-	}	
 
-}
-// jetpack
-if( function_exists( 'grunion_display_form_view' ) ){
-	global $wpdb;
-	$shortcodes = $wpdb->get_results("SELECT `post_id` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_g_feedback_shortcode';", ARRAY_A );
-	if( !empty( $shortcodes ) ){
-		$formworks['forms']['jp'] = array(
-			'name' => __('Jetpack Contact Form', 'jetpack'),
-			'forms' => array()
-		);
-		foreach( $shortcodes as $post_id ){
-			$form = get_post( $post_id['post_id'] );
-			$formworks['forms']['jp']['forms'][ 'jp_' . $post_id['post_id'] ] = $form->post_title;
-		}
-	}
-}
+$formworks['forms'] = apply_filters( 'formworks_get_forms', array() );
 
+
+// add slug
+foreach( $formworks['forms'] as $slug => &$forms_set ){
+	$forms_set[ 'slug' ] = $slug;
+}
 
 
 ?>

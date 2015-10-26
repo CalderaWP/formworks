@@ -548,11 +548,15 @@ h4 > small.description {
   width: 14px;
 }
 
+label.add-new-h2.formworks-filter-button:active,
+label.add-new-h2.formworks-filter-button,
 button.add-new-h2.formworks-filter-button:active,
 button.add-new-h2.formworks-filter-button{
   cursor: pointer;
   top: 0;
 }
+label.add-new-h2.formworks-filter-button.active,
+label.add-new-h2.formworks-filter-button:hover,
 button.add-new-h2.formworks-filter-button.active,
 button.add-new-h2.formworks-filter-button:hover{
   color: #fff;

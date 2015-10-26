@@ -141,7 +141,6 @@ Handlebars.registerHelper(":name", function(context) {
   
   $.fn.formJSON = function(){
     var form = $(this);
-
     var fields       = form.find('[name]'),
         json         = {},
         arraynames   = {};

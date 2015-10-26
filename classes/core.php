@@ -9,7 +9,6 @@
  * @copyright 2015 David Cramer
  */
 namespace calderawp\frmwks;
-use Handlebars\Handlebars;
 
 /**
  * Main plugin class.
@@ -54,7 +53,7 @@ class core {
 	 * @access private
 	 */
 	private function __construct() {
-		global $formworks_submittion_tracks;
+		global $formworks_tracker;
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 
@@ -81,83 +80,68 @@ class core {
 		
 		// complete submission
 		add_action( 'caldera_forms_submit_complete', array( $this, 'tracker_push') );
-
-		// pull partials
-		add_filter( 'caldera_forms_render_pre_get_entry' , array( $this, 'get_partial' ), 10, 3 );
+		// open actions
+		add_action( 'formworks_track', array( $this, 'handle_track'), 10, 4 );
 
 		add_filter( 'grunion_contact_form_success_message', function( $html ){
-			global $formworks_submittion_tracks;
-			$form_id = 'jp_' . $_GET['contact-form-id'];
-			tracker::add_submission( $form_id );
-			$formworks_submittion_tracks[] = $form_id;
+
+			$form_id = $_GET['contact-form-id'];
+			do_action( 'formworks_track', 'jp', $form_id, 'submission' );
+
 			return $html;
 		});
 
 		add_filter( 'grunion_contact_form_form_action', function( $url, $post, $form ){
-			$form_id = 'jp_' . $form;
-			core::set_tracking( null, $form_id );
+
+			do_action( 'formworks_track', 'jp', $form, 'loaded' );
 			return $url;
 		}, 15, 3 );
 
 		add_action( 'frm_process_entry', function( $params ){
-			global $formworks_submittion_tracks;
-			$form_id = 'frmid_' . $params['form_id'];
-			$formworks_submittion_tracks[] = $form_id;
-			tracker::add_submission( $form_id );
-			
+			do_action( 'formworks_track', 'frmid', $params['form_id'], 'submission' );			
 		}, 15 );
 
 		add_filter( 'formidable_shortcode_atts' , function( $shortcode_atts, $atts ){
 
-			$form_id = 'frmid_' . $atts['id'];
-			core::set_tracking( null, $form_id );
+			do_action( 'formworks_track', 'frmid', $atts['id'], 'loaded' );
 
 		}, 10, 2 );
 
 		add_filter( 'wpcf7_form_elements', function( $html ){
 			$form = \WPCF7_ContactForm::get_current();
-			$form_id = 'cf7_'. $form->id();
-			return core::set_tracking( $html, $form_id );
+			do_action( 'formworks_track', 'cf7', $form->id(), 'loaded' );
+			return $html;
 		},10 , 2 );
 
 		add_action( 'wpcf7_submit', function( $instance, $result ){
 
 			if( $result['status'] === 'mail_sent' ){
-				global $formworks_submittion_tracks;
-				$form_id = 'cf7_' . $instance->id();
-				$formworks_submittion_tracks[] = $form_id;
-				tracker::add_submission( $form_id );
+				do_action( 'formworks_track', 'cf7', $instance->id(), 'submission' );
 			}
 
 		},20, 2);
 
 		add_filter( 'gform_get_form_filter', function( $html, $form ){
-			$form_id = 'gform_'. $form['id'];
-			return core::set_tracking( $html, $form_id );
+			do_action( 'formworks_track', 'gform', $form['id'], 'loaded' );
+			return $html;
 		},10 , 2 );
 
 		// setup tracking
 		add_filter( 'caldera_forms_render_form', function( $html, $form ){
-			return core::set_tracking( $html, $form['ID'] );
+			do_action( 'formworks_track', 'caldera', $form['ID'], 'loaded' );
+			return $html;
 		}, 10, 2 );
 
 		add_action( 'gform_after_submission', function( $form ){
 
 			// do a submission complete
-			$form_id = 'gform_'. $form['form_id'];
-			tracker::add_submission( $form_id );
-			//$form['ID']
+			do_action( 'formworks_track', 'gform', $form['form_id'], 'submission' );
 			return;
 		} );
 
 		add_action( 'ninja_forms_post_process', function(){
 			global $ninja_forms_processing;
-			global $formworks_submittion_tracks;
-
-			$form_id = 'ninja_'. $ninja_forms_processing->get_form_ID();
-			$formworks_submittion_tracks[] = $form_id;
-			tracker::add_submission( $form_id );
-			return;
+			do_action( 'formworks_track', 'ninja', $ninja_forms_processing->get_form_ID(), 'submission' );
 		});
 
 		//load settings class in admin
@@ -175,186 +159,6 @@ class core {
 
 	}
 
-
-	/**
-	 * Return form for modal
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return    form HTML
-	 */
-	function render_form_handler() {
-		global $wp_query;
-
-		// if this is not a request for json or a singular object then bail
-		if ( ! isset( $wp_query->query_vars['cf_form_id'] ) ){
-			return;
-		}
-
-		add_filter( 'caldera_forms_render_form_classes', array( $this, 'setup_modal_form_classes' ), 25, 2 );
-		add_filter( 'caldera_forms_render_form_element', array( $this, 'setup_modal_form_element' ), 25, 2 );
-		add_filter( 'caldera_forms_render_get_field_type-button', array( $this, 'setup_modal_form_button' ), 25, 2 );
-
-		echo \Caldera_Forms::render_form( $wp_query->query_vars['cf_form_id'], $_REQUEST['entry'] );
-		//var_dump( $_REQUEST );
-		ob_start();
-		?>
-		<script type="text/javascript">
-		jQuery( function( $ ){
-			$('.baldrick-modal-wrap').baldrick({
-				request : "<?php echo admin_url('admin-ajax.php'); ?>"
-			});
-		});
-		</script>
-		<?php
-		echo ob_get_clean();
-		die;
-
-	}
-
-
-	/**
-	 * remove the submit button from the form
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return    form HTML
-	 */
-	function setup_modal_form_button( $field, $form) {
-		
-		if( $field['config']['type'] == 'submit' ){
-			return false;
-		}
-
-		return $field;
-	}
-
-
-	/**
-	 * remove the cfajax-trigger class from the form
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return    form HTML
-	 */
-	function setup_modal_form_classes( $classes, $form) {
-		
-		$old_ajax_class = array_search( 'cfajax-trigger', $classes);
-		if( !empty( $old_ajax_class ) ){
-			unset( $classes[ $old_ajax_class ] );
-		}
-
-		return $classes;
-	}
-
-	/**
-	 * setup attributes for modal form
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return    form HTML
-	 */
-	function setup_modal_form_element( $element, $form) {
-		return 'div';
-	}
-
-	/**
-	 * Return json stufs
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return    json string
-	 */
-	function table_data_handler() {
-		global $wp_query;
-
-		// if this is not a request for json or a singular object then bail
-		if ( ! isset( $wp_query->query_vars['cf_view_id'] ) ){
-			return;
-		}
-
-		$formworks = \calderawp\frmwks\options::get_single( $wp_query->query_vars['cf_view_id'] );
-		$form = \Caldera_Forms::get_form( $formworks['form'] );
-
-		foreach( $form['fields'] as $field ){
-			$fields[ $field['slug'] ] = $field['ID'];
-		}
-		$get_fields = array();
-
-		foreach( $formworks['columns'] as $column ){
-			if( !isset( $fields[ $column['field'] ] ) ){
-				continue;
-			}
-			$get_fields[] = $fields[ $column['field'] ];
-		}
-
-		$entries = options::get_entries( $form['ID'], 1, null, "CF", $get_fields );
-
-		$out = array();
-		$entry_actions = array( 
-			'_edit' => __('Edit', 'formworks'),
-			'_view' => __('View', 'formworks'),
-			'_delete' => __('Delete', 'formworks'),
-		);
-		if( !empty( $entries['entry'] ) ){
-			foreach( $entries['entry'] as $key => $entry ) {
-				$row = array();
-				foreach( $formworks['columns'] as $column ){
-					if( isset( $entry['data'][ $column['field'] ] ) ){
-						$field_value = $entry['data'][ $column['field'] ];
-					}elseif( isset( $entry[ $column['field'] ] ) ){
-						$field_value = $entry[ $column['field'] ];
-					}elseif( isset( $entry_actions[ $column['field'] ] ) ){
-						// actions
-						switch ( $column['field'] ) {
-							case '_edit':
-								$field_value = '<a href="#" class="caldera-forms-modal" data-entry="' . $entry['_entry_id'] . '" data-modal-title="WOOTER" data-form="' . $form['ID'] . '">EDIT</a>';
-								break;
-							case '_view':
-								$field_value = 'VIEW LINK';
-								break;
-							case '_delete':
-								$field_value = 'DELETE LINK';
-								break;
-							
-							default:
-								$field_value = '';
-								break;
-						}
-					}else{
-						continue;
-					}			
-					$row[$column['field']] = $field_value;
-				}
-				$out[] = $row;
-			}
-		}
-
-		wp_send_json( $out );
-
-	}
-
-	/**
-	 * Return partial entries if any
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return    object|\calderawp\frmwks\core    A single instance of this class.
-	 */
-	public function get_partial( $data, $form, $entry_id ){
-		
-		if( !empty( $entry_id ) ){
-			return $data; // only on a non entry partial based
-		}
-		
-		$partial = tracker::get_notch( $form['ID'], 'partial' );
-		if( !empty( $partial ) ){
-			return json_decode( $partial['meta_value'], ARRAY_A );
-		}
-		
-		return $data;
-
-	}
 	
 	/**
 	 * sets tracking for the rendered form
@@ -363,23 +167,22 @@ class core {
 	 *
 	 * @return   html  the form HTML
 	 */
-	public static function set_tracking( $html, $form_id ){
-			global $formworks_submittion_tracks;
+	public function set_tracking($prefix, $form_id ){
+			global $formworks_tracker;
 			$formworks = \calderawp\frmwks\options::get_single( 'formworks' );
 
 			// add loaded notch
-			tracker::add_notch( $form_id, 'loaded' );
+			tracker::add_notch( $prefix, $form_id, 'loaded' );
 
 			// URL hack :)
 			$script_array = array(
 				'frmwksurl' => admin_url( 'admin-ajax.php' ),
 				'config' => $formworks,
-				'submissions' => $formworks_submittion_tracks
+				'submissions' => $formworks_tracker
 			);
 			wp_localize_script( 'formworks-front-binding', 'formworks', $script_array );
 			wp_enqueue_script( 'formworks-front-binding' );
 
-			return $html;
 		}
 	/**
 	 * Return an instance of this class.
@@ -443,6 +246,16 @@ class core {
 		}
 		
 	}
+
+	static function getBrowser(){
+		$u_agent = $_SERVER['HTTP_USER_AGENT'];
+		echo $u_agent;
+		preg_match_all('/\((.+?)\)/', $u_agent, $matches);
+		if( !empty( $matches[0] ) ){
+			var_dump( $matches );
+		}
+		die;
+	} 
 	
 	/**
 	 * Register visitor session and ensure one is created before using anything.
@@ -453,7 +266,11 @@ class core {
 	 */
 	public function register_visitor_session() {
 		global $formworks_current_usertag;
+
+
+
 		if( !isset( $_COOKIE[ FRMWKS_SLUG ] ) ){
+
 			$formworks_current_usertag = uniqid();
 			$expire = time() + ( 365 * DAY_IN_SECONDS );
 			setcookie( FRMWKS_SLUG , $formworks_current_usertag, $expire, COOKIEPATH, COOKIE_DOMAIN, is_ssl(), true);
@@ -470,10 +287,10 @@ class core {
 			if( !is_wp_error( $geo ) ){
 				$data = json_decode( wp_remote_retrieve_body( $geo ) );
 				if( !empty( $data ) && empty( $data->code ) ){
-					tracker::add_notch( '', 'geo_latlng', $data->latitude . ',' . $data->longitude );
-					tracker::add_notch( '', 'geo_city', $data->city );
-					tracker::add_notch( '', 'geo_region', $data->region );
-					tracker::add_notch( '', 'geo_country', $data->country );
+					tracker::add_notch( '_sys', '_global', 'geo_latlng', $data->latitude . ',' . $data->longitude );
+					tracker::add_notch( '_sys', '_global', 'geo_city', $data->city );
+					tracker::add_notch( '_sys', '_global', 'geo_region', $data->region );
+					tracker::add_notch( '_sys', '_global', 'geo_country', $data->country );
 				}
 			}else{
 				// alt
@@ -481,17 +298,50 @@ class core {
 				if( !is_wp_error( $geo ) ){
 					$data = json_decode( wp_remote_retrieve_body( $geo ) );
 					if( !empty( $data ) && empty( $data->message ) ){
-						tracker::add_notch( '', 'geo_latlng', $data->lat . ',' . $data->lon );
-						tracker::add_notch( '', 'geo_city', $data->city );
-						tracker::add_notch( '', 'geo_region', $data->regionName );
-						tracker::add_notch( '', 'geo_country', $data->country );
+						tracker::add_notch( '_sys', '_global', 'geo_latlng', $data->lat . ',' . $data->lon );
+						tracker::add_notch( '_sys', '_global', 'geo_city', $data->city );
+						tracker::add_notch( '_sys', '_global', 'geo_region', $data->regionName );
+						tracker::add_notch( '_sys', '_global', 'geo_country', $data->country );
 					}
 				}
 			}
 
+			// detect device
+			$detect = new mobile_detect;
+			$deviceType = ($detect->isMobile() ? ($detect->isTablet() ? 'tablet' : 'phone') : 'computer');
+			tracker::add_notch( '_sys', '_global', 'device', $deviceType );
+
+
 		}
 	}
 
+
+	/**
+	 * tracker action handler
+	 *
+	 * @since 1.0.0
+	 *
+	 */
+	public function handle_track( $prefix, $track_id, $type, $value = null) {
+		global $formworks_tracker;
+
+		switch ( $type ) {
+			case 'loaded':
+				$this->set_tracking($prefix, $track_id );
+				break;
+			case 'submission':
+				$formworks_tracker[] = $track_id;
+				tracker::add_submission($prefix, $track_id );
+				break;
+			case 'partial':
+				tracker::add_partial($prefix, $track_id, $value );
+				break;
+			default:
+				tracker::add_notch($prefix, $track_id, $type );
+				break;
+		}
+
+	}
 
 	/**
 	 * push stuff to tracker
@@ -500,30 +350,26 @@ class core {
 	 *
 	 * @return    null
 	 */
-	public function tracker_push( $form = null ) {
+	public function tracker_push( $form = null, $type = null ) {
 
 		if( !empty( $form ) ){
 			// do a submission complete
-			global $formworks_submittion_tracks;
-			$formworks_submittion_tracks[] = $form['ID'];
-			tracker::add_submission( $form['ID'] );
+			do_action( 'formworks_track', $form['ID'], 'submission' );
 			return;
 		}
-
+		
 		if( !empty ( $_POST['method'] ) && !empty( $_POST['form'] ) ){
+			$form = explode('_', sanitize_text_field( $_POST['form'] ), 2 );
 
 			switch ( $_POST['method'] ) {
 				case 'add_notch':
 					if( !empty( $_POST['type'] ) ){
-						tracker::add_notch( $_POST['form'], $_POST['type'] );
-					}
-					if( $_POST['type'] === 'engage' ){
-						tracker::add_partial( $_POST['form'] );
+						do_action( 'formworks_track', $form[0], $form[1], $_POST['type'] );
 					}
 					break;
 				case 'add_partial':
 					if( !empty( $_POST['field'] ) ){
-						tracker::add_partial( $_POST['form'], $_POST['field'], $_POST['value'] );
+						do_action( 'formworks_track', $form[0], $form[1], 'partial', $_POST['field'] );
 					}
 					break;
 				default:
@@ -577,6 +423,7 @@ class core {
 			wp_enqueue_script( 'formworks-flot-js', FRMWKS_URL . 'assets/js/jquery.flot.min.js', array( 'jquery' ) , false );
 			wp_enqueue_script( 'formworks-flot-js-cat', FRMWKS_URL . 'assets/js/jquery.flot.categories.min.js', array( 'formworks-flot-js' ) , false );
 			wp_enqueue_script( 'formworks-flot-js-resize', FRMWKS_URL . 'assets/js/jquery.flot.resize.min.js', array( 'formworks-flot-js' ) , false );
+			wp_enqueue_script( 'formworks-flot-js-pie', FRMWKS_URL . 'assets/js/jquery.flot.pie.min.js', array( 'formworks-flot-js' ) , false );
 
 			wp_enqueue_style( 'formworks-datepicker', FRMWKS_URL . 'assets/css/bootstrap-datepicker.css' );
 			wp_enqueue_script( 'formworks-datepicker', FRMWKS_URL . 'assets/js/bootstrap-datepicker.min.js', array( 'jquery' ) , false );
@@ -656,7 +503,7 @@ class core {
 		$output = null;
 
 		// do stuf and output
-		//*$entries = \calderawp\frmwks\options::get_entries( $formworks['form'],1, 1000, 'CF');
+		//*$entries = \calderawp\frmwks\options::get_entries( $formworks['form'],1, 1000, 'caldera');
 		//*$engine = new Handlebars;
 
 		wp_enqueue_script( 'foo-table', FRMWKS_URL . 'assets/js/footable.min.js', array( 'jquery' ) );

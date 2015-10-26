@@ -10,54 +10,19 @@
  */
 
 $formworks = \calderawp\frmwks\options::get_single( $formwork_id );
-$formworks['limit'] = 10;
+
 // simplyfy creation
 $formworks['id'] = '__' . $formwork_id;
 $formworks['_current_tab'] = '#formworks-panel-stats';
 
-	if( false !== strpos( $formwork_id, '_' ) ){
+$formworks['forms'] = apply_filters( 'formworks_get_forms', array() );
+$form_parts = explode( '_', $formwork_id, 2 );
 
-		// not a CF form
-		$form = explode( '_', $formwork_id );
-		
-		switch ( $form[0] ){
-			case 'gform':
-				# get gravity form
-				$form_info     = \RGFormsModel::get_form( $form[1] );
-				$form_name = $form_info->title;
+if( empty( $formworks['forms'][ $form_parts[0] ]['forms'][$form_parts[1]] ) ){
+	wp_die( __('Invalid form or form removed', 'formworks' ) );
+}
 
-				break;
-			
-			case 'ninja':
-				# get ninja form				
-				$form_name = Ninja_Forms()->form( $form[1] )->get_setting( 'form_title' );
-				break;
-			
-			case 'cf7':
-				# get contact form 7
-				$cf7form = \WPCF7_ContactForm::get_instance( $form[1] );							
-				$form_name = $cf7form->title();
-				break;
-			case 'frmid':
-				$form_name = FrmForm::getname( $form[1] );
-				break;
-			case 'jp':
-				$form_post = get_post( $form[1] );
-				$form_name = $form_post->post_title;
-			default:
-				# no idea what this is or the form plugin was disabled.
-				break;
-		}
-	}else{
-		// is CF
-		$form = \Caldera_Forms::get_form( $formwork_id );
-		if( empty( $form ) ){
-			continue;
-		}
-		$form_name = $form['name'];
-	}
-
-$formworks['name'] = $form_name;
+$formworks['name'] = $formworks['forms'][ $form_parts[0] ]['forms'][$form_parts[1]];
 
 
 //$data = \calderawp\frmwks\tracker::get_main_stats( $formwork_id );

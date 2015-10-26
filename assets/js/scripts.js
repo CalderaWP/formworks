@@ -11,11 +11,18 @@ var formworks_canvas = false,
 	frmwks_rebuild_magics,
 	frmwks_is_view,
 	frmwks_init_magic_tags,
+	frmwks_get_filters,
 	frmwks_config_object = {},
 	frmwks_magic_tags = [];
 
 jQuery( function($){
 
+	frmwks_get_filters = function( el ){
+		frmwks_get_config_object();
+		if( frmwks_config_object.filters ){
+			$( el ).data( { filters : JSON.stringify( frmwks_config_object.filters ) } );
+		}
+	}
 
 	frmwks_handle_save = function( obj ){
 
@@ -447,25 +454,10 @@ jQuery( function($){
 			}
 		});
 	});
-	// bind toggles
-	$(document).on('click', '[data-toggle]', function(){
-		
-		var toggle = $(this).data('toggle'),
-			target = $(toggle);
-		
-		target.each(function(){
-			var tog = $(this);
-			if( tog.is(':checkbox') || tog.is(':radio') ){
-				if( tog.prop('checked') ){
-					tog.prop('checked', false);
-				}else{
-					tog.prop('checked', true);
-				}
-				frmwks_record_change();
-			}else{
-				tog.toggle();
-			}
-		});
+
+	$('body').on('click', 'label.formworks-filter-button', function(){
+
+		$('.formworks-filter-button.wp-baldrick.active').trigger('click');
 
 	});	
 

@@ -34,6 +34,9 @@ class settings extends core{
 		// exporter
 		add_action( 'init', array( $this, 'check_exporter' ) );
 
+		// get forms list
+		add_filter( 'formworks_get_forms', array( $this, 'get_forms' ) );
+
 		// create new
 		add_action( 'wp_ajax_frmwks_create_formworks', array( $this, 'create_new_formworks') );
 
@@ -49,6 +52,150 @@ class settings extends core{
 		// do quickstats
 		add_action( 'wp_ajax_frmwks_get_mainstats', array( $this, 'get_main_stats') );
 
+		add_filter( 'formworks_stats_field_name', function( $field, $form_prefix, $form_id ){
+				
+				switch ( $form_prefix ){
+					case 'caldera':
+						// is CF
+						$form = \Caldera_Forms::get_form( $form_id );
+						if( empty( $form ) ){
+							continue;
+						}
+						if( !empty( $form['fields'][ $field ]['label'] ) ){
+							$field = $form['fields'][ $field ]['label'];
+						}
+
+						break;
+					case 'gform':
+						# get gravity form
+						if( !class_exists( 'RGFormsModel' ) ){
+							continue;
+						}						
+						$form_info     = \RGFormsModel::get_form( $form_id );
+
+
+						break;
+					
+					case 'ninja':
+						# get ninja form
+						if( !function_exists( 'Ninja_Forms' ) ){
+							continue;
+						}
+						$form_name = Ninja_Forms()->form( $form_id )->get_setting( 'form_title' );
+						$form_id = $form_id;
+						break;
+					case 'cf7':
+						# get contact form 7
+						if( !class_exists( 'WPCF7_ContactForm' ) ){
+							continue;
+						}
+						$cf7form = \WPCF7_ContactForm::get_instance( $form_id );							
+						$form_name = $cf7form->title();
+						$form_id = $cf7form->id();
+						break;
+					case 'frmid':
+						if( !class_exists( 'FrmForm' ) ){
+							continue;
+						}
+						$field_id = (int) strtok( str_replace('item_meta[', '', $field ), ']');
+						$form_field = \FrmField::getOne( $field_id );
+						$field = $form_field->name;
+						if( !empty( $form_field->description ) && $form_field->description != $form_field->name ){
+							$field .= ':'.$form_field->description;
+						}
+						break;
+					case 'jp':
+						$form_post = get_post( $form_id );
+						if( empty( $form_post )){
+							continue;
+						}
+						$form_name = $form_post->post_title;
+						$form_id = $form_id;
+					default:
+						# no idea what this is or the form plugin was disabled.
+						break;
+				}
+
+			return $field;
+
+		},10, 3 );
+
+	}
+
+	public function get_forms( $form_list ){
+
+		if( class_exists( 'Caldera_Forms' ) ){
+			$forms = \Caldera_Forms::get_forms();
+			$form_list['cf'] = array(
+				'name' => __('Caldera Forms', 'caldera-forms'),
+				'forms' => array()
+			);
+			foreach( $forms as $form ){
+				$form_list['caldera']['forms'][ $form['ID'] ] = $form['name'];
+			}
+		}
+		if( class_exists('RGFormsModel') ){
+			$forms = \RGFormsModel::get_forms( null, 'title' );
+			$form_list['gform'] = array(
+				'name' => __('Gravity Forms', 'gravityforms'),
+				'forms' => array()
+			);
+			foreach( $forms as $form ){
+				$form_list['gravity']['forms'][ $form->id ] = $form->title;
+			}
+		}
+		if( class_exists( 'NF_Forms' ) ){
+			$nforms = new \NF_Forms();
+			$nforms = $nforms->get_all();
+			$form_list['ninja'] = array(
+				'name' => __('Ninja Forms', 'ninja-forms'),
+				'forms' => array()
+			);
+			foreach ($nforms as $form) {
+				$form_list['ninja']['forms'][ $form ]	= Ninja_Forms()->form( $form )->get_setting( 'form_title' );
+			}
+		}
+		if( class_exists( 'WPCF7_ContactForm' ) ){
+			$cforms = \WPCF7_ContactForm::find( array( 'posts_per_page' => -1 ) );
+			$form_list['cf7'] = array(
+				'name' => __('Contact Form 7', 'contact-form-7'),
+				'forms' => array()
+			);	
+			foreach( $cforms as $form ){
+				$form_list['cf7']['forms'][ $form->id() ] = $form->title();
+			}
+		}
+		if( class_exists( 'FrmForm' ) ){
+			$fforms = \FrmForm::getAll();
+			$form_list['frmid'] = array(
+				'name' => __('Formidable', 'formidable'),
+				'forms' => array()
+			);
+			foreach( $fforms as $form ){
+				if( !empty( $form->is_template ) ){
+					continue;
+				}
+				$form_list['frmid']['forms'][  $form->id ] = $form->name;
+			}	
+
+		}
+		// jetpack
+		if( function_exists( 'grunion_display_form_view' ) ){
+			global $wpdb;
+			$shortcodes = $wpdb->get_results("SELECT `post_id` FROM `" . $wpdb->postmeta . "` WHERE `meta_key` = '_g_feedback_shortcode';", ARRAY_A );
+			if( !empty( $shortcodes ) ){
+				$form_list['jp'] = array(
+					'name' => __('Jetpack Contact Form', 'jetpack'),
+					'forms' => array()
+				);
+				foreach( $shortcodes as $post_id ){
+					$form = get_post( $post_id['post_id'] );
+					$form_list['jp']['forms'][ $post_id['post_id'] ] = $form->post_title;
+				}
+			}
+		}
+
+		return $form_list;
 	}
 
 	/**
@@ -76,7 +223,7 @@ class settings extends core{
 	 */
 	public function get_quick_stats(){
 		$form_id = $_POST['form'];
-		$stats = tracker::get_quick_stats( $form_id );
+		$stats = stats::get_quick_stats( $form_id );
 
 		wp_send_json( $stats );
 	}
@@ -117,11 +264,23 @@ class settings extends core{
 			$preset = $args[ $_POST['preset'] ];
 			$filter = $_POST['preset'];
 		}
+		if( !empty( $_POST['filters'] ) ){
+			$is_json = json_decode( stripslashes_deep( $_POST['filters'] ), ARRAY_A );
+			if( !empty( $is_json ) ){
+				$preset['filters'] = $is_json;
+			}
+		}
 
-		$stats = tracker::get_main_stats( $form_id, $preset, $filter );
-		$stats['filter'] = $filter;
-		$stats['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
-		$stats['end'] = date( 'Y-m-d', strtotime( $preset['end'] ) );
+		$sig = sha1( $form_id . '_' . json_encode( $preset ) . '_' . $filter );
+		
+		$stats = '';//get_transient( $sig );
+		if( empty( $stats ) ){
+			$stats = stats::get_main_stats( $form_id, $preset, $filter );
+			$stats['filter'] = $filter;
+			$stats['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
+			$stats['end'] = date( 'Y-m-d', strtotime( $preset['end'] ) );
+			set_transient( $sig, $stats, 600 );
+		}
 		wp_send_json( $stats );
 	}
 
@@ -325,88 +484,25 @@ class settings extends core{
 			if( empty( $formworks ) || empty( $formworks['track_form'] ) ){
 				return;
 			}
-
-			foreach( $formworks['track_form'] as $form_id => $track ){
-				// get type of form
-				$form_name = null;
-				$form_key = $form_id;
-				if( false !== strpos( $form_id, '_' ) ){
-
-					// not a CF form
-					$form = explode( '_', $form_id );
+			$forms = apply_filters( 'formworks_get_forms', array() );
+			foreach( $formworks['track_form'] as $prefix => $track ){
+				foreach ($track as $form_id => $form_name ) {
 					
-					switch ( $form[0] ){
-						case 'gform':
-							# get gravity form
-							if( !class_exists( 'RGFormsModel' ) ){
-								continue;
-							}						
-							$form_info     = \RGFormsModel::get_form( $form[1] );
-							$form_name = $form_info->title;
-							$form_id = $form_info->id;
+					$form_key = $prefix . '_' . $form_id;
 
-							break;
-						
-						case 'ninja':
-							# get ninja form
-							if( !function_exists( 'Ninja_Forms' ) ){
-								continue;
-							}
-							$form_name = Ninja_Forms()->form( $form[1] )->get_setting( 'form_title' );
-							$form_id = $form[1];
-							break;
-						case 'cf7':
-							# get contact form 7
-							if( !class_exists( 'WPCF7_ContactForm' ) ){
-								continue;
-							}
-							$cf7form = \WPCF7_ContactForm::get_instance( $form[1] );							
-							$form_name = $cf7form->title();
-							$form_id = $cf7form->id();
-							break;
-						case 'frmid':
-							if( !class_exists( 'FrmForm' ) ){
-								continue;
-							}
-							$form_name = \FrmForm::getname( $form[1] );
-							$form_id = $form[1];
-						case 'jp':
-							$form_post = get_post( $form[1] );
-							if( empty( $form_post )){
-								continue;
-							}
-							$form_name = $form_post->post_title;
-							$form_id = $form[1];
-						default:
-							# no idea what this is or the form plugin was disabled.
-							break;
-					}
-				}else{
-					// is CF
-					$form = \Caldera_Forms::get_form( $form_id );
-					if( empty( $form ) ){
-						continue;
-					}
-					$form_id = $form['ID'];
-					$form_name = $form['name'];
-				}
-				if( $form_name == null ){
-					continue;
-				}
-				$form_slug = sanitize_key( $form_name );
-				$this->plugin_screen_hook_suffix['formwork-' . $form_key ] =  add_submenu_page(
-					'formworks',
-					$form_slug,
-					'- ' . $form_name,
-					'manage_options',
-					'formwork-' . $form_key,
-					array( $this, 'create_admin_page' )
-				);
-				add_action( 'admin_print_styles-' . $this->plugin_screen_hook_suffix[ 'formwork-' . $form_key ], array( $this, 'enqueue_admin_stylescripts' ) );
+					$this->plugin_screen_hook_suffix['formwork-' . $form_key ] =  add_submenu_page(
+						'formworks',
+						$form_name,
+						'- ' . $form_name,
+						'manage_options',
+						'formwork-' . $form_key,
+						array( $this, 'create_admin_page' )
+					);
 
+					add_action( 'admin_print_styles-' . $this->plugin_screen_hook_suffix[ 'formwork-' . $form_key ], array( $this, 'enqueue_admin_stylescripts' ) );
+
+				}
 			}
-
-
 
 	}
 

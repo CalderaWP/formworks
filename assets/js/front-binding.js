@@ -54,7 +54,7 @@ jQuery( function( $ ){
 	forms.each( function(){
 
 		var form = $( this ),
-			form_id = form.find('[name="_cf_frm_id"]').length ? form.find('[name="_cf_frm_id"]').val() : form.prop('id');
+			form_id = form.find('[name="_cf_frm_id"]').length ? 'caldera_' + form.find('[name="_cf_frm_id"]').val() : form.prop('id');
 		// is cf7
 		if( form.find('[name="_wpcf7"]').length ){
 			form_id = 'cf7_' + form.find('[name="_wpcf7"]').val();
@@ -90,6 +90,7 @@ jQuery( function( $ ){
 				push_stuff( { action : 'frmwks_push', 'method' : 'add_notch', 'type' : 'engage', 'form' : form.data('form_id') } );
 				form.data('engageNotch', true);
 			}
+			$( this ).trigger( 'change' );
 		});
 
 		form.on('submit', function(){

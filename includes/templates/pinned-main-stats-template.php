@@ -18,11 +18,17 @@
 </h4>
 {{#if main_stats}}
 <div style="position: relative; top: -5px;">
-	<button type="button" class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="this_week"}} active{{/is}}{{#unless main_stats/filter}} active{{/unless}}" data-preset="this_week" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('This Week', 'formworks' ); ?></button>
-	<button type="button" class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="this_month"}} active{{/is}}" data-preset="this_month" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('This Month', 'formworks' ); ?></button>
-	<button type="button" class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="last_month"}} active{{/is}}" data-preset="last_month" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('Last Month', 'formworks' ); ?></button>
+	<input type="hidden" name="filters[device]" value="">
+	<label class="add-new-h2 formworks-filter-button {{#if main_stats/config/filters/device/computer}}active{{/if}}" style="display: inline-block; padding: 3px 6px;margin-left: -4px; margin-top: -3px;border-radius: 3px 0px 0px 3px;"><input style="display:none;" type="checkbox" name="filters[device][computer]" value="1" {{#if main_stats/config/filters/device/computer}}checked="checked"{{/if}}><span class="dashicons dashicons-desktop"></span></label>
+	<label class="add-new-h2 formworks-filter-button {{#if main_stats/config/filters/device/tablet}}active{{/if}}" style="display: inline-block; padding: 3px 6px;margin-left: -4px; margin-top: -3px;border-radius: 0px;"><input style="display:none;" type="checkbox" name="filters[device][tablet]" value="1" {{#if main_stats/config/filters/device/tablet}}checked="checked"{{/if}}><span class="dashicons dashicons-tablet"></span></label>
+	<label class="add-new-h2 formworks-filter-button {{#if main_stats/config/filters/device/phone}}active{{/if}}" style="display: inline-block; padding: 3px 6px;margin-left: -4px; margin-top: -3px;border-radius: 0px 3px 3px 0px;"><input style="display:none;" type="checkbox" name="filters[device][phone]" value="1" {{#if main_stats/config/filters/device/phone}}checked="checked"{{/if}}><span class="dashicons dashicons-smartphone"></span></label>
 
-	<button style="margin: 0px 0px 0px 20px;" type="button" class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="custom"}} active{{/is}}" data-preset="custom" data-end="{{main_stats/end}}" data-start="{{main_stats/start}}" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('Custom Range', 'formworks' ); ?></button>
+
+	<button type="button" data-before="frmwks_get_filters"  class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="this_week"}} active{{/is}}{{#unless main_stats/filter}} active{{/unless}}" data-preset="this_week" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('This Week', 'formworks' ); ?></button>
+	<button type="button" data-before="frmwks_get_filters"  class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="this_month"}} active{{/is}}" data-preset="this_month" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('This Month', 'formworks' ); ?></button>
+	<button type="button" data-before="frmwks_get_filters"  class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="last_month"}} active{{/is}}" data-preset="last_month" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('Last Month', 'formworks' ); ?></button>
+
+	<button data-before="frmwks_get_filters" style="margin: 0px 0px 0px 20px;" type="button" class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="custom"}} active{{/is}}" data-preset="custom" data-end="{{main_stats/end}}" data-start="{{main_stats/start}}" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('Custom Range', 'formworks' ); ?></button>
 
 	<div style="display: inline-block;" class="formwork-datepicker input-daterange input-group" id="formworks-range-datepicker">		
 	    <input style="width: 120px;" type="text" class="formworks-date-input wp-baldrick" data-event="change" data-preset="custom" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>" data-end="{{main_stats/end}}" name="start" value="{{main_stats/start}}" />
@@ -77,6 +83,7 @@ jQuery( function( $ ) {
 		<div id="formworks-tooltip" class="postbox" style="display:none;position:absolute;"></div>
 	</div>
 
+
 	<div style="width: 33%; float: left; padding: 0px 12px 0px 0px; box-sizing: padding-box;">
 	{{#if main_stats/conversion_story}}
 		<h4><?php _e('Report Summary', 'formworks'); ?></h4>
@@ -84,45 +91,18 @@ jQuery( function( $ ) {
 	{{/if}}
 	</div>
 
-	<div style="width: 33%; float: left; padding: 0px 12px 0px 0px; box-sizing: padding-box;">
-		<h4><?php _e('Conversion Rates', 'formworks'); ?></h4>
-		{{#each main_stats/datasets}}
-			{{#if is_conversion}}
-			<div class="formworks-config-group">
-				<strong style="float: left; margin: -3px 0px 0px; width:120px;">{{label}}</strong>
-				<span style="float: left; margin: -3px 0px 0px; width:80px;">{{rate}}%</span>
-				<span class="quick-stat" style="color: rgb(127, 127, 127); margin-bottom: 12px; display: block; margin-left: 180px;">
-					<div style="width: 100%; background: rgb(207, 207, 207) none repeat scroll 0% 0%; height: 14px; ">
-						<div style="background: rgb(219, 68, 55) none repeat scroll 0% 0%; width: {{rate}}%; height: 14px;"></div>
-					</div>
-					<p class="description">{{description}}</p>
-				</span>
-			</div>
-			{{/if}}
+	{{#if @root/main_stats/pies}}
+		{{#each @root/main_stats/pies}}
+		<div style="width: 22%; min-width:260px; float: left; padding: 0px 12px 0px 0px; box-sizing: padding-box;">
+			<h4>{{name}} <small>{{description}}</small></h4>
+			<div class="postbox" id="pie-chart-{{@key}}" style="width: 100%; height: 250px; padding: 0px; position: relative; margin: 0px auto;"></div>
+		</div>
 		{{/each}}
-	</div>
-	<div style="width: 33%; float: left; padding: 0px 12px 0px 0px; box-sizing: padding-box;">
-		<h4><?php _e('Engagement Rates', 'formworks'); ?></h4>
-		{{#each main_stats/datasets}}
-			{{#if is_engage}}
-			<div class="formworks-config-group">
-				<strong style="float: left; margin: -3px 0px 0px; width:120px;">{{label}}</strong>
-				<span style="float: left; margin: -3px 0px 0px; width:80px;">{{rate}}%</span>
-				<span class="quick-stat" style="color: rgb(127, 127, 127); margin-bottom: 12px; display: block; margin-left: 180px;">
-					<div style="width: 100%; background: rgb(207, 207, 207) none repeat scroll 0% 0%; height: 14px; ">
-						<div style="background: rgb(219, 68, 55) none repeat scroll 0% 0%; width: {{rate}}%; height: 14px;"></div>
-					</div>
-					<p class="description">{{description}}</p>
-				</span>
-			</div>
-			{{/if}}
-		{{/each}}
-
-
-		
-	</div>
+	<div class="clear"></div>
+	{{/if}}
 
 	<div class="clear"></div>
+
 
 {{#if main_stats}}	
 	{{#script}}
@@ -265,6 +245,17 @@ jQuery( function( $ ) {
 			{{/each}}
 			{{/unless}}
 		{{/if}}
+
+
+		{{#if @root/main_stats/pies}}
+			function labelFormatter(label, series) {
+				return "<div style='font-size:8pt; text-align:center; padding:2px 4px; border-radius:4px; color:white;background-color: rgba(0,0,0,0.6);'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+			}
+			{{#each @root/main_stats/pies}}
+				$.plot('#pie-chart-{{@key}}', {{{json data}}}, {{{json config}}});
+			{{/each}}
+		{{/if}}
+
 
 		$("#formworks-main-chart").bind("plothover", function (event, pos, item) {
 

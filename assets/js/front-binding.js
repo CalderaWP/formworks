@@ -89,8 +89,9 @@ jQuery( function( $ ){
 			if( !form.data('engageNotch') ){
 				push_stuff( { action : 'frmwks_push', 'method' : 'add_notch', 'type' : 'engage', 'form' : form.data('form_id') } );
 				form.data('engageNotch', true);
+			}else{
+				$( this ).trigger( 'change' );
 			}
-			$( this ).trigger( 'change' );
 		});
 
 		form.on('submit', function(){

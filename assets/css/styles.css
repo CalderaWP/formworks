@@ -122,14 +122,13 @@ h4 > small.description {
   margin-right: 12px;
 }
 
-.formworks-main-headerbrickroad h2,
-.formworks-main-headercaldera h2 {
+.formworks-main-headerbrickroad h1,
+.formworks-main-headercaldera h1 {
 	color: #4f4f4f;
 	font-size: 20px;
 	font-weight: 300;
   float: left;
   padding: 11px 15px 2px 0;  
-  margin: 6px;
 }
 
 .formworks-main-headerbrickroad .logo-icon,

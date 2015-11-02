@@ -126,8 +126,9 @@ class settings extends core{
 
 		if( class_exists( 'Caldera_Forms' ) ){
 			$forms = \Caldera_Forms::get_forms();
-			$form_list['cf'] = array(
+			$form_list['caldera'] = array(
 				'name' => __('Caldera Forms', 'caldera-forms'),
+				'activity' => tracker::get_activity( 'caldera', 6 ),
 				'forms' => array()
 			);
 			foreach( $forms as $form ){
@@ -138,10 +139,11 @@ class settings extends core{
 			$forms = \RGFormsModel::get_forms( null, 'title' );
 			$form_list['gform'] = array(
 				'name' => __('Gravity Forms', 'gravityforms'),
+				'activity' => tracker::get_activity( 'gform', 6 ),
 				'forms' => array()
 			);
 			foreach( $forms as $form ){
-				$form_list['gravity']['forms'][ $form->id ] = $form->title;
+				$form_list['gform']['forms'][ $form->id ] = $form->title;
 			}
 		}
 		if( class_exists( 'NF_Forms' ) ){
@@ -484,25 +486,6 @@ class settings extends core{
 			if( empty( $formworks ) || empty( $formworks['track_form'] ) ){
 				return;
 			}
-			$forms = apply_filters( 'formworks_get_forms', array() );
-			foreach( $formworks['track_form'] as $prefix => $track ){
-				foreach ($track as $form_id => $form_name ) {
-					
-					$form_key = $prefix . '_' . $form_id;
-
-					$this->plugin_screen_hook_suffix['formwork-' . $form_key ] =  add_submenu_page(
-						'formworks',
-						$form_name,
-						'- ' . $form_name,
-						'manage_options',
-						'formwork-' . $form_key,
-						array( $this, 'create_admin_page' )
-					);
-
-					add_action( 'admin_print_styles-' . $this->plugin_screen_hook_suffix[ 'formwork-' . $form_key ], array( $this, 'enqueue_admin_stylescripts' ) );
-
-				}
-			}
 
 	}
 
@@ -517,9 +500,9 @@ class settings extends core{
 		$base = array_search($screen->id, $this->plugin_screen_hook_suffix);
 			
 		// include main template
-		if( false !== strpos( $base, 'formwork-' ) ){
+		if( !empty( $_GET['form'] ) ){
 			
-			$formwork_id = substr( $base, strlen( 'formwork-' ) );
+			$formwork_id = $_GET['form'];
 			if( file_exists( FRMWKS_PATH . 'includes/pinned.php' ) ){
 				include FRMWKS_PATH . 'includes/pinned.php';
 			}

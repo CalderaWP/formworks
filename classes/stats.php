@@ -628,7 +628,7 @@ class stats {
 			if( !empty( $datasets[ 'submission' ][ 'data' ] ) ){
 				if( !empty( $datasets[ $dataset['is_conversion'] ][ 'data' ] ) ){
 					foreach ($dataset['data'] as $key => $value) {
-						if( !empty( $datasets[ 'submission' ][ 'data' ][ $key ] ) ){
+						if( !empty( $datasets[ 'submission' ][ 'data' ][ $key ] ) && !empty( $datasets[ $dataset['is_conversion'] ][ 'data' ][ $key ] ) ){
 							$dataset['data'][ $key ] = $datasets[ 'submission' ][ 'data' ][ $key ] / $datasets[ $dataset['is_conversion'] ][ 'data' ][ $key ] * 100;
 						}
 					}
@@ -647,7 +647,7 @@ class stats {
 			if( !empty( $datasets[ 'engage' ][ 'data' ] ) ){
 				if( !empty( $datasets[ $dataset['is_engage'] ][ 'data' ] ) ){
 					foreach ($dataset['data'] as $key => $value) {
-						if( !empty( $datasets[ 'engage' ][ 'data' ][ $key ] ) ){
+						if( !empty( $datasets[ 'engage' ][ 'data' ][ $key ] ) && !empty(  $datasets[ $dataset['is_engage'] ][ 'data' ][ $key ] ) ){
 							$dataset['data'][ $key ] = $datasets[ 'engage' ][ 'data' ][ $key ] / $datasets[ $dataset['is_engage'] ][ 'data' ][ $key ] * 100;
 						}
 					}

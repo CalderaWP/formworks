@@ -44,6 +44,29 @@ class tracker {
 
 
 	/**
+	 * get an activity line for a slug
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $prefix tracking prefix
+	 * @param string $days number of days
+	 *
+	 * @return void
+	 */
+	public static function get_activity( $prefix, $days = 6 ){
+		return '23';
+		global $wpdb;
+		$query = $wpdb->prepare("
+			SELECT COUNT(`id`) AS `total` FROM `" . $wpdb->prefix . "formworks_tracker` WHERE `prefix` = %s && 
+			GROUP BY SUBSTR( `datestamp`,1,7);
+		", $prefix );
+		var_dump( $query );
+		die;
+		return self::save( $type, $data, $form_id, $prefix );
+	}
+
+
+	/**
 	 * add a notch
 	 *
 	 * @since 1.0.0

@@ -1,10 +1,12 @@
 <div class="formworks-main-headercaldera" style="height: 46px;">
-		<h2 class="formworks-main-title">
+		<h1 class="formworks-main-title">
+		<a style="text-decoration: none; color: rgb(219, 68, 55);" href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>"><?php _e('Formworks', 'formworks') ?></a>
+		/
 		<?php echo $formworks['name']; ?>
 		<span class="formworks-version">
 			<?php echo FRMWKS_VER; ?>
 		</span>		
-	</h2>
+	</h1>
 	{{#unless quick_stats}}<span class="spinner" style="visibility: visible; float: none; margin: 18px 0px 0px;"></span>{{/unless}}
 	{{#each quick_stats}}
 		{{#if total}}

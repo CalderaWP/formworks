@@ -79,7 +79,9 @@ class core {
 		add_action( 'wp_ajax_nopriv_frmwks_push', array( $this, 'tracker_push') );
 		
 		// complete submission
-		add_action( 'caldera_forms_submit_complete', array( $this, 'tracker_push') );
+		add_action( 'caldera_forms_submit_complete', function( $form ){
+			do_action( 'formworks_track', 'caldera', $form['ID'], 'submission' );
+		} );
 		// open actions
 		add_action( 'formworks_track', array( $this, 'handle_track'), 10, 4 );
 
@@ -103,7 +105,12 @@ class core {
 
 		add_filter( 'formidable_shortcode_atts' , function( $shortcode_atts, $atts ){
 
-			do_action( 'formworks_track', 'frmid', $atts['id'], 'loaded' );
+			$form = \FrmForm::getOne( $atts['id'] );
+			$selector = array(
+				"name" => $form->name,
+				"selector" => "#form_" . $form->form_key
+			);
+			do_action( 'formworks_track', 'frmid', $form->id, 'loaded', $selector );
 
 		}, 10, 2 );
 
@@ -128,7 +135,15 @@ class core {
 
 		// setup tracking
 		add_filter( 'caldera_forms_render_form', function( $html, $form ){
-			do_action( 'formworks_track', 'caldera', $form['ID'], 'loaded' );
+
+			$selector = array(
+				"name" => $form['name'],
+				"selector" => "." . $form['ID'],
+				"prefix" => 'caldera',
+				"id"	=> $form['ID']
+			);
+			do_action( 'formworks_track', 'caldera', $form['ID'], 'loaded', $selector );
+
 			return $html;
 		}, 10, 2 );
 
@@ -167,18 +182,23 @@ class core {
 	 *
 	 * @return   html  the form HTML
 	 */
-	public function set_tracking($prefix, $form_id ){
+	public function set_tracking($prefix, $form_id, $selector ){
 			global $formworks_tracker;
 			$formworks = \calderawp\frmwks\options::get_single( 'formworks' );
 
 			// add loaded notch
 			tracker::add_notch( $prefix, $form_id, 'loaded' );
+			if( empty( $selector['selector'] ) || empty( $selector['name'] ) ){
+				return;
+			}
+			$selector['prefix'] = $prefix;
+			$selector['id'] = $form_id;
+			$formworks_tracker['selectors'][] = $selector;
 
 			// URL hack :)
 			$script_array = array(
 				'frmwksurl' => admin_url( 'admin-ajax.php' ),
-				'config' => $formworks,
-				'submissions' => $formworks_tracker
+				'config' => $formworks_tracker
 			);
 			wp_localize_script( 'formworks-front-binding', 'formworks', $script_array );
 			wp_enqueue_script( 'formworks-front-binding' );
@@ -327,7 +347,7 @@ class core {
 
 		switch ( $type ) {
 			case 'loaded':
-				$this->set_tracking($prefix, $track_id );
+				$this->set_tracking($prefix, $track_id, $value );
 				break;
 			case 'submission':
 				$formworks_tracker[] = $track_id;
@@ -351,25 +371,21 @@ class core {
 	 * @return    null
 	 */
 	public function tracker_push( $form = null, $type = null ) {
-
-		if( !empty( $form ) ){
-			// do a submission complete
-			do_action( 'formworks_track', $form['ID'], 'submission' );
-			return;
+		if( !isset( $_COOKIE[ FRMWKS_SLUG ] ) ){
+			exit;
 		}
-		
-		if( !empty ( $_POST['method'] ) && !empty( $_POST['form'] ) ){
-			$form = explode('_', sanitize_text_field( $_POST['form'] ), 2 );
+		if( !empty ( $_REQUEST['method'] ) && !empty( $_REQUEST['form'] ) ){
+			$form = explode('_', sanitize_text_field( $_REQUEST['form'] ), 2 );
 
-			switch ( $_POST['method'] ) {
+			switch ( $_REQUEST['method'] ) {
 				case 'add_notch':
-					if( !empty( $_POST['type'] ) ){
-						do_action( 'formworks_track', $form[0], $form[1], $_POST['type'] );
+					if( !empty( $_REQUEST['type'] ) ){
+						do_action( 'formworks_track', $form[0], $form[1], $_REQUEST['type'] );
 					}
 					break;
 				case 'add_partial':
-					if( !empty( $_POST['field'] ) ){
-						do_action( 'formworks_track', $form[0], $form[1], 'partial', $_POST['field'] );
+					if( !empty( $_REQUEST['field'] ) ){
+						do_action( 'formworks_track', $form[0], $form[1], 'partial', $_REQUEST['field'] );
 					}
 					break;
 				default:
@@ -378,6 +394,7 @@ class core {
 			}
 
 		}
+		//header( "Content-Type:image/gif", true );
 		exit;
 	}
 	/**
@@ -403,7 +420,7 @@ class core {
 		
 		
 		if( false !== strpos( $screen->base, 'formworks' ) ){
-
+			
 			wp_enqueue_style( 'formworks-core-style', FRMWKS_URL . 'assets/css/styles.css' );
 			wp_enqueue_style( 'formworks-baldrick-modals', FRMWKS_URL . 'assets/css/modals.css' );
 			wp_enqueue_script( 'formworks-handlebars', FRMWKS_URL . 'assets/js/handlebars.js' );
@@ -427,6 +444,8 @@ class core {
 
 			wp_enqueue_style( 'formworks-datepicker', FRMWKS_URL . 'assets/css/bootstrap-datepicker.css' );
 			wp_enqueue_script( 'formworks-datepicker', FRMWKS_URL . 'assets/js/bootstrap-datepicker.min.js', array( 'jquery' ) , false );
+
+			wp_enqueue_script( 'formworks-sparklines', FRMWKS_URL . 'assets/js/jquery.sparkline.min.js', array( 'jquery') );
 
 		
 		}

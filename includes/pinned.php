@@ -10,6 +10,7 @@
  */
 
 $formworks = \calderawp\frmwks\options::get_single( $formwork_id );
+$modules = apply_filters( 'formworks_stat_modules', array() );
 
 // simplyfy creation
 $formworks['id'] = '__' . $formwork_id;
@@ -18,17 +19,18 @@ $formworks['_current_tab'] = '#formworks-panel-stats';
 $formworks['forms'] = apply_filters( 'formworks_get_forms', array() );
 $form_parts = explode( '_', $formwork_id, 2 );
 
+$formworks['form_id'] = $form_parts[1];
+$formworks['form_slug'] = $form_parts[0];
+
+$formworks['filters']['date']['start'] = date('Y-m-d', strtotime( "-7 days" ) );
+$formworks['filters']['date']['end'] = date('Y-m-d', strtotime( "tomorrow" ) );
+$formworks['filters']['date']['preset'] = 'this_week';
+
 if( empty( $formworks['forms'][ $form_parts[0] ]['forms'][$form_parts[1]] ) ){
 	wp_die( __('Invalid form or form removed', 'formworks' ) );
 }
 
 $formworks['name'] = $formworks['forms'][ $form_parts[0] ]['forms'][$form_parts[1]];
-
-
-//$data = \calderawp\frmwks\tracker::get_main_stats( $formwork_id );
-//var_dump( $data['datasets'] );
-//die;
-
 if( empty( $formworks['page'] ) ){
 	$formworks['page'] = 1;
 }
@@ -36,46 +38,6 @@ $formworks['data'] = null;
 
 $formworks['legend']['engage'] = $formworks['legend']['loaded'] = $formworks['legend']['submission'] = $formworks['legend']['view'] = 'true';
 
-
-/*$formworks['data'] = \calderawp\frmwks\options::get_entries( $formworks['form'],1, 1000, 'CF');
-global $wpdb;
-
-$wpdb->query( "TRUNCATE TABLE `" . $wpdb->prefix . "formworks_tracker`" );
-foreach( $formworks['data']['entries'] as $entry ){
-		$user = get_user_by( 'email', $entry['data']['email'] );
-		if( !empty( $user ) ){
-			$user_id = $user->ID;
-		}else{
-			$user_id = 0;
-		}
-		$data = array(
-			'form_id'	=>	$formworks['form'],
-			'user_id'	=>	$user_id,
-			'user_key'	=>	md5( $entry['data']['email'] ),
-			'meta_value'=>	'1',
-			'datestamp'=> date( 'Y-m-d H:i:s', strtotime( $entry['_date'] ) ),
-		);
-	
-		$random_seed = rand(2, 7);
-		$data['meta_key'] = 'load';
-		$wpdb->insert( $wpdb->prefix . "formworks_tracker", $data );			
-
-		for( $rdm = 0; $rdm < $random_seed; $rdm++ ){
-			$data['meta_key'] = 'view';
-			$wpdb->insert( $wpdb->prefix . "formworks_tracker", $data );			
-			$data['meta_key'] = 'loaded';
-			$wpdb->insert( $wpdb->prefix . "formworks_tracker", $data );
-		}
-		$random_seed = rand(1, 2);
-		for( $rdm = 0; $rdm < $random_seed; $rdm++ ){		
-			$data['meta_key'] = 'engage';
-			$wpdb->insert( $wpdb->prefix . "formworks_tracker", $data );			
-		}
-
-		$data['meta_key'] = 'submission';
-		$data['meta_value'] = rand( 90, 200 );
-		$wpdb->insert( $wpdb->prefix . "formworks_tracker", $data );
-}*/
 $formworks['data'] = false;
 ?>
 <div class="wrap formworks-calderamain-canvas" id="formworks-main-canvas">
@@ -105,52 +67,27 @@ $formworks['data'] = false;
 		jQuery('#frmwks-save-button').trigger('click');
 	}
 </script>
-<script type="text/html" id="import-formworks-form">
-	<div class="import-tester-config-group">
-		<input id="new-formworks-import-file" type="file" class="regular-text">
-		<input id="new-formworks-import" value="" name="import" type="hidden">
-	</div>
-	{{#script}}
-		jQuery( function($){
-
-			$('#frmwks_import_init').prop('disabled', true).addClass('disabled');
-
-			$('#new-formworks-import-file').on('change', function(){
-				$('#frmwks_import_init').prop('disabled', true).addClass('disabled');
-				var input = $(this),
-					f = this.files[0],
-				contents;
-
-				if (f) {
-					var r = new FileReader();
-					r.onload = function(e) { 
-						contents = e.target.result;
-						var data;
-						 try{ 
-						 	data = JSON.parse( contents );
-						 } catch(e){};
-						 
-						 if( !data || ! data['formworks-setup'] ){
-						 	alert("<?php echo esc_attr( __('Not a valid Form View export file.', 'formworks') ); ?>");
-						 	input[0].value = null;
-							return false;
-						 }
-
-						$('#formworks-live-config').val( contents );						
-						$('#frmwks_import_init').prop('disabled', false).removeClass('disabled');
-					}
-					if( f.type !== 'application/json' ){
-						alert("<?php echo esc_attr( __('Not a valid Form View export file.', 'formworks') ); ?>");
-						this.value = null;
-						return false;
-					}
-					r.readAsText(f);
-				} else { 
-					alert("Failed to load file");
-					return false;
-				}
-			});
-
-		});
-	{{/script}}
-</script>
+<?php
+foreach( $modules as $module_slug => $module ){
+	if( !file_exists( $module['template'] ) )
+		continue;
+	?>
+	<script type="text/html" data-handlebars-partial="<?php echo $module_slug; ?>">
+	<div 
+		id="<?php echo $module_slug; ?>-module"
+		class="wp-baldrick stat-module"
+		data-event="reload"
+		data-before="frmwks_get_filters"
+		data-action="frmwks_module_data"
+		data-module="<?php echo $module_slug; ?>"
+		data-template="#<?php echo $module_slug; ?>-tmpl"
+		data-target="#<?php echo $module_slug; ?>-module"
+		data-autoload="true"
+	></div>
+	</script>
+	<script type="text/html" id="<?php echo $module_slug; ?>-tmpl">
+	<?php include $module['template']; ?>
+	</script>
+	<?php
+}
+?>

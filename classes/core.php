@@ -129,7 +129,12 @@ class core {
 		},20, 2);
 
 		add_filter( 'gform_get_form_filter', function( $html, $form ){
-			do_action( 'formworks_track', 'gform', $form['id'], 'loaded' );
+
+			$selector = array(
+				"name" => $form['title'],
+				"selector" => "#gform_" . $form['id']
+			);
+			do_action( 'formworks_track', 'gform', $form['id'], 'loaded', $selector );
 			return $html;
 		},10 , 2 );
 

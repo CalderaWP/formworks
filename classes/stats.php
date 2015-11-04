@@ -38,7 +38,6 @@ class stats {
 			"loaded" => __('Loads', 'formworks' ),
 			"view" => __('Views', 'formworks' ),
 			"engage" => __('Engagements', 'formworks' ),
-			//"partial" => __('Incomplete', 'formworks' ),
 		);
 
 		$meta_keys = implode("','" , array_keys( $types ) );

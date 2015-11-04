@@ -533,18 +533,10 @@ h4 > small.description {
 }
 .formworks-chart-legend .line-legend > li {
   display: inline-block;
-  margin-right: 20px;
-  padding-left: 20px;
   position: relative;
 }
 .formworks-chart-legend .line-legend span {
-  border: 2px solid #fff;
-  display: block;
-  height: 14px;
-  left: 0;
-  position: absolute;
-  top: 1px;
-  width: 14px;
+
 }
 
 label.add-new-h2.formworks-filter-button:active,
@@ -570,4 +562,8 @@ button.add-new-h2.formworks-filter-button:hover{
 .formworks-post-event:hover{
   opacity: 1;
   z-index: 101;
+}
+
+div.stat-module.loading {
+  opacity: 0.4;
 }

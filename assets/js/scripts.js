@@ -20,7 +20,11 @@ jQuery( function($){
 	frmwks_get_filters = function( el ){
 		frmwks_get_config_object();
 		if( frmwks_config_object.filters ){
-			$( el ).data( { filters : JSON.stringify( frmwks_config_object.filters ) } );
+			$( el ).data( { 
+				id : frmwks_config_object.form_id,
+				prefix : frmwks_config_object.form_slug,
+				filters : JSON.stringify( frmwks_config_object.filters ) 
+			} );
 		}
 	}
 
@@ -438,7 +442,11 @@ jQuery( function($){
 
 		this.value = this.value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
 	});
-	
+	// init partials
+	$('script[data-handlebars-partial]').each( function(){
+		var partial = $( this );
+		Handlebars.registerPartial( partial.data('handlebarsPartial'), partial.html() );
+	});	
 	// bind label update
 	$(document).on('keyup change', '[data-sync]', function(){
 		var input = $(this),
@@ -537,6 +545,29 @@ jQuery( function($){
 	$(document).on('change', '[data-live-sync]', function(e){
 		frmwks_record_change();
 	});
+	// initialize live sync rebuild
+	$(document).on('click', '.apply-filters', function(e){
+		$('.stat-module').trigger('reload');
+	});	
+	// initialize live sync rebuild
+	$(document).on('change', '.preset-radio', function(e){
+		var radios = $('.preset-radio');
+		radios.each( function(){
+			var parent = $(this).parent();
+			parent.removeClass('active');
+			if( $(this).is(':checked') ){
+				parent.addClass('active');
+			}
+		});
+	});	
+	$(document).on('change', '.preset-check', function(e){
+		var parent = $(this).parent();
+		if( $(this).is(':checked') ){
+			parent.addClass('active');
+		}else{
+			parent.removeClass('active');
+		}
+	});	
 
 	// initialise baldrick triggers
 	$('.wp-baldrick').baldrick({

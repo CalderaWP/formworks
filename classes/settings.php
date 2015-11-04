@@ -37,6 +37,8 @@ class settings extends core{
 		// get forms list
 		add_filter( 'formworks_get_forms', array( $this, 'get_forms' ) );
 
+		add_action( 'wp_ajax_frmwks_module_data', array( $this, 'module_data_loader') );
+
 		// create new
 		add_action( 'wp_ajax_frmwks_create_formworks', array( $this, 'create_new_formworks') );
 
@@ -119,6 +121,62 @@ class settings extends core{
 			return $field;
 
 		},10, 3 );
+
+	}
+ 
+	public function module_data_loader( $form_list ){
+		$modules = apply_filters( 'formworks_stat_modules', array() );
+		$module = filter_var( $_POST['module'], FILTER_SANITIZE_STRING );
+		$filter = array(
+			'form' => filter_var( $_POST['id'], FILTER_SANITIZE_STRING ),
+			'prefix' => filter_var( $_POST['prefix'], FILTER_SANITIZE_STRING ),
+			'filters' => array()
+		);
+
+		$date_ranges = array(
+			'this_week' => array(
+				'start' => 'last sunday',
+				'end' => 'next sunday'
+			),
+			'this_month' => array(
+				'start' => 'first day of this month',
+				'end' => 'last day of this month'
+			),
+			'last_month' => array(
+				'start' => 'first day of last month',
+				'end' => 'last day of last month'
+			),			
+			'custom' => array()
+		);
+
+
+		if( isset( $modules[ $module ] ) && isset( $modules[ $module ]['handler'] ) ){
+
+			$is_json = json_decode( stripslashes_deep( $_POST['filters'] ), ARRAY_A );
+			if( !empty( $is_json ) ){
+				$filter['filters'] = $is_json;
+			}
+
+			$preset = $date_ranges[ $filter['filters']['date']['preset'] ];
+			if( !empty( $preset ) ){
+				$filter['filters']['date']['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
+				$filter['filters']['date']['end'] = date( 'Y-m-d', strtotime( $preset['end'] ) );
+			}
+
+			$sig = sha1( $module . '_' . json_encode( $filter ) );
+			//$result = get_transient( $sig );
+			if( empty( $result ) ){
+				add_filter( 'formworks_get_module_data-' . $module, $modules[ $module ]['handler'], 10, 2 ); // add filters
+				$result = apply_filters( 'formworks_get_module_data-' . $module, array(), $filter );
+				set_transient( $sig, $result, 600 );
+			}
+			
+			wp_send_json_success( $result );
+
+		}else{
+			wp_send_json_error();
+		}
+		
 
 	}
 

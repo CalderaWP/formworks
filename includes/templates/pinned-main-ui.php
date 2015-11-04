@@ -47,6 +47,9 @@
 	<?php wp_nonce_field( 'formworks', 'formworks-setup' ); ?>
 	<input type="hidden" value="pinned" name="id" id="formworks-id">
 	<input type="hidden" name="quick_stats" id="formworks-quick-stats" value="{{#if quick_stats}}{{json quick_stats}}{{/if}}" data-live-sync="true">
+	<input type="hidden" name="form_id" value="{{form_id}}">
+	<input type="hidden" name="form_slug" value="{{form_slug}}">
+
 	{{#unless quick_stats}}<span class="wp-baldrick" data-action="frmwks_get_quickstats" data-target="#formworks-quick-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>" data-autoload="true"></span>{{/unless}}
 
 	<input type="hidden" value="{{_current_tab}}" name="_current_tab" id="formworks-active-tab">

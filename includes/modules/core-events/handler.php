@@ -201,6 +201,31 @@ function formworks_get_core_events( $data, $request ){
 			),
 		);
 		
+
+		// fun fun! add posts
+		$index = 0;
+		global $wpdb;
+		foreach( $datasets[ 'view' ]['data'] as $date=>$val ){
+			// harsh!
+			$thisdate = gmdate('Y-m-d', strtotime( $date ) );
+			$posts = $wpdb->get_results( "SELECT `post_title` FROM `" . $wpdb->posts ."` WHERE `post_type` = 'post' && `post_status` = 'publish' && `post_date_gmt` >= '" . $thisdate ." 00:00:00' && `post_date_gmt` <= '" . $thisdate ." 23:59:59' LIMIT 1;", ARRAY_A );
+			if( empty( $posts ) ){
+				$index++;
+				continue;
+			}
+
+			foreach( $posts as $event_post ){
+				$options['grid']['markings'][] = array(
+					"label" => $event_post['post_title'],
+					"color"	=>	"rgba(0,0,0,0.1)",
+					"lineWidth" => 1,
+					"xaxis" => array( "from" => $index, "to" => $index ),
+				);
+			}
+
+			$index++;			
+		}
+
 		$stats['options'] = apply_filters( 'formworks_chart_options', $options, $request );
 		
 		$stats = apply_filters( 'formworks_stats_data', $stats, $request );

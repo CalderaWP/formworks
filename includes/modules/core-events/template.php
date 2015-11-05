@@ -50,9 +50,32 @@
 				raw_data[ i ].data = new_data;
 				data.push( raw_data[ i ] );
 
+		
+
 			}
 
+		
+
+
 		var plot = $.plot( placeholder, data, options );
+
+		var o,
+			top_start = 8,
+			start_left = 0;
+		{{#each @root/data/options/grid/markings}}
+
+			o = plot.pointOffset({ x: {{xaxis/from}}, y: 1});				
+			placeholder.prepend("<div class='formworks-post-event' style='position:absolute;left:" + (o.left) + "px;top:" + top_start + "px;color:#666;font-size:smaller;background: rgb(255, 255, 255) none repeat scroll 0% 0%; padding: 0px 8px; border: 1px solid rgb(207, 207, 207);' title='{{label}}'>{{label}}</div>");
+			if( start_left !== {{xaxis/from}} ){
+				//top_start == 0;
+				start_left = {{xaxis/from}};
+			}
+			top_start += 22;
+			if( top_start > 180 ){
+				top_start = 8;
+			}
+		{{/each}}
+
 		$("#formworks-main-chart").bind("plothover", function (event, pos, item) {
 
 			var str = "(" + pos.x + ", " + pos.y + ")";

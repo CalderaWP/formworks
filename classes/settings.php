@@ -45,14 +45,6 @@ class settings extends core{
 		// delete
 		add_action( 'wp_ajax_frmwks_delete_formworks', array( $this, 'delete_formworks') );
 		
-		// load entry
-		add_action( 'wp_ajax_frmwks_get_entry', array( $this, 'get_form_entry') );
-		// do pagination
-		add_action( 'wp_ajax_frmwks_get_entries', array( $this, 'get_form_entries') );
-		// do quickstats
-		add_action( 'wp_ajax_frmwks_get_quickstats', array( $this, 'get_quick_stats') );
-		// do quickstats
-		add_action( 'wp_ajax_frmwks_get_mainstats', array( $this, 'get_main_stats') );
 
 		add_filter( 'formworks_stats_field_name', function( $field, $form_prefix, $form_id ){
 				
@@ -256,112 +248,6 @@ class settings extends core{
 		}
 
 		return $form_list;
-	}
-
-	/**
-	 * gets a form entry
-	 *
-	 * @uses "wp_ajax_frmwks_get_entry" hook
-	 *
-	 * @since 0.0.1
-	 */
-	public function get_form_entry(){
-
-		if( $_POST['formtype'] === 'CF' ){
-			$entry = \Caldera_Forms::get_entry( (int) $_POST['entry'], $_POST['form'] );
-			wp_send_json( $entry );
-		}
-
-	}
-
-	/**
-	 * get quick stats for a form
-	 *
-	 * @uses "wp_ajax_frmwks_get_quickstats" hook
-	 *
-	 * @since 0.0.1
-	 */
-	public function get_quick_stats(){
-		$form_id = $_POST['form'];
-		$stats = stats::get_quick_stats( $form_id );
-
-		wp_send_json( $stats );
-	}
-
-	/**
-	 * get main stats for a form
-	 *
-	 * @uses "wp_ajax_frmwks_get_mainstats" hook
-	 *
-	 * @since 0.0.1
-	 */
-	public function get_main_stats(){
-		$form_id = $_POST['form'];
-		
-		$args = array(
-			'this_week' => array(
-				'start' => 'last sunday',
-				'end' => 'next sunday'
-			),
-			'this_month' => array(
-				'start' => 'first day of this month',
-				'end' => 'last day of this month'
-			),
-			'last_month' => array(
-				'start' => 'first day of last month',
-				'end' => 'last day of last month'
-			),			
-			'custom' => array()
-		);
-
-		if( !empty( $_POST['start'] ) && !empty( $_POST['end'] ) ){
-			$args['custom']['start'] = $_POST['start'];
-			$args['custom']['end'] = $_POST['end'];
-		}
-		$filter = 'this_month';
-		$preset = $args[ $filter ];
-		if( !empty( $_POST['preset'] ) && isset( $args[ $_POST['preset'] ] ) ){
-			$preset = $args[ $_POST['preset'] ];
-			$filter = $_POST['preset'];
-		}
-		if( !empty( $_POST['filters'] ) ){
-			$is_json = json_decode( stripslashes_deep( $_POST['filters'] ), ARRAY_A );
-			if( !empty( $is_json ) ){
-				$preset['filters'] = $is_json;
-			}
-		}
-
-		$sig = sha1( $form_id . '_' . json_encode( $preset ) . '_' . $filter );
-		
-		$stats = '';//get_transient( $sig );
-		if( empty( $stats ) ){
-			$stats = stats::get_main_stats( $form_id, $preset, $filter );
-			$stats['filter'] = $filter;
-			$stats['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
-			$stats['end'] = date( 'Y-m-d', strtotime( $preset['end'] ) );
-			set_transient( $sig, $stats, 600 );
-		}
-		wp_send_json( $stats );
-	}
-
-	/**
-	 * gets a form entries page
-	 *
-	 * @uses "wp_ajax_frmwks_get_entries" hook
-	 *
-	 * @since 0.0.1
-	 */
-	public function get_form_entries(){
-
-		if( $_POST['formtype'] === 'CF' ){
-			if( $_POST['_value'] <= 0){
-				$_POST['_value'] = 1;
-			}
-
-			$entries = options::get_entries( $_POST['form'], (int) $_POST['page'], (int) $_POST['_value'], "CF" );
-			wp_send_json( $entries );
-		}
-
 	}
 
 	/**

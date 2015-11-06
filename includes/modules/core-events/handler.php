@@ -183,8 +183,7 @@ function formworks_get_core_events( $data, $request ){
 				"tickLength"	=> 0,
 			),
 			"legend" => array(
-				"show" => true,
-				"backgroundColor" => '#ffffff'
+				"show" => false,
 			),
 			"grid" => array(
 				"hoverable" => true,

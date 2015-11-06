@@ -30,20 +30,22 @@ function formworks_get_summary_story( $data, $request ){
 			'this_month' => __( 'This month', 'formworks' ),
 			'last_month' => __( 'Last month', 'formworks' ),
 			'custom' => sprintf( __( 'Between %s and %s', 'formworks' ), '<strong>'.$request['filters']['date']['start'].'</strong>', '<strong>'.$request['filters']['date']['end'].'</strong>'),
-		);
-		
+		);		
+
 		$stats['conversion_story'] = '<p>' . $starts[ $request['filters']['date']['preset'] ] . ', ';
 		
 		$stats['conversion_story'] .= sprintf( _n( 'The form was loaded %s time ', 'The form was loaded %s times ', $total_loads, 'formworks' ), '<strong>'. $total_loads . '</strong>');		
 		$stats['conversion_story'] .= sprintf( _n( 'and received %s submission. ', 'and received %s submissions. ', $total_submitions, 'formworks' ), '<strong>'. $total_submitions . '</strong>' );		
 		$stats['conversion_story'] .= '</p>';
 		$stats['conversion_story'] .= '<p>';
-		if( $stats['datasets'][ 'engage_conversion' ]['rate'] > 0 ){
-			$stats['conversion_story'] .= sprintf( __( '%s of visitors actively engage the form and %s of engaged users go on to a submission. ', 'formworks' ), 
-				'<strong>' . $stats['datasets'][ 'engage_load' ]['rate'] . '%</strong>',
-				'<strong>' . $stats['datasets'][ 'engage_conversion' ]['rate'] . '%</strong>'
-			 );			
-			$stats['conversion_story'] .= '<br>';
+		if( !empty( $stats['datasets'][ 'engage_conversion' ]['rate'] ) ){
+			if( $stats['datasets'][ 'engage_conversion' ]['rate'] > 0 ){
+				$stats['conversion_story'] .= sprintf( __( '%s of visitors actively engage the form and %s of engaged users go on to a submission. ', 'formworks' ), 
+					'<strong>' . $stats['datasets'][ 'engage_load' ]['rate'] . '%</strong>',
+					'<strong>' . $stats['datasets'][ 'engage_conversion' ]['rate'] . '%</strong>'
+				 );			
+				$stats['conversion_story'] .= '<br>';
+			}
 		}
 		if( !empty( $stats['datasets'][ 'load_conversion' ]['rate'] ) ){
 			$stats['conversion_story'] .= sprintf( __( 'That is a conversion rate of %s from load', 'formworks' ), '<strong>' . $stats['datasets'][ 'load_conversion' ]['rate'] . '%</strong>' );
@@ -68,14 +70,17 @@ function formworks_get_summary_story( $data, $request ){
 			$stats['conversion_story'] .= '</p>';
 
 			$stats['conversion_story'] .= '<p>';
-			$stats['conversion_story'] .= sprintf( __( 'Of those that do see the form, the conversion rate is %s. ', 'formworks' ), '<strong>'.$stats['datasets'][ 'view_conversion' ]['rate'] . '%</strong>' );			
-
-			if( $stats['datasets'][ 'engage_conversion' ]['rate'] > 0 ){
-				$stats['conversion_story'] .= sprintf( __( 'This means that %s of visitors who see the form, actively engage it.', 'formworks' ), 
-					'<strong>' . $stats['datasets'][ 'engage_view' ]['rate'] . '%</strong>'
-				 );			
+			if( !empty( $stats['datasets'][ 'view_conversion' ] ) ){
+				$stats['conversion_story'] .= sprintf( __( 'Of those that do see the form, the conversion rate is %s. ', 'formworks' ), '<strong>'.$stats['datasets'][ 'view_conversion' ]['rate'] . '%</strong>' );			
 			}
+			if( !empty( $stats['datasets'][ 'engage_conversion' ] ) ){
 
+				if( $stats['datasets'][ 'engage_conversion' ]['rate'] > 0 ){
+					$stats['conversion_story'] .= sprintf( __( 'This means that %s of visitors who see the form, actively engage it.', 'formworks' ), 
+						'<strong>' . $stats['datasets'][ 'engage_view' ]['rate'] . '%</strong>'
+					 );			
+				}
+			}
 			$stats['conversion_story'] .= '</p>';
 
 		}else{
@@ -84,5 +89,5 @@ function formworks_get_summary_story( $data, $request ){
 			$stats['conversion_story'] .= '</p>';
 		}
 
-		return $stats;
+		return $stats['conversion_story'];
 }

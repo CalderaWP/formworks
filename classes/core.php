@@ -54,6 +54,20 @@ class core {
 	 */
 	private function __construct() {
 		global $formworks_tracker;
+
+		//auto load modules
+		$dir = FRMWKS_PATH . 'includes/modules';
+		if (is_dir($dir)) {
+			if ($dh = opendir($dir)) {
+				while (($folder = readdir($dh)) !== false) {
+					if( $folder === '..' || $folder === '.') continue;
+					if( file_exists( $dir . '/' . $folder . '/handler.php' ) ){
+						include_once $dir . '/' . $folder . '/handler.php';
+					}
+				}
+				closedir($dh);
+			}
+		}
 		// Load plugin text domain
 		add_action( 'init', array( $this, 'load_plugin_textdomain' ) );
 

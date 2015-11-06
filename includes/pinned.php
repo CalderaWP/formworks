@@ -78,11 +78,13 @@ foreach( $modules as $module_slug => $module ){
 		class="wp-baldrick stat-module"
 		data-event="reload"
 		data-before="frmwks_get_filters"
+		data-load-class="loading-module"
 		data-action="frmwks_module_data"
 		data-module="<?php echo $module_slug; ?>"
 		data-template="#<?php echo $module_slug; ?>-tmpl"
 		data-target="#<?php echo $module_slug; ?>-module"
 		data-autoload="true"
+		style="position: relative;min-height:20px;"
 	></div>
 	</script>
 	<script type="text/html" id="<?php echo $module_slug; ?>-tmpl">

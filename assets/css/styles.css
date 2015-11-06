@@ -261,6 +261,12 @@ h4 > small.description {
   background-color: #db4437;
   color: #fff;
 }
+.formworks-sub-headercaldera .formworks-sub-tabs > li.active > span{
+  background-color: #db4437;
+  color: #fff;
+  display: inline-block;
+  padding: 8px 16px;
+}
 .formworks-sub-headerbrickroad .formworks-sub-tabs > li.active > a {
   background-color: #646464;
   color: #fff;

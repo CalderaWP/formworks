@@ -18,6 +18,9 @@ var formworks_canvas = false,
 jQuery( function($){
 
 	frmwks_get_filters = function( el ){
+		var module = $( el );
+		module.children().css('opacity', 0.4);
+		module.prepend('<span class="spinner" style="visibility:visible; float:none;position:absolute;display:block"></span>');
 		frmwks_get_config_object();
 		if( frmwks_config_object.filters ){
 			$( el ).data( { 
@@ -559,6 +562,13 @@ jQuery( function($){
 				parent.addClass('active');
 			}
 		});
+
+		if( $(this).parent().hasClass('date-range') ){
+			$('.input-daterange').fadeIn( 200 );
+		}else{
+			$('.input-daterange').fadeOut( 200 );
+		}
+		$('.apply-filters').fadeIn();
 	});	
 	$(document).on('change', '.preset-check', function(e){
 		var parent = $(this).parent();
@@ -567,6 +577,8 @@ jQuery( function($){
 		}else{
 			parent.removeClass('active');
 		}
+		$('.apply-filters').fadeIn();
+
 	});	
 
 	// initialise baldrick triggers
@@ -580,6 +592,9 @@ jQuery( function($){
 			if( tr.data('addNode') && !tr.data('request') ){
 				tr.data('request', 'frmwks_get_default_setting');
 			}
+		},
+		complete : function(){
+			$('.apply-filters').fadeOut();
 		}
 	});
 

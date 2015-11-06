@@ -9,6 +9,7 @@
  * @copyright 2015 David Cramer & CalderaWP LLC
  */
 
+
 // activate - table and version check
 register_activation_hook( FRMWKS_CORE , 'activate_formworks_tracker' );
 

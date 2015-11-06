@@ -490,7 +490,9 @@ h4 > small.description {
 	top: -2px;
 }
 
-
+.baldrick-modal-body.loading_tool_action {
+  opacity: 0.34;
+}
 
 .formworks-fixed-center > .avatar{
   background: rgb(255, 255, 255) none repeat scroll 0 0;

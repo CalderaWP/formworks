@@ -13,9 +13,13 @@ var formworks_canvas = false,
 	frmwks_init_magic_tags,
 	frmwks_get_filters,
 	frmwks_config_object = {},
-	frmwks_magic_tags = [];
+	frmwks_magic_tags = [],
+	frmwks_prepdb_rebuild;
 
 jQuery( function($){
+	frmwks_prepdb_rebuild = function(){
+		return {};
+	}
 
 	frmwks_get_filters = function( el ){
 		var module = $( el );

@@ -10,7 +10,7 @@
 		</span>		
 	</h1>
 
-<div style="position: relative; top: 11px;">
+<div style="position: relative; top: 11px; display:inline-block;">
 	<input type="hidden" name="filters[device]" value="">
 	<ul style="margin: 0px; padding: 5px 0 26px;">
 		<li style="float: left;">

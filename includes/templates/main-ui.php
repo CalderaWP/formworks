@@ -45,6 +45,11 @@
 				<?php _e('Analytics', 'formworks') ; ?>
 			</a>
 		</li>
+		<li class="{{#is _current_tab value="#formworks-panel-tools"}}active {{/is}}formworks-nav-tab">
+			<a href="#formworks-panel-tools">
+				<?php _e('Tools', 'formworks') ; ?>
+			</a>
+		</li>
 	</ul>
 </div>
 <form class="caldera-main-form " id="formworks-main-form" action="?page=formworks" method="POST">
@@ -84,6 +89,22 @@
 			include FRMWKS_PATH . 'includes/templates/analytics-panel.php';
 		?>
 	</div>
+
+
+	<div id="formworks-panel-tools" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-tools"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
+		<h4>
+			<?php _e( 'Tools and Utilities', 'formworks' ); ?>
+			<small class="description">
+				<?php _e('General Maintanence Options and Settings', 'formworks') ; ?>
+			</small>	
+		</h4>
+		<?php
+			/**
+			 * Include the tools template
+			 */
+			include FRMWKS_PATH . 'includes/templates/tools-panel.php';
+		?>
+	</div>	
 
 
 </form>

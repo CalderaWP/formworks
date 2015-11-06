@@ -39,6 +39,10 @@ class settings extends core{
 
 		add_action( 'wp_ajax_frmwks_module_data', array( $this, 'module_data_loader') );
 
+		if( current_user_can( 'manage_options' ) ){
+			add_action( 'wp_ajax_frmwks_rebuild_database', array( $this, 'rebuild_database') );
+		}
+
 		// create new
 		add_action( 'wp_ajax_frmwks_create_formworks', array( $this, 'create_new_formworks') );
 
@@ -364,6 +368,31 @@ class settings extends core{
 
 	}
 
+
+	/**
+	 * rebuilds database
+	 *
+	 * @uses "wp_ajax_frmwks_rebuild_database"  action
+	 *
+	 * @since 0.0.1
+	 */
+	public function rebuild_database(){
+		global $wpdb;
+
+
+		$wpdb->query( "DROP TABLE `" . $wpdb->prefix . "formworks_tracker`;" );
+
+		delete_option( '_formworks_tracker' );
+		activate_formworks_tracker();
+		echo '<div class="updated"><p><strong>Database rebuilt.</strong>: Reloading Admin...</p></div>';
+		?>
+		<script>
+		window.location = '<?php echo admin_url( 'admin.php?page=formworks' ); ?>';
+		</script>
+		<?php
+		exit;
+	}
+
 	/**
 	 * Create a new item
 	 *
@@ -452,12 +481,7 @@ class settings extends core{
 			}
 
 		}else{
-			// include main template
-			//if( empty( $_GET['edit'] ) ){
-			//	include FRMWKS_PATH . 'includes/admin.php';
-			//}else{
-				include FRMWKS_PATH . 'includes/edit.php';
-			//}
+			include FRMWKS_PATH . 'includes/admin.php';
 		}
 
 

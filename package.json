@@ -1,7 +1,7 @@
 {
   "name": "formworks",
-  "version": "1.0.0-b-1",
-  "description": "FForm analytics for your favorite WordPress Form Builder Plugins",
+  "version": "1.0.0-b-2",
+  "description": "Form analytics for your favorite WordPress Form Builder Plugins",
   "repository": {
     "type": "git",
     "url": "https://github.com/CalderaWP/formworks"

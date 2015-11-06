@@ -182,15 +182,7 @@ class core {
 		if ( is_admin() ) {
 			new settings();
 		}
-		// queue up the shortcode inserter
-		//add_action( 'media_buttons', array($this, 'shortcode_insert_button' ), 11 );
-
-		// shortcode insterter js
-		//add_action( 'admin_footer', array( $this, 'add_shortcode_inserter'));
-
-		//shortcode
-		//add_shortcode( 'formworks', array( $this, 'render_formworks') );
-
+		
 	}
 
 	
@@ -431,11 +423,6 @@ class core {
 			return;
 
 		}
-
-		if( $screen->base == 'post' ){
-			wp_enqueue_style( 'formworks-baldrick-modals', FRMWKS_URL . '/assets/css/modals.css' );
-			wp_enqueue_script( 'formworks-shortcode-insert', FRMWKS_URL . '/assets/js/shortcode-insert.js', array( 'jquery' ) , false, true );
-		}
 		
 		
 		if( false !== strpos( $screen->base, 'formworks' ) ){
@@ -450,12 +437,8 @@ class core {
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );			
 
-			wp_enqueue_style( 'formworks-core-grid', FRMWKS_URL . 'assets/css/grid.css' );
-			wp_enqueue_script( 'formworks-core-grid-script', FRMWKS_URL . 'assets/js/grid.js', array( 'jquery' ) , false );
-
 			wp_enqueue_style( 'formworks-select2', FRMWKS_URL . 'assets/css/select2.css' );
 			wp_enqueue_script( 'formworks-select2', FRMWKS_URL . 'assets/js/select2.min.js', array( 'jquery' ) , false );
-			wp_enqueue_script( 'formworks-bootpag', FRMWKS_URL . 'assets/js/jquery.bootpag.min.js', array( 'jquery' ) , false );
 			wp_enqueue_script( 'formworks-flot-js', FRMWKS_URL . 'assets/js/jquery.flot.min.js', array( 'jquery' ) , false );
 			wp_enqueue_script( 'formworks-flot-js-cat', FRMWKS_URL . 'assets/js/jquery.flot.categories.min.js', array( 'formworks-flot-js' ) , false );
 			wp_enqueue_script( 'formworks-flot-js-resize', FRMWKS_URL . 'assets/js/jquery.flot.resize.min.js', array( 'formworks-flot-js' ) , false );
@@ -488,161 +471,6 @@ class core {
 		}
 
 	}
-
-	/**
-	 * Insert shortcode modal template in post editor.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @uses 'admin_footer' action
-	 */
-	public static function add_shortcode_inserter(){
-		
-		$screen = get_current_screen();
-
-		if( $screen->base === 'post'){
-			include FRMWKS_PATH . 'includes/insert-shortcode.php';
-		}
-
-	}
-
-	/**
-	 * Render Shortcode
-	 *
-	 * @since 0.0.1
-	 */
-	public function render_formworks( $atts ){
-		
-		$formworks = options::get_registry();
-		if( empty( $formworks ) ){
-			$formworks = array();
-		}
-
-		if( empty( $atts['id'] ) && !empty( $atts['slug'] ) ){
-			foreach( $formworks as $formworks_id => $formworks ){
-
-				if( $formworks['slug'] === $atts['slug'] ){
-					$formworks = options::get_single( $formworks['id'] );
-					break;
-				}
-
-			}
-
-		}elseif( !empty( $atts['id'] ) ){
-			$formworks = options::get_single( $atts['id'] );
-		}else{
-			return;
-		}
-
-		if( empty( $formworks ) ){
-			return;
-		}
-
-		$output = null;
-
-		// do stuf and output
-		//*$entries = \calderawp\frmwks\options::get_entries( $formworks['form'],1, 1000, 'caldera');
-		//*$engine = new Handlebars;
-
-		wp_enqueue_script( 'foo-table', FRMWKS_URL . 'assets/js/footable.min.js', array( 'jquery' ) );
-		wp_enqueue_script( 'formworks-baldrick' );
-		wp_enqueue_script( 'cf-dynamic' );
-
-		$output = '';//$engine->render( $formworks['template']['code'], $entries );
-		
-		$form = \Caldera_Forms::get_form( $formworks['form'] );
-
-		$columns = array();
-		$fields = array();
-		$entry_details = array( 
-			'_date' => __('Entry Date', 'formworks'),
-			'_entry_id' => __('Entry ID', 'formworks'),
-		);
-		$entry_actions = array( 
-			'_edit' => __('Edit', 'formworks'),
-			'_view' => __('View', 'formworks'),
-			'_delete' => __('Delete', 'formworks'),
-		);
-
-		foreach( $form['fields'] as $field ){
-			$fields[ $field['slug'] ] = $field['label'];
-		}
-		foreach( $formworks['columns'] as $column ){
-			if( isset( $fields[ $column['field'] ] ) ){
-				$column_title = $fields[ $column['field'] ];
-			}elseif( isset( $entry_details[ $column['field'] ] ) ){
-				$column_title = $entry_details[ $column['field'] ];
-			}elseif( isset( $entry_actions[ $column['field'] ] ) ){
-				$column_title = $entry_actions[ $column['field'] ];
-			}else{
-				continue;
-			}
-
-			$new_column = array(
-				'name' => $column['field'],
-				'title' => $column_title
-			);
-			if( empty( $column['sortable'] ) ){
-				$new_column['sortable'] = false;
-			}
-			if( ! empty( $column['breakpoints'] ) ){
-				$new_column['breakpoints'] = implode( ' ', array_keys( $column['breakpoints'] ) );
-			}
-			$columns[] = $new_column;
-		}
-
-		ob_start();
-		wp_enqueue_style( 'cf-grid-styles' );
-		wp_enqueue_style( 'cf-form-styles' );
-		wp_enqueue_style( 'cf-alert-styles' );
-		?>
-
-		<style type="text/css">
-
-				.pagination{
-					margin: 12px -2px;
-				}
-				.pagination li a,.pagination li.active a,.pagination li.disabled a{
-					color: <?php echo $formworks['pagination_style']['text']; ?>; text-decoration:none;
-				}
-				.pagination li {
-					display: inline;margin:0 2px;
-				}
-				.pagination li a,.pagination li a:hover,.pagination li.active a,.pagination li.disabled a {
-					display:inline;background-color: <?php echo $formworks['pagination_style']['background']; ?>;border-radius: 3px;cursor: pointer;padding: 12px;padding: 0.25rem 0.62rem;
-				}
-				.pagination li a:hover,.pagination li.active a {
-					background-color: <?php echo $formworks['pagination_style']['active']; ?>; color:<?php echo $formworks['pagination_style']['active_text']; ?>;
-				}
-
-		</style>
-		<div id="cf-view-<?php echo $formworks['id']; ?>-wrapper"></div>
-		<textarea id="testing"></textarea>
-		<script type="text/javascript">
-		jQuery(function($){
-			init_footable = function(){
-				
-				var wrapper = $('#cf-view-<?php echo $formworks['id']; ?>-wrapper');
-				wrapper.css({ 'height' : wrapper.outerHeight(), 'min-height' : 200} ).html('<table class="cf-view-<?php echo $formworks['id']; ?>" data-paging="true" data-sorting="true" data-paging-limit="<?php echo $formworks['pagination_style']['size']; ?>" data-paging-size="<?php echo $formworks['pagination_style']['limit']; ?>" data-paging-position="<?php echo $formworks['pagination_style']['position']; ?>"></table>');				
-				
-				var footable = $('.cf-view-<?php echo $formworks['id']; ?>').footable({
-					"columns": <?php echo json_encode( $columns ); ?>,
-					"rows": $.post('/cf-view/<?php echo $formworks['id']; ?>/' ).complete( function(){ 
-						wrapper.css('height', '' );
-						$('.wp-baldrick').baldrick({
-
-						});
-					})
-				});
-			};
-			init_footable();
-		});</script>
-		<?php
-		$output .= ob_get_clean();
-
-		return $output;		
-	}
-
 
 }
 

@@ -22,15 +22,17 @@ jQuery( function($){
 	}
 
 	frmwks_get_filters = function( el ){
+		var backdrop = $('<div class="baldrick-backdrop" style="display: none;"></div>');
+		$('#formworks-main-canvas').append( backdrop );
+		backdrop.fadeIn(200);
 		var module = $( el );
-		module.children().css('opacity', 0.4);
-		module.prepend('<span class="spinner" style="visibility:visible; float:none;position:absolute;display:block"></span>');
 		frmwks_get_config_object();
 		if( frmwks_config_object.filters ){
 			$( el ).data( { 
 				id : frmwks_config_object.form_id,
 				prefix : frmwks_config_object.form_slug,
-				filters : JSON.stringify( frmwks_config_object.filters ) 
+				filters : JSON.stringify( frmwks_config_object.filters ),
+				modules : JSON.stringify( frmwks_config_object.module ),
 			} );
 		}
 	}

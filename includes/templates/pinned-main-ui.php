@@ -44,7 +44,7 @@
 			</div>
 		</li>
 
-		<li class="apply-filters" style="display:none; float: left; height: 38px; margin: -16px 0px 0px 6px; padding: 16px 0px 0px 5px; border-left: 1px solid rgb(226, 226, 226);">
+		<li class="wp-baldrick apply-filters" data-for="#filter-reload-trigger" style="display:none; float: left; height: 38px; margin: -16px 0px 0px 6px; padding: 16px 0px 0px 5px; border-left: 1px solid rgb(226, 226, 226);">
 			<label class="add-new-h2 formworks-filter-button"><?php _e('Apply Filters', 'formworks'); ?></label>
 		</li>
 	</ul>
@@ -63,9 +63,22 @@ jQuery( function( $ ) {
 
 {{/script}}
 	
-	<?php /*
-	<span class="wp-baldrick" id="formworks-field-sync" data-event="refresh" data-target="#formworks-main-canvas" data-before="frmwks_canvas_reset" data-callback="frmwks_canvas_init" data-type="json" data-request="#formworks-live-config" data-template="#main-ui-template"></span>
-	*/ ?>
+	
+<span class="wp-baldrick" id="formworks-field-sync" data-event="refresh" data-target="#formworks-main-canvas" data-before="frmwks_canvas_reset" data-callback="frmwks_canvas_init" data-type="json" data-request="#formworks-live-config" data-template="#main-ui-template"></span>
+
+<input type="hidden" value="{{#if module_data}}{{json module_data}}{{/if}}" name="module_data"
+	class="wp-baldrick stat-module"
+	data-before="frmwks_get_filters"
+	data-load-class="loading-module"
+	data-action="frmwks_module_data"
+	{{#unless module_data}}data-autoload="true"{{/unless}}
+	id="core-module-data"
+	data-target="#core-module-data"
+	data-event="reload"
+	data-live-sync="true"
+	id="filter-reload-trigger"
+>
+
 </div>
 <div class="formworks-sub-headercaldera">
 	<ul class="formworks-sub-tabs formworks-nav-tabs">
@@ -88,8 +101,6 @@ jQuery( function( $ ) {
 	<input type="hidden" name="quick_stats" id="formworks-quick-stats" value="{{#if quick_stats}}{{json quick_stats}}{{/if}}" data-live-sync="true">
 	<input type="hidden" name="form_id" value="{{form_id}}">
 	<input type="hidden" name="form_slug" value="{{form_slug}}">
-
-	{{#unless quick_stats}}<span class="wp-baldrick" data-action="frmwks_get_quickstats" data-target="#formworks-quick-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>" data-autoload="true"></span>{{/unless}}
 
 	<input type="hidden" value="{{_current_tab}}" name="_current_tab" id="formworks-active-tab">
 

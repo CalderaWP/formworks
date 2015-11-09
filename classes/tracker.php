@@ -186,8 +186,11 @@ class tracker {
 		// no blank data.
 		if( null !== $field ){
 			if( in_array( $field, $data ) ){
+				$counts = array_count_values( $data );
 				// field edit
-				self::save( 'field_edit', $field, $form_id, $prefix  );
+				if( $counts[ $field ] >= 2 ){
+					self::save( 'field_edit', $field, $form_id, $prefix  );
+				}
 			}else{
 				self::save( 'field_engage', $field, $form_id, $prefix );
 			}

@@ -21,12 +21,6 @@
     "autoload": {
         "psr-4": {
             "calderawp\\frmwks\\": "classes"
-        },
-        "files": [
-            "includes/modules/field-edits/handler.php",
-            "includes/modules/field-drop-off/handler.php",
-            "includes/modules/core-events/handler.php",
-            "includes/modules/summary/handler.php"
-        ]
+        }
     }
 }

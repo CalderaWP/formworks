@@ -108,8 +108,11 @@ class core {
 		});
 
 		add_filter( 'grunion_contact_form_form_action', function( $url, $post, $form ){
-
-			do_action( 'formworks_track', 'jp', $form, 'loaded' );
+			$selector = array(
+				"name" => $post->post_title,
+				"selector" => "#contact-form-" . $form
+			);
+			do_action( 'formworks_track', 'jp', $form, 'loaded', $selector );
 			return $url;
 		}, 15, 3 );
 

@@ -54,6 +54,9 @@ class settings extends core{
 				
 				switch ( $form_prefix ){
 					case 'caldera':
+						if( false !== strpos( $field , '[') ){
+							$field = strtok( $field, '[');
+						}
 						// is CF
 						$form = \Caldera_Forms::get_form( $form_id );
 						if( empty( $form ) ){
@@ -107,8 +110,7 @@ class settings extends core{
 						if( empty( $form_post )){
 							continue;
 						}
-						$form_name = $form_post->post_title;
-						$form_id = $form_id;
+						$field = ucwords( str_replace('g' . $form_id . '-','',$field) );
 					default:
 						# no idea what this is or the form plugin was disabled.
 						break;
@@ -122,13 +124,14 @@ class settings extends core{
  
 	public function module_data_loader( $form_list ){
 		$modules = apply_filters( 'formworks_stat_modules', array() );
-		$module = filter_var( $_POST['module'], FILTER_SANITIZE_STRING );
+		$loaded_modules = json_decode( stripslashes_deep( $_POST['modules'] ), ARRAY_A );
+
 		$filter = array(
 			'form' => filter_var( $_POST['id'], FILTER_SANITIZE_STRING ),
 			'prefix' => filter_var( $_POST['prefix'], FILTER_SANITIZE_STRING ),
 			'filters' => array()
 		);
-
+		$data = array();
 		$date_ranges = array(
 			'this_week' => array(
 				'start' => 'last sunday',
@@ -144,35 +147,34 @@ class settings extends core{
 			),			
 			'custom' => array()
 		);
-
-
-		if( isset( $modules[ $module ] ) && isset( $modules[ $module ]['handler'] ) ){
-
-			$is_json = json_decode( stripslashes_deep( $_POST['filters'] ), ARRAY_A );
-			if( !empty( $is_json ) ){
-				$filter['filters'] = $is_json;
-			}
-
-			$preset = $date_ranges[ $filter['filters']['date']['preset'] ];
-			if( !empty( $preset ) ){
-				$filter['filters']['date']['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
-				$filter['filters']['date']['end'] = date( 'Y-m-d', strtotime( $preset['end'] ) );
-			}
-
-			$sig = sha1( $module . '_' . json_encode( $filter ) );
-			//$result = get_transient( $sig );
-			if( empty( $result ) ){
-				add_filter( 'formworks_get_module_data-' . $module, $modules[ $module ]['handler'], 10, 2 ); // add filters
-				$result = apply_filters( 'formworks_get_module_data-' . $module, array(), $filter );
-				set_transient( $sig, $result, 600 );
-			}
-			
-			wp_send_json_success( $result );
-
-		}else{
-			wp_send_json_error();
+		$is_json = json_decode( stripslashes_deep( $_POST['filters'] ), ARRAY_A );
+		if( !empty( $is_json ) ){
+			$filter['filters'] = $is_json;
 		}
-		
+
+		$preset = $date_ranges[ $filter['filters']['date']['preset'] ];
+		if( !empty( $preset ) ){
+			$filter['filters']['date']['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
+			$filter['filters']['date']['end'] = date( 'Y-m-d', strtotime( $preset['end'] ) );
+		}
+
+		foreach( $loaded_modules as $module ){
+
+			if( isset( $modules[ $module ] ) && isset( $modules[ $module ]['handler'] ) ){
+
+				$sig = sha1( $module . '_' . json_encode( $filter ) );
+				$result = get_transient( $sig );
+				if( empty( $result ) ){
+					add_filter( 'formworks_get_module_data-' . $module, $modules[ $module ]['handler'], 10, 2 ); // add filters
+					$result = apply_filters( 'formworks_get_module_data-' . $module, array(), $filter );
+					set_transient( $sig, $result, 600 );
+				}
+				
+				$data[ $module ] = $result;
+			}
+
+		}
+		wp_send_json( $data );
 
 	}
 

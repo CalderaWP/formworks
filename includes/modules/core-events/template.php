@@ -1,9 +1,9 @@
 
-{{#if data/datasets}}
+{{#if datasets}}
 
 	<div id="formworks-main-chart-legend" class="formworks-chart-legend">
 		<ul class="line-legend">
-		{{#each data/datasets}}
+		{{#each datasets}}
 			<li>
 				<label style="margin-right: 12px;">
 					<span data-active="{{color}}" style="background-color:{{color}};color: rgb(255, 255, 255); display: inline-block; padding: 8px; border: 2px solid rgb(255, 255, 255);margin: 0px 0px -5px;"></span>
@@ -24,8 +24,7 @@
 		</ul>
 	</div>
 	<div>
-		{{#unless data}}<span style="visibility: visible; float: none;" class="spinner"></span>{{/unless}}
-		{{#if data/legend/conversion}}<canvas id="formworks-main-chart-conversion" style="width:100%; height: 100px;"></canvas>{{/if}}
+		{{#if legend/conversion}}<canvas id="formworks-main-chart-conversion" style="width:100%; height: 100px;"></canvas>{{/if}}
 		<div id="formworks-main-chart" style="width:100%; height: 250px;"></div>
 		<div id="formworks-tooltip" class="postbox" style="display:none;position:absolute;"></div>
 	</div>
@@ -67,9 +66,9 @@
 		var plot;
 		
 		function plot_fromLegend(){
-			var raw_data = {{{json @root/data/datasets}}},
+			var raw_data = {{{json datasets}}},
 				data = [],
-				options = {{{json @root/data/options}}},
+				options = {{{json options}}},
 				placeholder = $("#formworks-main-chart");
 			
 				for( var i in raw_data ){
@@ -98,7 +97,7 @@
 			var o,
 				top_start = 8,
 				start_left = 0;
-			{{#each @root/data/options/grid/markings}}
+			{{#each options/grid/markings}}
 
 				o = plot.pointOffset({ x: {{xaxis/from}}, y: 1});				
 				placeholder.prepend("<div class='formworks-post-event' style='position:absolute;left:" + (o.left) + "px;top:" + top_start + "px;color:#666;font-size:smaller;background: rgb(255, 255, 255) none repeat scroll 0% 0%; padding: 0px 8px; border: 1px solid rgb(207, 207, 207);' title='{{label}}'>{{label}}</div>");

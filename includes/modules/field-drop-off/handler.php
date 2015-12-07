@@ -40,6 +40,7 @@ function formworks_get_field_drop_off( $data, $request ){
 		LEFT JOIN `{$wpdb->prefix}formworks_tracker` AS `device` ON ( `{$wpdb->prefix}formworks_tracker`.`user_key` = `device`.`user_key` && `device`.`meta_key` = 'device' )
 		WHERE 
 		{$device_filter}
+		`{$wpdb->prefix}formworks_tracker`.`user_id` NOT IN (" . implode(',', $request['filters']['admins'] ) ." ) &&
 		`{$wpdb->prefix}formworks_tracker`.`meta_key` = 'partial' &&
 		`{$wpdb->prefix}formworks_tracker`.`form_id` = %s && 
 		`{$wpdb->prefix}formworks_tracker`.`prefix` = %s && 

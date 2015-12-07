@@ -160,11 +160,13 @@ class settings extends core{
 				'phone'		=>	1
 			);
 		}
+
 		$preset = $date_ranges[ $filter['filters']['date']['preset'] ];
 		if( !empty( $preset ) ){
 			$filter['filters']['date']['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
 			$filter['filters']['date']['end'] = date( 'Y-m-d', strtotime( $preset['end'] ) );
 		}
+
 
 		foreach( $loaded_modules as $module ){
 
@@ -173,6 +175,14 @@ class settings extends core{
 				$sig = sha1( $module . '_' . json_encode( $filter ) );
 				$result = get_transient( $sig );
 				if( empty( $result ) ){
+
+					$users_query = new \WP_User_Query( array( 
+						'role' => 'administrator',
+						'fields'	=> 'ID',
+						'number' => -1
+					) );
+					$filter['filters']['admins'] = $users_query->get_results();
+					
 					add_filter( 'formworks_get_module_data-' . $module, $modules[ $module ]['handler'], 10, 2 ); // add filters
 					$result = apply_filters( 'formworks_get_module_data-' . $module, array(), $filter );
 					set_transient( $sig, $result, 120 );

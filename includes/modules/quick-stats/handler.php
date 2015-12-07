@@ -39,6 +39,7 @@ function formworks_get_quick_stats( $data, $request ){
 		`{$wpdb->prefix}formworks_tracker` 
 		WHERE 
 		`meta_key` IN ( '{$meta_keys}' ) &&
+		`user_id` NOT IN (" . implode(',', $request['filters']['admins'] ) ." ) &&
 		`prefix` = %s &&
 		`form_id` = %s && 
 		`meta_value` != ''

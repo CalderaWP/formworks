@@ -22,7 +22,7 @@ jQuery( function($){
 	}
 
 	frmwks_get_filters = function( el ){
-		var backdrop = $('<div class="baldrick-backdrop" style="display: none;"></div>');
+		var backdrop = $('<div class="baldrick-backdrop" style="display: none;"><div class="formworks-loader"></div></div>');
 		$('#formworks-main-canvas').append( backdrop );
 		backdrop.fadeIn(200);
 		var module = $( el );

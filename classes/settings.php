@@ -41,6 +41,7 @@ class settings extends core{
 
 		if( current_user_can( 'manage_options' ) ){
 			add_action( 'wp_ajax_frmwks_rebuild_database', array( $this, 'rebuild_database') );
+			//add_action( 'wp_ajax_frmwks_reset_form_stats', array( $this, 'reset_form_stats') );
 		}
 
 		// create new
@@ -151,7 +152,14 @@ class settings extends core{
 		if( !empty( $is_json ) ){
 			$filter['filters'] = $is_json;
 		}
-
+		// setup devices
+		if( empty( $filter['filters']['device'] ) ){
+			$filter['filters']['device'] = array(
+				'computer'	=> 	1,
+				'tablet'	=>	1,
+				'phone'		=>	1
+			);
+		}
 		$preset = $date_ranges[ $filter['filters']['date']['preset'] ];
 		if( !empty( $preset ) ){
 			$filter['filters']['date']['start'] = date( 'Y-m-d', strtotime( $preset['start'] ) );
@@ -167,9 +175,8 @@ class settings extends core{
 				if( empty( $result ) ){
 					add_filter( 'formworks_get_module_data-' . $module, $modules[ $module ]['handler'], 10, 2 ); // add filters
 					$result = apply_filters( 'formworks_get_module_data-' . $module, array(), $filter );
-					set_transient( $sig, $result, 600 );
+					set_transient( $sig, $result, 120 );
 				}
-				
 				$data[ $module ] = $result;
 			}
 

@@ -575,3 +575,14 @@ button.add-new-h2.formworks-filter-button:hover{
 div.stat-module.loading {
   opacity: 0.4;
 }
+
+.formworks-loader {
+  background: rgba(0, 0, 0, 0) url("loading.gif") no-repeat scroll center center / 100px auto;
+  border-radius: 50%;
+  height: 100px;
+  left: 50%;
+  margin: -150px 0 0 -50px;
+  position: absolute;
+  top: 50%;
+  width: 100px;
+}

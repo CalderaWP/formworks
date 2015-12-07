@@ -60,8 +60,7 @@ class tracker {
 			SELECT COUNT(`id`) AS `total` FROM `" . $wpdb->prefix . "formworks_tracker` WHERE `prefix` = %s && 
 			GROUP BY SUBSTR( `datestamp`,1,7);
 		", $prefix );
-		var_dump( $query );
-		die;
+
 		return self::save( $type, $data, $form_id, $prefix );
 	}
 

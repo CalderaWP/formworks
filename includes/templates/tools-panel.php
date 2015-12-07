@@ -13,3 +13,4 @@
 			 data-modal-width="400"
 			 data-modal-height="190" type="button"><?php _e('Rebuild Database', 'formworks'); ?></button>			
 		</div>
+

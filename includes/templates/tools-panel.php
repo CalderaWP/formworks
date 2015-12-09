@@ -2,7 +2,7 @@
 
 		<div class="formworks-config-group">
 			<label for="formworks-rebuild">
-				<?php _e( 'Rebuild Database', 'formworks' ); ?>
+				<?php esc_html_e( 'Rebuild Database', 'formworks' ); ?>
 			</label>
 			<button class="button wp-baldrick"
 			 data-modal="warning"

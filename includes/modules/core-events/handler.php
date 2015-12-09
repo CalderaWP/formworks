@@ -5,7 +5,7 @@ add_filter( 'formworks_stat_modules', 'formworks_core_events' );
 function formworks_core_events( $modules ){
 
 	$modules['core_events'] = array(
-		'title' => __('Core Events', 'firmworks'),
+		'title' => __('Core Events', 'formworks'),
 		'description' => __('Chart the main events, load, view engage and submission.', 'formworks'),
 		'template' => dirname( __FILE__ ) . '/template.php',
 		'handler' => 'formworks_get_core_events'

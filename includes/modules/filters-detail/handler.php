@@ -1,12 +1,22 @@
 <?php
-
-
 add_filter( 'formworks_stat_modules', 'formworks_filters_detail' );
+
+/**
+ * Add the summary module
+ *
+ * @since 1.0.0
+ *
+ * @uses "formworks_stat_modules" filter
+ *
+ * @param array $modules
+ *
+ * @return array
+ */
 function formworks_filters_detail( $modules ){
 
 	$modules['filters_detail'] = array(
-		'title' => __('Filters details line', 'firmworks'),
-		'description' => __('Shoes the selected filters as text.', 'formworks'),
+		'title' => __('Filters details line', 'formworks'),
+		'description' => __('Describes the current data being shown.', 'formworks'),
 		'template' => dirname( __FILE__ ) . '/template.php',
 		'handler' => 'formworks_get_filters_detail'
 	);
@@ -15,6 +25,12 @@ function formworks_filters_detail( $modules ){
 
 }
 
+/**
+ * @param $data
+ * @param $request
+ *
+ * @return string
+ */
 function formworks_get_filters_detail( $data, $request ){
 		
 		$devices = __('all devices', 'formworks');

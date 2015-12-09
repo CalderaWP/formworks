@@ -17,7 +17,7 @@
 				<label style="margin-right: 12px;">
 					<span data-active="#333" style="background-color:#333;color: rgb(255, 255, 255); display: inline-block; padding: 8px; border: 2px solid rgb(255, 255, 255);margin: 0px 0px -5px;"></span>
 					<input style="display:none;" class="legend-checks legend-post_events" name="legend[post_events]" value="post_events" type="checkbox">
-					<?php _e('Post Events', 'formworks'); ?>
+					<?php esc_html_e('Post Events', 'formworks'); ?>
 					
 				</label>
 			</li>

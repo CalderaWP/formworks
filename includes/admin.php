@@ -152,7 +152,7 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 		</div>
 		<div class="formworks-config-group">
 			<label for="formworks-paginator-type">
-				<?php _e( 'Position', 'formworks' ); ?>
+				<?php esc_html_e( 'Position', 'formworks' ); ?>
 			</label>
 			<select name="position">
 				<option value="top" {{#is type value="top"}}selected="selected"{{/is}}>Top</option>

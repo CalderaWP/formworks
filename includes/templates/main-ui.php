@@ -1,13 +1,13 @@
 <div class="formworks-main-headercaldera">
 		<h1 class="formworks-main-title">
-		<?php _e( 'Formworks', 'formworks' ); ?>
+		<?php esc_html_e( 'Formworks', 'formworks' ); ?>
 		<span class="formworks-version">
 			<?php echo FRMWKS_VER; ?>
 		</span>
 		<span class="formworks-nav-separator"></span>
 			
 		<span class="add-new-h2 wp-baldrick" data-action="frmwks_save_config" data-load-element="#formworks-save-indicator" data-callback="frmwks_handle_save" data-before="frmwks_get_config_object" >
-			<?php _e('Save Changes', 'formworks') ; ?>
+			<?php esc_html_e('Save Changes', 'formworks') ; ?>
 		</span>
 
 		<span class="formworks-nav-separator"></span>
@@ -20,10 +20,10 @@
 
 
 		<div class="updated_notice_box">
-		<?php _e( 'Updated Successfully', 'formworks' ); ?>
+		<?php esc_html_e( 'Updated Successfully', 'formworks' ); ?>
 	</div>
 	<div class="error_notice_box">
-		<?php _e( 'Could not save changes.', 'formworks' ); ?>
+		<?php esc_html_e( 'Could not save changes.', 'formworks' ); ?>
 	</div>
 	<ul class="formworks-header-tabs formworks-nav-tabs">
 				
@@ -37,22 +37,22 @@
 	<ul class="formworks-sub-tabs formworks-nav-tabs">
 		<li class="{{#is _current_tab value="#formworks-panel-forms"}}active {{/is}}formworks-nav-tab">
 			<a href="#formworks-panel-forms">
-				<?php _e('Forms', 'formworks') ; ?>
+				<?php esc_html_e('Forms', 'formworks') ; ?>
 			</a>
 		</li>
 		<li class="{{#is _current_tab value="#formworks-panel-analytics"}}active {{/is}}formworks-nav-tab">
 			<a href="#formworks-panel-analytics">
-				<?php _e('Analytics', 'formworks') ; ?>
+				<?php esc_html_e('Analytics', 'formworks') ; ?>
 			</a>
 		</li>
 		<li class="{{#is _current_tab value="#formworks-panel-tools"}}active {{/is}}formworks-nav-tab">
 			<a href="#formworks-panel-tools">
-				<?php _e('Tools', 'formworks') ; ?>
+				<?php esc_html_e('Tools', 'formworks') ; ?>
 			</a>
 		</li>
 		<li class="{{#is _current_tab value="#formworks-panel-about"}}active {{/is}}formworks-nav-tab">
 			<a href="#formworks-panel-about">
-				<?php _e('About', 'formworks') ; ?>
+				<?php esc_html_e('About', 'formworks') ; ?>
 			</a>
 		</li>		
 	</ul>
@@ -66,9 +66,9 @@
 	
 	<div id="formworks-panel-forms" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-forms"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
 		<h4>
-			<?php _e('Setup Formworks Pages', 'formworks') ; ?>
+			<?php esc_html_e('Setup Formworks Pages', 'formworks') ; ?>
 			<small class="description">
-				<?php _e('General Settings', 'formworks') ; ?>
+				<?php esc_html_e('General Settings', 'formworks') ; ?>
 			</small>
 		</h4>
 		<?php
@@ -82,9 +82,9 @@
 
 	<div id="formworks-panel-analytics" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-analytics"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
 		<h4>
-			<?php _e( 'Google Analytics Goals', 'formworks' ); ?>
+			<?php esc_html_e( 'Google Analytics Goals', 'formworks' ); ?>
 			<small class="description">
-				<?php _e('How to setup goals in Google Analytics', 'formworks') ; ?>
+				<?php esc_html_e('How to setup goals in Google Analytics', 'formworks') ; ?>
 			</small>	
 		</h4>
 		<?php
@@ -98,9 +98,9 @@
 
 	<div id="formworks-panel-tools" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-tools"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
 		<h4>
-			<?php _e( 'Tools and Utilities', 'formworks' ); ?>
+			<?php esc_html_e( 'Tools and Utilities', 'formworks' ); ?>
 			<small class="description">
-				<?php _e('General Maintanence Options and Settings', 'formworks') ; ?>
+				<?php esc_html_e('General Maintanence Options and Settings', 'formworks') ; ?>
 			</small>	
 		</h4>
 		<?php
@@ -112,7 +112,7 @@
 	</div>	
 	<div id="formworks-panel-about" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-about"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
 		<h4>
-			<?php _e( 'About Formworks', 'formworks' ); ?>
+			<?php esc_html_e( 'About Formworks', 'formworks' ); ?>
 		</h4>
 		<?php
 			/**

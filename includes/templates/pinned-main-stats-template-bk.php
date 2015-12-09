@@ -11,9 +11,9 @@
 
 ?>
 <h4 style="float: left; margin: 0 18px 0px 0px;">
-	<?php _e('Form Statistics', 'formworks') ; ?>
+	<?php esc_html_e('Form Statistics', 'formworks') ; ?>
 	<small class="description">
-		<?php _e('Analytics', 'formworks') ; ?>
+		<?php esc_html_e('Analytics', 'formworks') ; ?>
 	</small>
 </h4>
 {{> field_edits}}
@@ -25,7 +25,7 @@
 	<label class="add-new-h2 formworks-filter-button {{#if main_stats/config/filters/device/phone}}active{{/if}}" style="display: inline-block; padding: 3px 6px;margin-left: -4px; margin-top: -3px;border-radius: 0px 3px 3px 0px;"><input style="display:none;" type="checkbox" name="filters[device][phone]" value="1" {{#if main_stats/config/filters/device/phone}}checked="checked"{{/if}}><span class="dashicons dashicons-smartphone"></span></label>
 
 
-	<button type="button" data-before="frmwks_get_filters"  class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="this_week"}} active{{/is}}{{#unless main_stats/filter}} active{{/unless}}" data-preset="this_week" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('This Week', 'formworks' ); ?></button>
+	<button type="button" data-before="frmwks_get_filters"  class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="this_week"}} active{{/is}}{{#unless main_stats/filter}} active{{/unless}}" data-preset="this_week" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php esc_html_e('This Week', 'formworks' ); ?></button>
 	<button type="button" data-before="frmwks_get_filters"  class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="this_month"}} active{{/is}}" data-preset="this_month" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('This Month', 'formworks' ); ?></button>
 	<button type="button" data-before="frmwks_get_filters"  class="add-new-h2 formworks-filter-button wp-baldrick {{#is main_stats/filter value="last_month"}} active{{/is}}" data-preset="last_month" data-action="frmwks_get_mainstats" data-target="#formworks-main-stats" data-form="<?php echo substr( $formworks['id'], 2 ); ?>"><?php _e('Last Month', 'formworks' ); ?></button>
 
@@ -33,7 +33,7 @@
 
 	<div style="display: inline-block;" class="formwork-datepicker input-daterange input-group" id="formworks-range-datepicker">		
 	    <input style="width: 120px;" type="text" class="formworks-date-input wp-baldrick" data-event="change" data-preset="custom" data-action="frmwks_get_mainstats" data-end="{{main_stats/end}}" name="filters[date][start]" value="{{filters/date/start}}" />
-	    <span style="display: inline-block; margin: -4px; padding: 5px 6px; background: rgb(224, 224, 224) none repeat scroll 0% 0%;"><?php _e( 'to', 'formworks' ); ?></span>
+	    <span style="display: inline-block; margin: -4px; padding: 5px 6px; background: rgb(224, 224, 224) none repeat scroll 0% 0%;"><?php esc_html_e( 'to', 'formworks' ); ?></span>
 	    <input style="width: 120px;" type="text" class="formworks-date-input wp-baldrick" data-event="change" data-preset="custom" data-action="frmwks_get_mainstats" data-start="{{main_stats/start}}" name="filters[date][end]" value="{{filters/date/end}}" />
 	</div>
 </div>
@@ -72,7 +72,7 @@ jQuery( function( $ ) {
 		{{#if @root/main_stats/options/grid/markings}}
 			<li><label><input style="display:none;" data-colorhack="{{strokeColor}}" data-name="{{label}}" data-live-sync="true" type="checkbox" value="1" name="show_events" {{#if @root/show_events}}checked="checked"{{/if}}>
 				<span style="background-color:{{#unless @root/show_events}}#333{{else}}#efefef{{/unless}};"></span>
-				<?php _e('Show Post Events', 'formworks'); ?></label>
+				<?php esc_html_e('Show Post Events', 'formworks'); ?></label>
 			</li>
 		{{/if}}
 		</ul>
@@ -87,7 +87,7 @@ jQuery( function( $ ) {
 
 	<div style="width: 33%; float: left; padding: 0px 12px 0px 0px; box-sizing: padding-box;">
 	{{#if main_stats/conversion_story}}
-		<h4><?php _e('Report Summary', 'formworks'); ?></h4>
+		<h4><?php esc_html_e('Report Summary', 'formworks'); ?></h4>
 		<p>{{{main_stats/conversion_story}}}</p>
 	{{/if}}
 	</div>

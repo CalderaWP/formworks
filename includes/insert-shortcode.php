@@ -35,7 +35,7 @@
 				}
 			}
 			if( empty( $has ) ){
-				echo '<p>' . __('You don\'t have any Formworks Frontend Views to insert.', 'formworks') .'</p>';
+				echo '<p>' . esc_html__('You don\'t have any Formworks Frontend Views to insert.', 'formworks') .'</p>';
 			}
 
 		?>
@@ -46,7 +46,7 @@
 	<div class="formworks-modal-footer" id="formworks_shortcode_modalFooter" style="display: block;">
 		<p class="modal-label-subtitle" style="text-align: right;">
 			<button class="button formworks-shortcode-insert" style="margin:5px 25px 0 15px;">
-				<?php echo __('Insert Selected', 'formworks'); ?>
+				<?php echo esc_html__('Insert Selected', 'formworks'); ?>
 			</button>
 		</p>
 	</div>

@@ -13,7 +13,7 @@
 ?>
 
 	<div style="width: 33%; float: left; padding: 0px 12px 0px 0px; box-sizing: padding-box;">
-		<h4><?php _e('Conversion Rates', 'formworks'); ?></h4>
+		<h4><?php esc_html_e('Conversion Rates', 'formworks'); ?></h4>
 		{{#each main_stats/datasets}}
 			{{#if is_conversion}}
 			<div class="formworks-config-group">
@@ -30,7 +30,7 @@
 		{{/each}}
 	</div>
 	<div style="width: 33%; float: left; padding: 0px 12px 0px 0px; box-sizing: padding-box;">
-		<h4><?php _e('Engagement Rates', 'formworks'); ?></h4>
+		<h4><?php esc_html_e('Engagement Rates', 'formworks'); ?></h4>
 		{{#each main_stats/datasets}}
 			{{#if is_engage}}
 			<div class="formworks-config-group">

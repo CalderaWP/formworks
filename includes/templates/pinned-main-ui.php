@@ -24,28 +24,28 @@
 		</li>
 		<li style="float: left;width:20px;"></li>
 		<li style="float: left;">
-			<label class="add-new-h2 formworks-filter-button {{#is filters/date/preset value="this_week"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="this_week" name="filters[date][preset]" {{#is filters/date/preset value="this_week"}}checked="checked"{{/is}}><?php _e('This Week', 'formworks' ); ?></label>
+			<label class="add-new-h2 formworks-filter-button {{#is filters/date/preset value="this_week"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="this_week" name="filters[date][preset]" {{#is filters/date/preset value="this_week"}}checked="checked"{{/is}}><?php esc_html_e('This Week', 'formworks' ); ?></label>
 		</li>
 		<li style="float: left;">
-			<label class="add-new-h2 formworks-filter-button {{#is filters/date/preset value="this_month"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="this_month" name="filters[date][preset]" {{#is filters/date/preset value="this_month"}}checked="checked"{{/is}}><?php _e('This Month', 'formworks' ); ?></label>
+			<label class="add-new-h2 formworks-filter-button {{#is filters/date/preset value="this_month"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="this_month" name="filters[date][preset]" {{#is filters/date/preset value="this_month"}}checked="checked"{{/is}}><?php esc_html_e('This Month', 'formworks' ); ?></label>
 		</li>
 		<li style="float: left;">
-			<label class="add-new-h2 formworks-filter-button {{#is filters/date/preset value="last_month"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="last_month" name="filters[date][preset]" {{#is filters/date/preset value="last_month"}}checked="checked"{{/is}}><?php _e('Last Month', 'formworks' ); ?></label>
+			<label class="add-new-h2 formworks-filter-button {{#is filters/date/preset value="last_month"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="last_month" name="filters[date][preset]" {{#is filters/date/preset value="last_month"}}checked="checked"{{/is}}><?php esc_html_e('Last Month', 'formworks' ); ?></label>
 		</li>
 
 		<li style="float: left;">
-			<label id="filter-custom-range" class="add-new-h2 date-range formworks-filter-button {{#is filters/date/preset value="custom"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="custom" name="filters[date][preset]" {{#is filters/date/preset value="last_month"}}checked="checked"{{/is}}><?php _e('Custom Range', 'formworks' ); ?></label>
+			<label id="filter-custom-range" class="add-new-h2 date-range formworks-filter-button {{#is filters/date/preset value="custom"}} active{{/is}}" ><input type="radio" style="display:none;" class="preset-radio" value="custom" name="filters[date][preset]" {{#is filters/date/preset value="last_month"}}checked="checked"{{/is}}><?php esc_html_e('Custom Range', 'formworks' ); ?></label>
 		</li>
 		<li style="float: left;">
 			<div style="display:none; margin: -4px 0px 0px 4px;" class="formwork-datepicker input-daterange input-group" id="formworks-range-datepicker">
 			    <input style="width: 120px; vertical-align: middle;" type="text" class="formworks-date-input" name="filters[date][start]" value="{{filters/date/start}}" />
-			    <span style="display: inline-block; background: rgb(224, 224, 224) none repeat scroll 0% 0%; margin: 0 -5px; padding: 3px 6px 6px;"><?php _e( 'to', 'formworks' ); ?></span>
+			    <span style="display: inline-block; background: rgb(224, 224, 224) none repeat scroll 0% 0%; margin: 0 -5px; padding: 3px 6px 6px;"><?php esc_html_e( 'to', 'formworks' ); ?></span>
 			    <input style="width: 120px; vertical-align: middle;" type="text" class="formworks-date-input" name="filters[date][end]" value="{{filters/date/end}}" />
 			</div>
 		</li>
 
 		<li class="wp-baldrick apply-filters" data-for="#filter-reload-trigger" style="display:none; float: left; height: 38px; margin: -16px 0px 0px 6px; padding: 16px 0px 0px 5px; border-left: 1px solid rgb(226, 226, 226);">
-			<label class="add-new-h2 formworks-filter-button"><?php _e('Apply Filters', 'formworks'); ?></label>
+			<label class="add-new-h2 formworks-filter-button"><?php esc_html_e('Apply Filters', 'formworks'); ?></label>
 		</li>
 	</ul>
 </div>

@@ -207,11 +207,11 @@ class core {
 
 	
 	/**
-	 * sets tracking for the rendered form
+	 * Sets tracking for the rendered form
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return   html  the form HTML
+	 * @return string  the form HTML
 	 */
 	public function set_tracking($prefix, $form_id, $selector ){
 			global $formworks_tracker;
@@ -234,7 +234,8 @@ class core {
 			wp_localize_script( 'formworks-front-binding', 'formworks', $script_array );
 			wp_enqueue_script( 'formworks-front-binding' );
 
-		}
+	}
+
 	/**
 	 * Return an instance of this class.
 	 *
@@ -243,7 +244,6 @@ class core {
 	 * @return    object|\calderawp\frmwks\core    A single instance of this class.
 	 */
 	public static function get_instance() {
-
 		// If the single instance hasn't been set, set it now.
 		if ( null == self::$instance ) {
 			self::$instance = new self;
@@ -259,7 +259,6 @@ class core {
 	 * @since 1.0.0
 	 */
 	public function load_plugin_textdomain() {
-
 		load_plugin_textdomain( $this->plugin_slug, false, basename( FRMWKS_PATH ) . '/languages');
 
 	}
@@ -272,7 +271,8 @@ class core {
 	 * @return    null
 	 */
 	public function enqueue_front_stylescripts() {
-		wp_register_script( 'formworks-front-binding', FRMWKS_URL . 'assets/js/front-binding.min.js', array( 'jquery' ), FRMWKS_VER );		
+		wp_register_script( 'formworks-front-binding', FRMWKS_URL . 'assets/js/front-binding.min.js', array( 'jquery' ), FRMWKS_VER );
+
 	}
 	/**
 	 * Output tracking code
@@ -281,7 +281,7 @@ class core {
 	 *
 	 */
 	public function print_front_scripts() {
-		$formworks = \calderawp\frmwks\options::get_single( 'formworks' );
+		$formworks = options::get_single( 'formworks' );
 		if( !empty( $formworks['external']['ga'] ) ){
 			?>
 			<script>
@@ -298,11 +298,16 @@ class core {
 		
 	}
 
+	/**
+	 * Get browser agent
+	 *
+	 * @since 1.0.0
+	 */
 	static function getBrowser(){
 		$u_agent = $_SERVER['HTTP_USER_AGENT'];
 		echo $u_agent;
 		preg_match_all('/\((.+?)\)/', $u_agent, $matches);
-		if( !empty( $matches[0] ) ){
+		if( ! empty( $matches[0] ) ){
 			var_dump( $matches );
 		}
 		die;
@@ -368,10 +373,9 @@ class core {
 
 
 	/**
-	 * tracker action handler
+	 * Tracker action handler
 	 *
 	 * @since 1.0.0
-	 *
 	 */
 	public function handle_track( $prefix, $track_id, $type, $value = null) {
 		global $formworks_tracker;
@@ -395,7 +399,7 @@ class core {
 	}
 
 	/**
-	 * push stuff to tracker
+	 * Push data into tracker to tracker
 	 *
 	 * @since 1.0.0
 	 *
@@ -425,7 +429,7 @@ class core {
 			}
 
 		}
-		//header( "Content-Type:image/gif", true );
+
 		exit;
 	}
 	/**
@@ -443,8 +447,7 @@ class core {
 			return;
 
 		}
-		
-		
+
 		if( false !== strpos( $screen->base, 'formworks' ) ){
 			
 			wp_enqueue_style( 'formworks-core-style', FRMWKS_URL . 'assets/css/styles.css' );
@@ -485,8 +488,8 @@ class core {
 	public function shortcode_insert_button(){
 		global $post;
 		if(!empty($post)){
-			echo "<a id=\"formworks-insert\" title=\"".__('Formworks','formworks')."\" class=\"button formworks-insert-button\" href=\"#inst\" style=\"padding-left: 10px; box-shadow: 4px 0px 0px #db4437 inset;\">\n";
-			echo __('Formworks', 'formworks')."\n";
+			echo "<a id=\"formworks-insert\" title=\"".esc_html__('Formworks','formworks')."\" class=\"button formworks-insert-button\" href=\"#inst\" style=\"padding-left: 10px; box-shadow: 4px 0px 0px #db4437 inset;\">\n";
+			echo esc_html__('Formworks', 'formworks')."\n";
 			echo "</a>\n";
 		}
 

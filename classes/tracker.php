@@ -20,10 +20,9 @@ namespace calderawp\frmwks;
 class tracker {
 
 	/**
-	 * retireive the user_key
+	 * Retrieve the user_key
 	 *
 	 * @since 1.0.0
-	 *
 	 *
 	 * @return int current stat ID
 	 */
@@ -44,7 +43,7 @@ class tracker {
 
 
 	/**
-	 * get an activity line for a slug
+	 * Get an activity line for a slug
 	 *
 	 * @since 1.0.0
 	 *
@@ -66,13 +65,13 @@ class tracker {
 
 
 	/**
-	 * add a notch
+	 * Addd a notch
 	 *
 	 * @since 1.0.0
 	 *
 	 * @param string $form form ID
 	 *
-	 * @return void
+	 * @return int|false The number of rows updated, or false on error.
 	 */
 	public static function add_notch( $prefix, $form_id, $type, $data = true ){
 
@@ -87,17 +86,22 @@ class tracker {
 				}
 			}
 		}
+
 		return self::save( $type, $data, $form_id, $prefix );
 	}
 
 	/**
-	 * save data
+	 * Save tracking data
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param array $data to be saved
+	 * @param string $key Meta key
+	 * @param mixed $value Value to save
+	 * @param int|string $form_id ID of form
+	 * @param string $prefix Form type prefix
+	 * @param null|array $where Optional. Where clause array in format $wpdb->update() will accept. If is null, the default, new record will be created.
 	 *
-	 * @return bool true on success false on fail
+	 * @return int|false The number of rows updated, or false on error.
 	 */
 	public static function save( $key, $value, $form_id, $prefix, $where = null ){
 		global $wpdb;
@@ -129,16 +133,20 @@ class tracker {
 			return $wpdb->update( $wpdb->prefix . "formworks_tracker", $data, $where );
 		}
 
+		return false;
+
 	}
+
 	/**
-	 * get a notch
+	 * Get a saved notch
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $form form ID
-	 * @param string $key notch type key
+	 * @param string $prefix Form type prefix
+	 * @param int|string $form_id ID of form
+	 * @param string $key Meta key
 	 *
-	 * @return void
+	 * @return array|null|object|void
 	 */
 	public static function get_notch( $prefix, $form_id, $key ){
 		
@@ -157,18 +165,18 @@ class tracker {
 
 		return $wpdb->get_row( $query, ARRAY_A );
 
-	}	
+	}
 
 	/**
-	 * add a partial
+	 * Get a saved partial submission
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $form form ID
-	 * @param string $field ID of field partial
-	 * @param string $value of partial
+	 * @param string $prefix Form type prefix
+	 * @param int|string $form_id ID of form
+	 * @param null|string $field Optional Name of field
 	 *
-	 * @return void
+	 * @return bool|false|int
 	 */
 	public static function add_partial( $prefix, $form_id, $field = null ){
 
@@ -196,6 +204,7 @@ class tracker {
 			// merge with current data (if any)
 			$data[] = $field;
 		}
+
 		// save partial
 		return self::save( 'partial', $data, $form_id, $prefix, $partial );
 
@@ -207,8 +216,10 @@ class tracker {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $form form ID
+	 * @param string $prefix Form type prefix
+	 * @param int|string $form_id ID of form
 	 *
+	 * @return bool
 	 */
 	public static function add_submission( $prefix, $form_id ){
 		// get the partial 
@@ -221,17 +232,19 @@ class tracker {
 		if( self::save( 'submission', $timespent, $form_id, $prefix ) ){
 			return self::kill_partial( $partial['id'] );
 		}
+
 		//fallback, all is not well.
 		return false;
 	}
 
 	/**
-	 * Kill a partial
+	 * Delete a saved a partial
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $form form ID
+	 * @param string $id Row ID
 	 *
+	 * @return int|false The number of rows updated, or false on error
 	 */
 	public static function kill_partial( $id ){
 		global $wpdb;

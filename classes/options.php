@@ -112,16 +112,23 @@ class options {
 	}
 
 	/**
-	 * Get The entries from a Calcera Form
+	 * Get The entries from a Caldera Form
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $id form ID
+	 * @param string $form_id form ID
+	 * @param int $page. Optional. Page number for results. Default is 1
+	 * @param int $perpage Optional. Results per page. Default is 1000
+	 * @param array $get_fields Optional. Array of fields to get. Default is an empty array, which returns all fields.
 	 *
 	 * @return array entries returned
 	 */
 	public static function get_cf_entries( $form_id, $page = 1, $perpage = 1000, $get_fields = array() ) {
-		
+		if( ! class_exists( '\\Caldera_Forms' ) ) {
+			return;
+
+		}
+
 		$form = \Caldera_Forms::get_form( $form_id );
 
 		if ( isset( $form[ 'ID' ])) {
@@ -348,6 +355,7 @@ class options {
 		$entries = apply_filters( 'formworks_get_entries-' . $type, $entries, $form_id );
 
 		return $entries;
+		
 	}
 
 	/**

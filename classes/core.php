@@ -94,6 +94,10 @@ class core {
 
 		// open actions
 		add_action( 'formworks_track', array( $this, 'handle_track'), 10, 4 );
+
+		/**
+		 * Tracking
+		 */
 		
 		/** Caldera Forms */
 		add_action( 'caldera_forms_submit_complete', function( $form ){
@@ -101,7 +105,6 @@ class core {
 		} );
 
 		add_filter( 'caldera_forms_render_form', function( $html, $form ){
-
 			$selector = array(
 				"name" => $form['name'],
 				"selector" => "." . $form['ID'],
@@ -115,11 +118,13 @@ class core {
 
 		/** JETPACK */
 		add_filter( 'grunion_contact_form_success_message', function( $html ){
-
-			$form_id = $_GET['contact-form-id'];
-			do_action( 'formworks_track', 'jp', $form_id, 'submission' );
+			if( isset( $_GET[ 'contact-form-id' ] ) ) {
+				$form_id = $_GET[ 'contact-form-id' ];
+				do_action( 'formworks_track', 'jp', $form_id, 'submission' );
+			}
 
 			return $html;
+
 		});
 
 		add_filter( 'grunion_contact_form_form_action', function( $url, $post, $form ){
@@ -129,6 +134,7 @@ class core {
 			);
 			do_action( 'formworks_track', 'jp', $form, 'loaded', $selector );
 			return $url;
+
 		}, 15, 3 );
 
 		/** Formidable */
@@ -137,7 +143,7 @@ class core {
 		}, 15 );
 
 		add_filter( 'formidable_shortcode_atts' , function( $shortcode_atts, $atts ){
-
+			if( class_exists( '\\FrmForm'))
 			$form = \FrmForm::getOne( $atts['id'] );
 			$selector = array(
 				"name" => $form->name,
@@ -149,14 +155,17 @@ class core {
 
 		/** Contact Form 7 */
 		add_filter( 'wpcf7_form_elements', function( $html ){
-			$form = \WPCF7_ContactForm::get_current();
-			do_action( 'formworks_track', 'cf7', $form->id(), 'loaded' );
+			if( class_exists( '\\WPCF7_ContactForm' ) ) {
+				$form = \WPCF7_ContactForm::get_current();
+				do_action( 'formworks_track', 'cf7', $form->id(), 'loaded' );
+			}
+
 			return $html;
+
 		},10 , 2 );
 
 		add_action( 'wpcf7_submit', function( $instance, $result ){
-
-			if( $result['status'] === 'mail_sent' ){
+			if( isset( $result[ 'status' ] ) &&  'mail_sent' === $result['status'] ){
 				do_action( 'formworks_track', 'cf7', $instance->id(), 'submission' );
 			}
 
@@ -164,26 +173,29 @@ class core {
 
 		/** Gravity Forms */
 		add_filter( 'gform_get_form_filter', function( $html, $form ){
-
 			$selector = array(
 				"name" => $form['title'],
 				"selector" => "#gform_" . $form['id']
 			);
 			do_action( 'formworks_track', 'gform', $form['id'], 'loaded', $selector );
 			return $html;
+
 		},10 , 2 );
 
 		add_action( 'gform_after_submission', function( $form ){
-
 			// do a submission complete
 			do_action( 'formworks_track', 'gform', $form['form_id'], 'submission' );
 			return;
+
 		} );
 
 		/** Ninja Forms */
 		add_action( 'ninja_forms_post_process', function(){
 			global $ninja_forms_processing;
-			do_action( 'formworks_track', 'ninja', $ninja_forms_processing->get_form_ID(), 'submission' );
+			if( is_object( $ninja_forms_processing ) ) {
+				do_action( 'formworks_track', 'ninja', $ninja_forms_processing->get_form_ID(), 'submission' );
+			}
+
 		});
 
 		//load settings class in admin

@@ -69,7 +69,7 @@ class settings extends core{
 
 						break;
 					case 'gform':
-						# get gravity form
+						//get gravity form
 						if( !class_exists( 'RGFormsModel' ) ){
 							continue;
 						}						
@@ -79,7 +79,7 @@ class settings extends core{
 						break;
 					
 					case 'ninja':
-						# get ninja form
+						//get ninja form
 						if( !function_exists( 'Ninja_Forms' ) ){
 							continue;
 						}
@@ -87,7 +87,7 @@ class settings extends core{
 						$form_id = $form_id;
 						break;
 					case 'cf7':
-						# get contact form 7
+						//get contact form 7
 						if( !class_exists( 'WPCF7_ContactForm' ) ){
 							continue;
 						}
@@ -112,8 +112,9 @@ class settings extends core{
 							continue;
 						}
 						$field = ucwords( str_replace('g' . $form_id . '-','',$field) );
+						break;
 					default:
-						# no idea what this is or the form plugin was disabled.
+						//no idea what this is or the form plugin was disabled.
 						break;
 				}
 
@@ -122,10 +123,27 @@ class settings extends core{
 		},10, 3 );
 
 	}
- 
+
+	/**
+	 * @todo David add description
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param $form_list
+	 */
 	public function module_data_loader( $form_list ){
+		/**
+		 * @todo David add description
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param array Modules
+		 */
 		$modules = apply_filters( 'formworks_stat_modules', array() );
-		$loaded_modules = json_decode( stripslashes_deep( $_POST['modules'] ), ARRAY_A );
+		$loaded_modules = array();
+		if( isset( $_POST['modules'] ) ) {
+			$loaded_modules = json_decode( stripslashes_deep( $_POST['modules'] ), ARRAY_A );
+		}
 
 		$filter = array(
 			'form' => filter_var( $_POST['id'], FILTER_SANITIZE_STRING ),
@@ -152,6 +170,7 @@ class settings extends core{
 		if( !empty( $is_json ) ){
 			$filter['filters'] = $is_json;
 		}
+
 		// setup devices
 		if( empty( $filter['filters']['device'] ) ){
 			$filter['filters']['device'] = array(
@@ -168,33 +187,48 @@ class settings extends core{
 		}
 
 
-		foreach( $loaded_modules as $module ){
+		if ( ! empty( $loaded_modules ) ) {
+			foreach ( $loaded_modules as $module ) {
 
-			if( isset( $modules[ $module ] ) && isset( $modules[ $module ]['handler'] ) ){
+				if ( isset( $modules[ $module ] ) && isset( $modules[ $module ][ 'handler' ] ) ) {
 
-				$sig = sha1( $module . '_' . json_encode( $filter ) );
-				$result = get_transient( $sig );
-				if( empty( $result ) ){
+					$sig    = sha1( $module . '_' . json_encode( $filter ) );
+					$result = get_transient( $sig );
+					if ( empty( $result ) ) {
 
-					$users_query = new \WP_User_Query( array( 
-						'role' => 'administrator',
-						'fields'	=> 'ID',
-						'number' => -1
-					) );
-					$filter['filters']['admins'] = $users_query->get_results();
-					
-					add_filter( 'formworks_get_module_data-' . $module, $modules[ $module ]['handler'], 10, 2 ); // add filters
-					$result = apply_filters( 'formworks_get_module_data-' . $module, array(), $filter );
-					set_transient( $sig, $result, 120 );
+						$users_query                     = new \WP_User_Query( array(
+							'role'   => 'administrator',
+							'fields' => 'ID',
+							'number' => - 1
+						) );
+						$filter[ 'filters' ][ 'admins' ] = $users_query->get_results();
+
+						add_filter( 'formworks_get_module_data-' . $module, $modules[ $module ][ 'handler' ], 10, 2 ); // add filters
+						$result = apply_filters( 'formworks_get_module_data-' . $module, array(), $filter );
+						set_transient( $sig, $result, 120 );
+					}
+					$data[ $module ] = $result;
 				}
-				$data[ $module ] = $result;
+
 			}
 
+			wp_send_json( $data );
+		} else {
+			wp_send_json( array() );
 		}
-		wp_send_json( $data );
+
 
 	}
 
+	/**
+	 * Get all forms running on the site
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param $form_list
+	 *
+	 * @return mixed
+	 */
 	public function get_forms( $form_list ){
 
 		if( class_exists( 'Caldera_Forms' ) ){
@@ -274,28 +308,31 @@ class settings extends core{
 	}
 
 	/**
-	 * builds an export
+	 * Builds an export file
 	 *
 	 * @uses "wp_ajax_frmwks_check_exporter" hook
 	 *
 	 * @since 0.0.1
 	 */
 	public function check_exporter(){
-
-		if( current_user_can( 'manage_options' ) ){
-
-			if( !empty( $_REQUEST['download'] ) && !empty( $_REQUEST['formworks-export'] ) && wp_verify_nonce( $_REQUEST['formworks-export'], 'formworks' ) ){
-
-				$data = options::get_single( $_REQUEST['download'] );
-
-				header( 'Content-Type: application/json' );
-				header( 'Content-Disposition: attachment; filename="formworks-export.json"' );
-				echo wp_json_encode( $data );
-				exit;
-
-			}
-			
+		$can = options::can();
+		if ( ! $can ) {
+			status_header( 500 );
+			wp_die( esc_html__( 'Access denied', 'formworks' ) );
 		}
+
+		if( !empty( $_REQUEST['download'] ) && !empty( $_REQUEST['formworks-export'] ) && wp_verify_nonce( $_REQUEST['formworks-export'], 'formworks' ) ){
+
+			$data = options::get_single( $_REQUEST['download'] );
+
+			header( 'Content-Type: application/json' );
+			header( 'Content-Disposition: attachment; filename="formworks-export.json"' );
+			echo wp_json_encode( $data );
+			exit;
+
+		}
+			
+
 	}
 
 	/**
@@ -310,8 +347,10 @@ class settings extends core{
 		$can = options::can();
 		if ( ! $can ) {
 			status_header( 500 );
-			wp_die( __( 'Access denied', 'formworks' ) );
+			wp_die( esc_html__( 'Access denied', 'formworks' ) );
 		}
+
+		$config = array();
 
 		if( empty( $_POST[ 'formworks-setup' ] ) || ! wp_verify_nonce( $_POST[ 'formworks-setup' ], 'formworks' ) ){
 			if( empty( $_POST['config'] ) ){
@@ -365,7 +404,6 @@ class settings extends core{
 	/**
 	 * Deletes an item
 	 *
-	 *
 	 * @uses 'wp_ajax_frmwks_create_formworks' action
 	 *
 	 * @since 0.0.1
@@ -389,7 +427,7 @@ class settings extends core{
 
 
 	/**
-	 * rebuilds database
+	 * Rebuilds database
 	 *
 	 * @uses "wp_ajax_frmwks_rebuild_database"  action
 	 *
@@ -403,7 +441,10 @@ class settings extends core{
 
 		delete_option( '_formworks_tracker' );
 		activate_formworks_tracker();
-		echo '<div class="updated"><p><strong>Database rebuilt.</strong>: Reloading Admin...</p></div>';
+		sprintf( '<div class="updated"><p><strong>%s</strong>%s</p></div>',
+			__( 'Database rebuilt.', 'formworks' ),
+			__( ': Reloading Admin...', 'formworks' )
+		);
 		?>
 		<script>
 		window.location = '<?php echo admin_url( 'admin.php?page=formworks' ); ?>';
@@ -466,9 +507,10 @@ class settings extends core{
 	public function add_settings_pages(){
 			// This page will be under "Settings"
 			$this->plugin_screen_hook_suffix['formworks'] =  add_menu_page(
-				__( 'Formworks', $this->plugin_slug ),
-				__( 'Formworks', $this->plugin_slug )
-				, 'manage_options', 'formworks',
+				__( 'Formworks', 'formworks' ),
+				__( 'Formworks', 'formworks'),
+				'manage_options',
+				'formworks',
 				array( $this, 'create_admin_page' ),
 				'dashicons-tablet'
 			);
@@ -503,9 +545,7 @@ class settings extends core{
 			include FRMWKS_PATH . 'includes/admin.php';
 		}
 
-
-
-
+		
 		// php based script include
 		if( file_exists( FRMWKS_PATH .'assets/js/inline-scripts.php' ) ){
 			echo "<script type=\"text/javascript\">\r\n";

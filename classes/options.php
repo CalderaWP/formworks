@@ -355,7 +355,7 @@ class options {
 		$entries = apply_filters( 'formworks_get_entries-' . $type, $entries, $form_id );
 
 		return $entries;
-		
+
 	}
 
 	/**

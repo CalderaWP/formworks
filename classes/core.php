@@ -91,14 +91,29 @@ class core {
 		// Add partial completions		
 		add_action( 'wp_ajax_frmwks_push', array( $this, 'tracker_push') );
 		add_action( 'wp_ajax_nopriv_frmwks_push', array( $this, 'tracker_push') );
+
+		// open actions
+		add_action( 'formworks_track', array( $this, 'handle_track'), 10, 4 );
 		
-		// complete submission
+		/** Caldera Forms */
 		add_action( 'caldera_forms_submit_complete', function( $form ){
 			do_action( 'formworks_track', 'caldera', $form['ID'], 'submission' );
 		} );
-		// open actions
-		add_action( 'formworks_track', array( $this, 'handle_track'), 10, 4 );
 
+		add_filter( 'caldera_forms_render_form', function( $html, $form ){
+
+			$selector = array(
+				"name" => $form['name'],
+				"selector" => "." . $form['ID'],
+				"prefix" => 'caldera',
+				"id"	=> $form['ID']
+			);
+			do_action( 'formworks_track', 'caldera', $form['ID'], 'loaded', $selector );
+
+			return $html;
+		}, 10, 2 );
+
+		/** JETPACK */
 		add_filter( 'grunion_contact_form_success_message', function( $html ){
 
 			$form_id = $_GET['contact-form-id'];
@@ -116,6 +131,7 @@ class core {
 			return $url;
 		}, 15, 3 );
 
+		/** Formidable */
 		add_action( 'frm_process_entry', function( $params ){
 			do_action( 'formworks_track', 'frmid', $params['form_id'], 'submission' );			
 		}, 15 );
@@ -131,6 +147,7 @@ class core {
 
 		}, 10, 2 );
 
+		/** Contact Form 7 */
 		add_filter( 'wpcf7_form_elements', function( $html ){
 			$form = \WPCF7_ContactForm::get_current();
 			do_action( 'formworks_track', 'cf7', $form->id(), 'loaded' );
@@ -145,6 +162,7 @@ class core {
 
 		},20, 2);
 
+		/** Gravity Forms */
 		add_filter( 'gform_get_form_filter', function( $html, $form ){
 
 			$selector = array(
@@ -155,20 +173,6 @@ class core {
 			return $html;
 		},10 , 2 );
 
-		// setup tracking
-		add_filter( 'caldera_forms_render_form', function( $html, $form ){
-
-			$selector = array(
-				"name" => $form['name'],
-				"selector" => "." . $form['ID'],
-				"prefix" => 'caldera',
-				"id"	=> $form['ID']
-			);
-			do_action( 'formworks_track', 'caldera', $form['ID'], 'loaded', $selector );
-
-			return $html;
-		}, 10, 2 );
-
 		add_action( 'gform_after_submission', function( $form ){
 
 			// do a submission complete
@@ -176,6 +180,7 @@ class core {
 			return;
 		} );
 
+		/** Ninja Forms */
 		add_action( 'ninja_forms_post_process', function(){
 			global $ninja_forms_processing;
 			do_action( 'formworks_track', 'ninja', $ninja_forms_processing->get_form_ID(), 'submission' );

@@ -135,14 +135,14 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 </script>
 <script type="text/html" id="rebuild-db-tml">
 	<div class="error" style="color: rgb(255, 0, 0);"><p><strong>WARNING</strong>: This will destroy all tracked data and rebuild the database structures.</p></div>
-	<button class="button button-primary wp-baldrick" data-load-class="loading_tool_action" data-action="frmwks_rebuild_database" data-active-class="disabled" data-target="#warning_baldrickModalBody" type="button" style="width: 100%; margin: 34px 0px 0px;"><?php _e('Understood. Proceed...', 'formworks'); ?></button>
+	<button class="button button-primary wp-baldrick" data-load-class="loading_tool_action" data-action="frmwks_rebuild_database" data-active-class="disabled" data-target="#warning_baldrickModalBody" type="button" style="width: 100%; margin: 34px 0px 0px;"><?php esc_html_e('Understood. Proceed...', 'formworks'); ?></button>
 </script>
 <script type="text/x-handlebars-template" id="edit-paginator-template">
 		<input type="hidden" name="_id" value="{{_id}}">
 		<input type="hidden" name="_node_point" value="{{_node_point}}">
 		<div class="formworks-config-group">
 			<label for="formworks-paginator-type">
-				<?php _e( 'Type', 'formworks' ); ?>
+				<?php esc_html_e( 'Type', 'formworks' ); ?>
 			</label>
 			<select name="type">
 				<option value="standard" {{#is type value="standard"}}selected="selected"{{/is}}>Standard</option>

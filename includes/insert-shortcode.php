@@ -14,7 +14,7 @@
 <div id="formworks_shortcode_modal" class="formworks-modal-wrap formworks-insert-modal" style="display: none; width: 600px; max-height: 500px; margin-left: -300px;">
 	<div class="formworks-modal-title" id="formworks_shortcode_modalTitle" style="display: block;">
 		<a href="#close" class="formworks-modal-closer" data-dismiss="modal" aria-hidden="true" id="formworks_shortcode_modalCloser">×</a>
-		<h3 class="modal-label" id="formworks_shortcode_modalLable"><?php echo __('Insert Form View', 'formworks'); ?></h3>
+		<h3 class="modal-label" id="formworks_shortcode_modalLable"><?php  esc_html_e('Insert Form View', 'formworks'); ?></h3>
 	</div>
 	<div class="formworks-modal-body none" id="formworks_shortcode_modalBody">
 		<div class="modal-body">

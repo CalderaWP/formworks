@@ -19,12 +19,12 @@
 
 	<br>
 	<h4>
-		<?php _e( 'Google Analytics ID', 'formworks' ); ?>
+		<?php esc_html_e( 'Google Analytics ID', 'formworks' ); ?>
 	</h4>
-	<p class="description"><?php _e( "If you're site is already using Google Analytics, this can be ignored as it will automatically be detected and events pushed to the existing implementation.", 'formworks' ); ?></p>
+	<p class="description"><?php esc_html_e( "If you're site is already using Google Analytics, this can be ignored as it will automatically be detected and events pushed to the existing implementation.", 'formworks' ); ?></p>
 	<div class="formworks-config-group">
 		<label for="formworks-template-ga">
-			<?php _e( 'Number of page links', 'formworks' ); ?>
+			<?php esc_html_e( 'Number of page links', 'formworks' ); ?>
 		</label>
 		<input id="formworks-template-ga" type="text" name="external[ga]" value="{{external/ga}}">		
 	</div>

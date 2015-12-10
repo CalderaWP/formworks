@@ -39,9 +39,9 @@ function formworks_get_filters_detail( $data, $request ){
 			$last = array_pop( $list );
 			$devices = implode( ', ', $list );
 			if( !empty( $devices ) ){
-				$devices .= ( count( $devices ) > 1 ? ', ' : ' ' ) . __( 'and', 'formworks') . ' ';				
+				$devices .= ( count( $devices ) > 1 ? ', ' : ' ' ) . esc_html__( 'and', 'formworks') . ' ';				
 			}else{
-				$last .= ' ' . __('only', 'formworks');
+				$last .= ' ' . esc_html__('only', 'formworks');
 			}
 			$devices .= $last;
 		}
@@ -49,5 +49,5 @@ function formworks_get_filters_detail( $data, $request ){
 		$from_date = date_i18n( get_option( 'date_format' ), strtotime( $request['filters']['date']['start'] ) );
 		$to_date = date_i18n( get_option( 'date_format' ), strtotime( $request['filters']['date']['end'] ) );
 		
-		return __( 'Between', 'formworks') . ' ' . $from_date .' ' . __( 'and', 'formworks') .' ' . $to_date . ', from ' . $devices . '.';
+		return __( 'Between', 'formworks') . ' ' . $from_date .' ' . esc_html__( 'and', 'formworks') .' ' . $to_date . ', from ' . $devices . '.';
 }

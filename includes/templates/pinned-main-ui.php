@@ -2,7 +2,7 @@
 
 <div class="formworks-main-headercaldera" style="height: 46px;">
 		<h1 class="formworks-main-title">
-		<a style="text-decoration: none; color: rgb(219, 68, 55);" href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>"><?php _e('Formworks', 'formworks') ?></a>
+		<a style="text-decoration: none; color: rgb(219, 68, 55);" href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>"><?php esc_html_e('Formworks', 'formworks') ?></a>
 		/
 		<?php echo $formworks['name']; ?>
 		<span class="formworks-version">
@@ -85,9 +85,9 @@ jQuery( function( $ ) {
 		<li class="{{#is _current_tab value="#formworks-panel-stats"}}active {{/is}}formworks-nav-tab">
 			<span>
 				<h4 style="display:inline;">
-					<?php _e('Form Statistics', 'formworks') ; ?>
+					<?php esc_html_e('Form Statistics', 'formworks') ; ?>
 					<small class="description" style="color: rgba(255,255,255,0.9);">
-						<?php _e('Analytics', 'formworks') ; ?>
+						<?php esc_html_e('Analytics', 'formworks') ; ?>
 					</small>
 				</h4>
 			</span>

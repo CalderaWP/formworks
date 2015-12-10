@@ -38,7 +38,7 @@
 					<td style="text-align: center;">{{#if engage}}{{engage}}{{else}}{{/if}}</td>
 					<td style="text-align: center;">{{#if submission}}{{submission}}{{else}}{{/if}}</td>
 					<td style="text-align: right; position: relative; overflow: hidden;"><div style="position: absolute; width: {{conversion}}%; top: 0px; left: 0px; bottom: 0px; background: rgba(137, 180, 32, 0.2) none repeat scroll 0% 0%;"></div>{{conversion}}%</td>
-					<td style="width: 100px;text-align: right;"><a href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>{{../slug}}_{{@key}}"><?php _e('View Report', 'formworks'); ?></a></td>
+					<td style="width: 100px;text-align: right;"><a href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>{{../slug}}_{{@key}}"><?php esc_html_e('View Report', 'formworks'); ?></a></td>
 				</tr>
 				{{/each}}
 

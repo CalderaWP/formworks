@@ -11,6 +11,6 @@
 			 data-type="json"
 			 data-template="#rebuild-db-tml"
 			 data-modal-width="400"
-			 data-modal-height="190" type="button"><?php _e('Rebuild Database', 'formworks'); ?></button>			
+			 data-modal-height="190" type="button"><?php esc_html_e('Rebuild Database', 'formworks'); ?></button>			
 		</div>
 

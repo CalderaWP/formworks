@@ -310,18 +310,18 @@ class settings extends core{
 	/**
 	 * Builds an export file
 	 *
-	 * @uses "wp_ajax_frmwks_check_exporter" hook
+	 * @uses "init" hook
 	 *
 	 * @since 0.0.1
 	 */
 	public function check_exporter(){
-		$can = options::can();
-		if ( ! $can ) {
-			status_header( 500 );
-			wp_die( esc_html__( 'Access denied', 'formworks' ) );
-		}
-
+		
 		if( !empty( $_REQUEST['download'] ) && !empty( $_REQUEST['formworks-export'] ) && wp_verify_nonce( $_REQUEST['formworks-export'], 'formworks' ) ){
+			$can = options::can();
+			if ( ! $can ) {
+				status_header( 500 );
+				wp_die( esc_html__( 'Access denied', 'formworks' ) );
+			}
 
 			$data = options::get_single( $_REQUEST['download'] );
 

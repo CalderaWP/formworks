@@ -198,9 +198,13 @@ class core {
 
 		});
 
-		//load settings class in admin
+		//load settings class && licensing in admin
 		if ( is_admin() ) {
 			new settings();
+			add_action( 'admin_init', function( ) {
+				$plugin = frmwks_licensing_args();
+				new \calderawp\licensing_helper\licensing( $plugin );
+			}, 0 );
 		}
 		
 	}

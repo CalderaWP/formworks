@@ -586,3 +586,7 @@ div.stat-module.loading {
   top: 50%;
   width: 100px;
 }
+
+span.dashicons.dashicons-star-filled {
+    color: gold;
+}

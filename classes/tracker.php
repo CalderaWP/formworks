@@ -101,7 +101,7 @@ class tracker {
 	 * @param string $prefix Form type prefix
 	 * @param null|array $where Optional. Where clause array in format $wpdb->update() will accept. If is null, the default, new record will be created.
 	 *
-	 * @return int|false The number of rows updated, or false on error.
+	 * @return int|false ID of row updated, or false on error.
 	 */
 	public static function save( $key, $value, $form_id, $prefix, $where = null ){
 		global $wpdb;
@@ -128,9 +128,16 @@ class tracker {
 			// add a datestamp
 			$data['datestamp']	=	current_time( 'mysql', true );
 
-			return $wpdb->insert( $wpdb->prefix . "formworks_tracker", $data );
+			$wpdb->insert( $wpdb->prefix . "formworks_tracker", $data );
+			if( true == $wpdb->result ) {
+				return $wpdb->insert_id;
+			}
+
 		}else{
-			return $wpdb->update( $wpdb->prefix . "formworks_tracker", $data, $where );
+			$wpdb->update( $wpdb->prefix . "formworks_tracker", $data, $where );
+			if( true == $wpdb->result ) {
+				return $wpdb->insert_id;
+			}
 		}
 
 		return false;

@@ -430,7 +430,7 @@ class core {
 
 		}
 
-		exit;
+    		exit;
 	}
 	/**
 	 * Register and enqueue admin-specific style sheet.

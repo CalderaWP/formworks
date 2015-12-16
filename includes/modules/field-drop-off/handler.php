@@ -2,11 +2,23 @@
 
 
 add_filter( 'formworks_stat_modules', 'formworks_field_drop_off' );
+
+/**
+ * Add field drop of module
+ *
+ * @since 1.0.0
+ *
+ * @uses "formworks_stat_modules" filter
+ *
+ * @param $modules
+ *
+ * @return mixed
+ */
 function formworks_field_drop_off( $modules ){
 
 	$modules['field_drop_off'] = array(
 		'title' =>  __('Field Abandonment', 'Formworks'),
-		'description' => __('Last field engaged before abandoning the form.', 'formworks'),
+		'description' => __('Last field engaged before form was abandoned.', 'formworks'),
 		'template' => dirname( __FILE__ ) . '/template.php',
 		'handler' => 'formworks_get_field_drop_off'
 	);
@@ -15,6 +27,16 @@ function formworks_field_drop_off( $modules ){
 
 }
 
+/**
+ * Callback for the field abandonment module
+ *
+ * @since 1.0.0
+ *
+ * @param $data
+ * @param $request
+ *
+ * @return array
+ */
 function formworks_get_field_drop_off( $data, $request ){
 		global $wpdb;
 

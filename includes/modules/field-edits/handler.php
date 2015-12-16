@@ -2,6 +2,12 @@
 
 
 add_filter( 'formworks_stat_modules', 'formworks_field_edits' );
+
+/**
+ * @param $modules
+ *
+ * @return mixed
+ */
 function formworks_field_edits( $modules ){
 
 	$modules['field_edits'] = array(

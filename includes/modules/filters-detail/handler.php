@@ -26,6 +26,10 @@ function formworks_filters_detail( $modules ){
 }
 
 /**
+ * Call back for filters module
+ *
+ * @since 1.0.0
+ *
  * @param $data
  * @param $request
  *
@@ -33,7 +37,7 @@ function formworks_filters_detail( $modules ){
  */
 function formworks_get_filters_detail( $data, $request ){
 		
-		$devices = __('all devices', 'formworks');
+		$devices = esc_html__('all devices', 'formworks');
 		if( !empty( $request['filters']['device'] ) ){
 			$list = array_map( function( $a ){ return ucfirst( $a ) . 's'; }, array_keys( $request['filters']['device'] ) );
 			$last = array_pop( $list );
@@ -49,5 +53,5 @@ function formworks_get_filters_detail( $data, $request ){
 		$from_date = date_i18n( get_option( 'date_format' ), strtotime( $request['filters']['date']['start'] ) );
 		$to_date = date_i18n( get_option( 'date_format' ), strtotime( $request['filters']['date']['end'] ) );
 		
-		return __( 'Between', 'formworks') . ' ' . $from_date .' ' . esc_html__( 'and', 'formworks') .' ' . $to_date . ', from ' . $devices . '.';
+		return esc_html__( 'Between', 'formworks') . ' ' . $from_date .' ' . esc_html__( 'and', 'formworks') .' ' . $to_date . ', from ' . $devices . '.';
 }

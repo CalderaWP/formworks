@@ -2,6 +2,18 @@
 
 
 add_filter( 'formworks_stat_modules', 'formworks_core_events' );
+
+/**
+ * Add core events module
+ *
+ * @since 1.0.0
+ *
+ * @uses "formworks_stat_modules" filter
+ *
+ * @param $modules
+ *
+ * @return mixed
+ */
 function formworks_core_events( $modules ){
 
 	$modules['core_events'] = array(
@@ -15,6 +27,16 @@ function formworks_core_events( $modules ){
 
 }
 
+/**
+ * Callback for core events
+ *
+ * @since 1.0.0
+ *
+ * @param $data
+ * @param $request
+ *
+ * @return array
+ */
 function formworks_get_core_events( $data, $request ){
 		global $wpdb;
 		$lables = array();

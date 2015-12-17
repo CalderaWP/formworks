@@ -59,6 +59,13 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 		$list=array();
 		$activity_list = array();
 		$limit = count( $activity_list );
+		$users_query = new \WP_User_Query( array(
+			'role'   => 'administrator',
+			'fields' => 'ID',
+			'number' => - 1
+		) );
+		$admins = $users_query->get_results();
+
 		$activity = $wpdb->get_results( "SELECT 
 				COUNT( `id` ) as `total`
 			FROM
@@ -96,6 +103,7 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 			FROM 
 			`{$wpdb->prefix}formworks_tracker` 
 			WHERE 
+			`user_id` NOT IN (" . implode(',', $admins ) ." ) &&
 			`meta_key` IN ( 'view','submission','loaded','engage' ) &&
 			`prefix` = %s &&
 			`form_id` = %s && 

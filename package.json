@@ -1,6 +1,6 @@
 {
   "name": "formworks",
-  "version": "1.0.0-b-3",
+  "version": "1.0.0",
   "description": "Form analytics for your favorite WordPress Form Builder Plugins",
   "repository": {
     "type": "git",

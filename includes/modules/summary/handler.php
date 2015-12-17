@@ -44,13 +44,27 @@ function formworks_get_summary_story( $data, $request ){
 	$total_engage = array_sum( $stats['datasets'][ 'engage' ][ 'data' ] );
 	$total_loads = array_sum( $stats['datasets'][ 'loaded' ][ 'data' ] );
 	$total_submitions = array_sum( $stats['datasets'][ 'submission' ][ 'data' ] );
-	$engage_conversion = round( ( $total_submitions / $total_engage ) * 100, 1);
-	$load_conversion = round( ( $total_submitions / $total_loads ) * 100, 1);
-	$view_conversion = round( ( $total_submitions / $total_views ) * 100, 1);
-	
-	$engage_load = round( ( $total_engage / $total_loads ) * 100, 1);
-	$engage_view = round( ( $total_engage / $total_views ) * 100, 1);
+	$engage_conversion = 0;
+	$load_conversion = 0;
+	$view_conversion = 0;
+	$engage_load = 0;
+	$engage_view = 0;
 
+	if( $total_engage > 0 ){
+		$engage_conversion = round( ( $total_submitions / $total_engage ) * 100, 1);
+	}
+	if( $total_loads > 0 ){
+		$load_conversion = round( ( $total_submitions / $total_loads ) * 100, 1);
+	}
+	if( $total_views > 0 ){
+		$view_conversion = round( ( $total_submitions / $total_views ) * 100, 1);
+	}
+	if( $total_loads > 0 && $total_engage > 0 ){
+		$engage_load = round( ( $total_engage / $total_loads ) * 100, 1);
+	}
+	if( $total_views > 0 && $total_engage > 0 ){
+		$engage_view = round( ( $total_engage / $total_views ) * 100, 1);
+	}
 	// quick stats 
 	$quick_stats = formworks_get_quick_stats( $data, $request );
 	

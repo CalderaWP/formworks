@@ -55,7 +55,6 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 		}
 
 
-
 		$list=array();
 		$activity_list = array();
 		$limit = count( $activity_list );
@@ -65,7 +64,17 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 			'number' => - 1
 		) );
 		$admins = $users_query->get_results();
+		$request = array(
+			'form' => $form_id,
+			'prefix' => $slug,
+			'filters' => array(
+				'admins' => $users_query->get_results()
+			)
+		);
 
+		$forms_set['forms'][ $form_id ] = formworks_get_quick_stats( array(), $request );
+		$forms_set['forms'][ $form_id ]['name'] = $form;
+		
 		$activity = $wpdb->get_results( "SELECT 
 				COUNT( `id` ) as `total`
 			FROM
@@ -86,40 +95,15 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 			foreach( $activity as $line_key => $line ) {
 				$activity_list[] = $line['total'];
 			}
-		
-			$forms_set['forms'][ $form_id ] = array(
-				'name' => $form,
-				'activity' => implode(',',$activity_list)
-			);
+			for( $i = 0; $i < 100; $i++ ){
+				$activity_list[] = rand(13, 89);
+			}
+			$forms_set['forms'][ $form_id ]['activity'] = implode(',',$activity_list);
 
-			$query = $wpdb->prepare("
-			SELECT 
-			`meta_key`, 
-			COUNT( DISTINCT( `user_key` ) ) AS `users`, 
-			COUNT( DISTINCT( `user_id` ) ) AS `logged`, 
-			COUNT( `meta_value` ) AS `total`,
-			SUM( `meta_value` ) AS `sum_total`,
-			`datestamp`
-			FROM 
-			`{$wpdb->prefix}formworks_tracker` 
-			WHERE 
-			`user_id` NOT IN (" . implode(',', $admins ) ." ) &&
-			`meta_key` IN ( 'view','submission','loaded','engage' ) &&
-			`prefix` = %s &&
-			`form_id` = %s && 
-			`meta_value` != ''
-			GROUP BY `meta_key`
-			;", $slug, $form_id );
-			$summary = $wpdb->get_results( $query );
-			foreach( $summary as $summ ){
-				$forms_set['forms'][ $form_id ][ $summ->meta_key ] = $summ->total;
-			}
-			$forms_set['forms'][ $form_id ][ 'conversion' ] = 0;
-			if( !empty( $forms_set['forms'][ $form_id ][ 'engage' ] ) && !empty( $forms_set['forms'][ $form_id ][ 'submission' ] ) ){
-				$forms_set['forms'][ $form_id ][ 'conversion' ] = round( ( $forms_set['forms'][ $form_id ][ 'submission' ] / $forms_set['forms'][ $form_id ][ 'engage' ] ) * 100, 1);
-			}
+			
 
 		}
+
 
 
 }

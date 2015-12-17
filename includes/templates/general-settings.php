@@ -4,12 +4,10 @@
 			<thead>
 				<tr>
 					<th style="width: 220px;"><?php esc_html_e('Form', 'formworks'); ?></th>
-					<th style="width: 90px;"><?php esc_html_e('Type', 'formworks'); ?></th>
 					<th style="width: 90px;text-align: center;"><?php esc_html_e('Loads', 'formworks'); ?></th>
 					<th style="width: 90px;text-align: center;"><?php esc_html_e('Views', 'formworks'); ?></th>
 					<th style="width: 90px;text-align: center;"><?php esc_html_e('Engagements', 'formworks'); ?></th>
 					<th style="width: 90px;text-align: center;"><?php esc_html_e('Submissions', 'formworks'); ?></th>
-					<th style="width: 100px;text-align: right;"><?php esc_html_e('Conversion', 'formworks'); ?></th>
 					<th style="width: 100px;text-align: right;"><?php esc_html_e('Action', 'formworks'); ?></th>
 				</tr>
 			</thead>
@@ -25,19 +23,104 @@
 						sparkDisableInteraction="true"
 						sparkSpotRadius=""
 						sparkHighlightLineColor="#ccc"
-						sparkHeight="36px"
+						sparkHeight="61px"
 						sparkWidth="100%"
 						sparkFillColor="false"
 						sparkBarWidth="18"
 						sparkBarSpacing="1"
 						sparkZeroColor="transparent"
-						sparkBarColor="#db4437"><!--{{activity}}--></div><span style="position:absolute;top: 7px;"><a href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>{{../slug}}_{{@key}}">{{name}}</a></span></td>					
-					<td>{{../name}}</td>
-					<td style="text-align: center;">{{#if loaded}}{{loaded}}{{else}}{{/if}}</td>
-					<td style="text-align: center;">{{#if view}}{{view}}{{else}}{{/if}}</td>
-					<td style="text-align: center;">{{#if engage}}{{engage}}{{else}}{{/if}}</td>
-					<td style="text-align: center;">{{#if submission}}{{submission}}{{else}}{{/if}}</td>
-					<td style="text-align: right; position: relative; overflow: hidden;"><div style="position: absolute; width: {{conversion}}%; top: 0px; left: 0px; bottom: 0px; background: rgba(137, 180, 32, 0.2) none repeat scroll 0% 0%;"></div>{{conversion}}%</td>
+						sparkBarColor="#db4437"><!--{{activity}}--></div>
+						<span style="position:absolute;top: 12px;"><a href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>{{../slug}}_{{@key}}">{{name}}</a>
+						<small style="opacity: 0.6; display: block;">{{../name}}</small>
+						</span>
+
+						</td>
+					<td style="text-align: center;">
+					{{#with loaded}}
+						{{#if name}}
+						<span class="quick-stat" style="padding: 0;">
+							<span class="quick-stat-name" style="display:block;">
+								{{#if conversion}}<small>{{conversion}} {{rate_type}}</small>{{/if}}
+							</span>
+							{{#if conversion}}
+							<div style="width: 100%; background: #dadada none repeat scroll 0% 0%; height: 4px; ">
+								<div style="background: rgb(219, 68, 55) none repeat scroll 0% 0%; width: {{conversion}}; height: 4px;"></div>
+							</div>
+							{{else}}
+
+							<div style="width: 100%; height: 4px;"></div>
+							{{/if}}	
+							<span class="quick-stat-total" style="font-size: 11px;">{{#if total}}<strong>{{total}}</strong> <?php esc_html_e('across', 'formworks'); ?> {{/if}}{{#if users}}<strong>{{users}}</strong> {{n}}{{/if}}&nbsp;</span>
+						</span>	
+						{{/if}}
+					{{/with}}
+					</td>
+					<td style="text-align: center;">
+					{{#with view}}
+						{{#if name}}
+						<span class="quick-stat" style="padding: 0;">
+							<span class="quick-stat-name" style="display:block;">
+								{{#if conversion}}<small>{{conversion}} {{rate_type}}</small>{{/if}}
+							</span>
+							{{#if conversion}}
+							<div style="width: 100%; background: #dadada none repeat scroll 0% 0%; height: 4px; ">
+								<div style="background: rgb(219, 68, 55) none repeat scroll 0% 0%; width: {{conversion}}; height: 4px;"></div>
+							</div>
+							{{else}}
+
+							<div style="width: 100%; height: 4px;"></div>
+							{{/if}}	
+							<span class="quick-stat-total" style="font-size: 11px;">{{#if total}}<strong>{{total}}</strong> <?php esc_html_e('across', 'formworks'); ?> {{/if}}{{#if users}}<strong>{{users}}</strong> {{n}}{{/if}}&nbsp;</span>
+						</span>	
+						{{/if}}					
+					{{/with}}
+					</td>
+					<td style="text-align: center;">
+					{{#with engage}}
+						{{#if name}}
+						<span class="quick-stat" style="padding: 0;">
+							<span class="quick-stat-name" style="display:block;">
+								{{#if conversion}}<small>{{conversion}} {{rate_type}}</small>{{/if}}
+							</span>
+							{{#if conversion}}
+							<div style="width: 100%; background: #dadada none repeat scroll 0% 0%; height: 4px; ">
+								<div style="background: rgb(219, 68, 55) none repeat scroll 0% 0%; width: {{conversion}}; height: 4px;"></div>
+							</div>
+							{{else}}
+
+							<div style="width: 100%; height: 4px;"></div>
+							{{/if}}	
+							<span class="quick-stat-total" style="font-size: 11px;">{{#if total}}<strong>{{total}}</strong> <?php esc_html_e('across', 'formworks'); ?> {{/if}}{{#if users}}<strong>{{users}}</strong> {{n}}{{/if}}&nbsp;</span>
+						</span>	
+						{{/if}}					
+					{{/with}}
+					</td>
+					<td style="text-align: center;">
+					{{#with submission}}
+						{{#if name}}
+						<span class="quick-stat" style="padding: 0;">
+							<span class="quick-stat-name" style="display:block;">
+								<span class="quick-stat-total" style="font-size: 11px;">{{#if total}}<strong>{{total}}</strong> <?php esc_html_e('across', 'formworks'); ?> {{/if}}{{#if users}}<strong>{{users}}</strong> {{n}}{{/if}}&nbsp;</span>
+							</span>
+							{{#if conversion}}
+							<div style="width: 100%; background: #dadada none repeat scroll 0% 0%; height: 4px; ">
+								<div style="background: rgb(219, 68, 55) none repeat scroll 0% 0%; width: {{conversion}}; height: 4px;"></div>
+							</div>
+							{{else}}
+
+							<div style="width: 100%; height: 4px;"></div>
+							{{/if}}	
+							{{#if total}}
+								{{#if conversion}}<small>{{conversion}} {{rate_type}}</small>{{/if}}
+								{{#if average_time}}{{average_time}} <?php esc_html_e('Average', 'formworks'); ?>{{/if}}
+							{{else}}
+								0
+							{{/if}}
+							
+						</span>	
+						{{/if}}					
+					{{/with}}
+					</td>
 					<td style="width: 100px;text-align: right;"><a href="<?php echo admin_url( 'admin.php?page=formworks&form=' ); ?>{{../slug}}_{{@key}}"><?php esc_html_e('View Report', 'formworks'); ?></a></td>
 				</tr>
 				{{/each}}

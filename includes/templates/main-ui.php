@@ -42,7 +42,7 @@
 		</li>
 		<li class="{{#is _current_tab value="#formworks-panel-analytics"}}active {{/is}}formworks-nav-tab">
 			<a href="#formworks-panel-analytics">
-				<?php esc_html_e('Analytics', 'formworks') ; ?>
+				<?php esc_html_e('Goal Tracking', 'formworks') ; ?>
 			</a>
 		</li>
 		<li class="{{#is _current_tab value="#formworks-panel-tools"}}active {{/is}}formworks-nav-tab">
@@ -68,7 +68,7 @@
 		<h4>
 			<?php esc_html_e('Form Statistics', 'formworks') ; ?>
 			<small class="description">
-				<?php esc_html_e('Analytics', 'formworks') ; ?>
+				<?php esc_html_e('Goal Tracking', 'formworks') ; ?>
 			</small>
 		</h4>
 		<?php

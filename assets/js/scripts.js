@@ -607,7 +607,7 @@ jQuery( function($){
 
 	window.onbeforeunload = function(e) {
 
-		if( formworks_canvas && formworks_canvas !== jQuery('#formworks-live-config').val() && !frmwks_is_view ){
+		if( formworks_canvas && formworks_canvas !== jQuery('#formworks-live-config').val() && !frmwks_is_view && !jQuery('.formworks-admin').length ){
 			return true;
 		}
 	};

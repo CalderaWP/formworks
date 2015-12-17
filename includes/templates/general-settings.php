@@ -1,6 +1,6 @@
 	<input type="hidden" name="forms" value="{{#if forms}}{{json forms}}{{/if}}">
 	{{#if forms}}
-		<table class="widefat fixed striped">
+		<table class="widefat fixed striped formworks-admin">
 			<thead>
 				<tr>
 					<th style="width: 220px;"><?php esc_html_e('Form', 'formworks'); ?></th>

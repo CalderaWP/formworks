@@ -66,9 +66,9 @@
 	
 	<div id="formworks-panel-forms" class="formworks-editor-panel" {{#if _current_tab}}{{#is _current_tab value="#formworks-panel-forms"}}{{else}} style="display:none;" {{/is}}{{/if}}>	
 		<h4>
-			<?php esc_html_e('Setup Formworks Pages', 'formworks') ; ?>
+			<?php esc_html_e('Form Statistics', 'formworks') ; ?>
 			<small class="description">
-				<?php esc_html_e('General Settings', 'formworks') ; ?>
+				<?php esc_html_e('Analytics', 'formworks') ; ?>
 			</small>
 		</h4>
 		<?php

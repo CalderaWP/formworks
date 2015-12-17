@@ -93,15 +93,17 @@ function frmwks_cwp_featured(){
 				$string = '
 					<div class="panel_{{slug}}" style="margin: 10px; width: 300px; float: left; height:250px;overflow: auto; border: 1px solid rgba(0, 0, 0, 0.15); box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);position: relative;">
 						<img src="{{banner}}" style="width:100%;vertical-align: top;">
-							<p style="padding: 8px;">{{tagline}}</p>
-							<div style="margin: 0px; padding: 6px 7px;"></div>
-								<div style="position: absolute; bottom: 0px; padding: 6px; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.03); left: 0px; right: 0px; border-top: 1px solid rgba(0, 0, 0, 0.06);">
-								<span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span><span class="dashicons dashicons-star-filled"></span>
-								<a class="button" href="{{link}}" target="_blank" rel="nofollow" style="float:right">{{button}}</a>
-								</div>
-
-							</div>
-						</div>';
+						<p style="padding: 8px;">{{tagline}}</p>
+						<div style="margin: 0px; padding: 6px 7px;"></div>
+						<div style="position: absolute; bottom: 0px; padding: 6px; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.03); left: 0px; right: 0px; border-top: 1px solid rgba(0, 0, 0, 0.06);">
+							<span class="dashicons dashicons-star-filled"></span>
+							<span class="dashicons dashicons-star-filled"></span>
+							<span class="dashicons dashicons-star-filled"></span>
+							<span class="dashicons dashicons-star-filled"></span>
+							<span class="dashicons dashicons-star-filled"></span>
+							<a class="button" href="{{link}}" target="_blank" rel="nofollow" style="float:right">{{button}}</a>
+						</div>
+					</div>';
 				$out[] = str_replace(
 					array(
 						'{{slug}}',

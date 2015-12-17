@@ -51,6 +51,9 @@ function formworks_get_summary_story( $data, $request ){
 	$engage_load = round( ( $total_engage / $total_loads ) * 100, 1);
 	$engage_view = round( ( $total_engage / $total_views ) * 100, 1);
 
+	// quick stats 
+	$quick_stats = formworks_get_quick_stats( $data, $request );
+	
 	// stories
 	$starts = array(
 		'this_week' => __( 'This week', 'formworks' ),
@@ -62,17 +65,18 @@ function formworks_get_summary_story( $data, $request ){
 	$stats['conversion_story'] = '<p>' . $starts[ $request['filters']['date']['preset'] ] . ', ';
 
 	$stats['conversion_story'] .= sprintf( _n( 'The form was loaded %s time ', 'The form was loaded %s times ', $total_loads, 'formworks' ), '<strong>'. $total_loads . '</strong>');
-	$stats['conversion_story'] .= sprintf( _n( 'and received %s submission. ', 'and received %s submissions. ', $total_submitions, 'formworks' ), '<strong>'. $total_submitions . '</strong>' );
+	$stats['conversion_story'] .= sprintf( _n( 'and received %s submission ', 'and received %s submissions ', $total_submitions, 'formworks' ), '<strong>'. $total_submitions . '</strong>' );
+	$stats['conversion_story'] .= sprintf( __('and was completed within a %s average', 'formworks' ), '<strong>'. $quick_stats['submission']['average_time'] . '</strong>' );
+
 	$stats['conversion_story'] .= '</p>';
 	$stats['conversion_story'] .= '<p>';
 
 	if( !empty( $engage_conversion ) ){
 		if( $engage_conversion > 0 ){
-			$stats['conversion_story'] .= sprintf( __( '%s of visitors actively engage the form and %s of engaged users go on to a submission. ', 'formworks' ),
+			$stats['conversion_story'] .= sprintf( __( '%s of visitors actively engage the form and %s of engaging users go on to a submission. ', 'formworks' ),
 				'<strong>' . $engage_load . '%</strong>',
 				'<strong>' . $engage_conversion . '%</strong>'
 			 );
-			$stats['conversion_story'] .= '<br>';
 		}
 	}
 	if( !empty( $load_conversion ) ){
@@ -80,9 +84,10 @@ function formworks_get_summary_story( $data, $request ){
 
 		if( $engage_conversion > 0 ){
 			$stats['conversion_story'] .= ' ';
-			$stats['conversion_story'] .= sprintf( esc_html__( 'and leaves a %s abandon rate.', 'formworks' ),
+			$stats['conversion_story'] .= sprintf( esc_html__( ' with a %s abandon rate.', 'formworks' ),
 				'<strong>' . ( 100 - $engage_conversion ) . '%</strong>'
-			 );
+			 );			
+			$stats['conversion_story'] .= '<br>';
 		}else{
 			$stats['conversion_story'] .='.';
 		}
@@ -93,7 +98,7 @@ function formworks_get_summary_story( $data, $request ){
 	if( $total_views < $total_loads ){
 		$view_percent = round( 100 - ( ( $total_views / $total_loads ) * 100 ), 1 );
 		$stats['conversion_story'] .= '<p>';
-		$stats['conversion_story'] .= __( 'There are, however, more loads than views. This indicates that the form is not visible on page load.', 'formworks' );
+		$stats['conversion_story'] .= __( 'There are, however, more loads than views, which indicates that the form is not visible on page load.', 'formworks' );
 		$stats['conversion_story'] .= sprintf( esc_html__( "Therefore %s of page visitors don't even see the form. ", 'formworks' ), '<strong>' . $view_percent . '%</strong>' );
 		$stats['conversion_story'] .= '</p>';
 

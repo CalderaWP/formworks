@@ -41,8 +41,15 @@ function formworks_get_summary_story( $data, $request ){
 	$stats = formworks_get_core_events( $data, $request );
 
 	$total_views = array_sum( $stats['datasets'][ 'view' ][ 'data' ] );
+	$total_engage = array_sum( $stats['datasets'][ 'engage' ][ 'data' ] );
 	$total_loads = array_sum( $stats['datasets'][ 'loaded' ][ 'data' ] );
 	$total_submitions = array_sum( $stats['datasets'][ 'submission' ][ 'data' ] );
+	$engage_conversion = round( ( $total_submitions / $total_engage ) * 100, 1);
+	$load_conversion = round( ( $total_submitions / $total_loads ) * 100, 1);
+	$view_conversion = round( ( $total_submitions / $total_views ) * 100, 1);
+	
+	$engage_load = round( ( $total_engage / $total_loads ) * 100, 1);
+	$engage_view = round( ( $total_engage / $total_views ) * 100, 1);
 
 	// stories
 	$starts = array(
@@ -58,22 +65,23 @@ function formworks_get_summary_story( $data, $request ){
 	$stats['conversion_story'] .= sprintf( _n( 'and received %s submission. ', 'and received %s submissions. ', $total_submitions, 'formworks' ), '<strong>'. $total_submitions . '</strong>' );
 	$stats['conversion_story'] .= '</p>';
 	$stats['conversion_story'] .= '<p>';
-	if( !empty( $stats['datasets'][ 'engage_conversion' ]['rate'] ) ){
-		if( $stats['datasets'][ 'engage_conversion' ]['rate'] > 0 ){
+
+	if( !empty( $engage_conversion ) ){
+		if( $engage_conversion > 0 ){
 			$stats['conversion_story'] .= sprintf( __( '%s of visitors actively engage the form and %s of engaged users go on to a submission. ', 'formworks' ),
-				'<strong>' . $stats['datasets'][ 'engage_load' ]['rate'] . '%</strong>',
-				'<strong>' . $stats['datasets'][ 'engage_conversion' ]['rate'] . '%</strong>'
+				'<strong>' . $engage_load . '%</strong>',
+				'<strong>' . $engage_conversion . '%</strong>'
 			 );
 			$stats['conversion_story'] .= '<br>';
 		}
 	}
-	if( !empty( $stats['datasets'][ 'load_conversion' ]['rate'] ) ){
-		$stats['conversion_story'] .= sprintf( esc_html__( 'That is a conversion rate of %s from load', 'formworks' ), '<strong>' . $stats['datasets'][ 'load_conversion' ]['rate'] . '%</strong>' );
+	if( !empty( $load_conversion ) ){
+		$stats['conversion_story'] .= sprintf( esc_html__( 'That is a conversion rate of %s from load', 'formworks' ), '<strong>' . $load_conversion . '%</strong>' );
 
-		if( $stats['datasets'][ 'engage_conversion' ]['rate'] > 0 ){
+		if( $engage_conversion > 0 ){
 			$stats['conversion_story'] .= ' ';
 			$stats['conversion_story'] .= sprintf( esc_html__( 'and leaves a %s abandon rate.', 'formworks' ),
-				'<strong>' . ( 100 - $stats['datasets'][ 'engage_conversion' ]['rate'] ) . '%</strong>'
+				'<strong>' . ( 100 - $engage_conversion ) . '%</strong>'
 			 );
 		}else{
 			$stats['conversion_story'] .='.';
@@ -90,14 +98,14 @@ function formworks_get_summary_story( $data, $request ){
 		$stats['conversion_story'] .= '</p>';
 
 		$stats['conversion_story'] .= '<p>';
-		if( !empty( $stats['datasets'][ 'view_conversion' ] ) ){
-			$stats['conversion_story'] .= sprintf( esc_html__( 'Of those that do see the form, the conversion rate is %s. ', 'formworks' ), '<strong>'.$stats['datasets'][ 'view_conversion' ]['rate'] . '%</strong>' );
+		if( !empty( $view_conversion ) ){
+			$stats['conversion_story'] .= sprintf( esc_html__( 'Of those that do see the form, the conversion rate is %s. ', 'formworks' ), '<strong>'.$view_conversion . '%</strong>' );
 		}
-		if( !empty( $stats['datasets'][ 'engage_conversion' ] ) ){
+		if( !empty( $engage_conversion ) ){
 
-			if( $stats['datasets'][ 'engage_conversion' ]['rate'] > 0 ){
+			if( $engage_conversion > 0 ){
 				$stats['conversion_story'] .= sprintf( esc_html__( 'This means that %s of visitors who see the form, actively engage it.', 'formworks' ),
-					'<strong>' . $stats['datasets'][ 'engage_view' ]['rate'] . '%</strong>'
+					'<strong>' . $engage_view . '%</strong>'
 				 );
 			}
 		}

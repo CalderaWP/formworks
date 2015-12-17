@@ -235,7 +235,6 @@ class settings extends core{
 			$forms = \Caldera_Forms::get_forms();
 			$form_list['caldera'] = array(
 				'name' => __('Caldera Forms', 'caldera-forms'),
-				'activity' => tracker::get_activity( 'caldera', 6 ),
 				'forms' => array()
 			);
 			foreach( $forms as $form ){
@@ -246,7 +245,6 @@ class settings extends core{
 			$forms = \RGFormsModel::get_forms( null, 'title' );
 			$form_list['gform'] = array(
 				'name' => __('Gravity Forms', 'gravityforms'),
-				'activity' => tracker::get_activity( 'gform', 6 ),
 				'forms' => array()
 			);
 			foreach( $forms as $form ){

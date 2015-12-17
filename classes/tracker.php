@@ -43,28 +43,6 @@ class tracker {
 
 
 	/**
-	 * Get an activity line for a slug
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $prefix tracking prefix
-	 * @param string $days number of days
-	 *
-	 * @return void
-	 */
-	public static function get_activity( $prefix, $days = 6 ){
-		return '23';
-		global $wpdb;
-		$query = $wpdb->prepare("
-			SELECT COUNT(`id`) AS `total` FROM `" . $wpdb->prefix . "formworks_tracker` WHERE `prefix` = %s && 
-			GROUP BY SUBSTR( `datestamp`,1,7);
-		", $prefix );
-
-		return self::save( $type, $data, $form_id, $prefix );
-	}
-
-
-	/**
 	 * Addd a notch
 	 *
 	 * @since 1.0.0
@@ -82,7 +60,7 @@ class tracker {
 			if( !empty( $prev ) && !empty( $prev['datestamp'] ) ){
 				// check its older than a day.
 				if( substr( $prev['datestamp'],0,10) == date( 'Y-m-d' ) ){
-					return; // no catch
+					//return; // no catch
 				}
 			}
 		}

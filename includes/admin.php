@@ -95,9 +95,7 @@ foreach( $formworks['forms'] as $slug => &$forms_set ){
 			foreach( $activity as $line_key => $line ) {
 				$activity_list[] = $line['total'];
 			}
-			for( $i = 0; $i < 100; $i++ ){
-				$activity_list[] = rand(13, 89);
-			}
+
 			$forms_set['forms'][ $form_id ]['activity'] = implode(',',$activity_list);
 
 			
